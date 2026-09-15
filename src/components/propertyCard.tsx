@@ -1,16 +1,11 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
-
-const COLORS = {
-  primary: "#0F113C", // Dark blue - MAIN
-  secondary: "#ffffff", // White - SECONDARY
-  darkGray: "#6B7280",
-  lightGray: "#D1D5DB",
-  teal: "#10B981",
-  tealBg: "#ECFDF5",
-  background: "#F8F9FA",
-};
 
 interface Property {
   id: string;
@@ -23,7 +18,7 @@ interface Property {
   description: string;
   images: string[];
   isFavorite: boolean;
-  postedAt?: string; // e.g. "منذ ساعتين" — optional, falls back to nothing if omitted
+  postedAt?: string;
 }
 
 export default function PropertyCard({
@@ -33,6 +28,7 @@ export default function PropertyCard({
   property: Property;
   onFavorite?: (id: string) => void;
 }) {
+  const router = useRouter();
   const [isFavorited, setIsFavorited] = useState(property.isFavorite);
 
   const handleFavorite = () => {
@@ -40,100 +36,112 @@ export default function PropertyCard({
     // onFavorite(property.id);
   };
 
+  const titleHandler = (title: string, length: number) => {
+    if (title.length <= length) return title;
+
+    return title.slice(0, length) + "...";
+  };
+
   return (
-    <Pressable className="flex-row items-center justify-between gap-2 p-3 mb-3 bg-white shadow-sm rounded-2xl">
-      {/* Image thumbnail — rightmost in RTL */}
-      <View className="flex-row h-full gap-2 w-fit">
-        <View className="relative">
-          <Image
-            source={{ uri: property.images[0] }}
-            style={{ width: 96, height: 96, borderRadius: 16 }}
-          />
-          {/* Property type badge, overlapping top of the thumbnail */}
-          <View
-            className="absolute px-2 py-0.5 rounded-full top-1 right-1"
-            style={{ backgroundColor: COLORS.secondary }}
-          >
-            <Text
-              className="text-[10px] font-semibold"
-              style={{ color: COLORS.primary }}
-            >
-              للبيع
-            </Text>
-          </View>
-        </View>
+    <Pressable
+      onPress={() => router.push(`/${property.id}`)}
+      className="flex-row items-center gap-2 mb-3 bg-white shadow-sm max-h-44 rounded-2xl"
+    >
+      {/* Image thumbnail */}
+      <View className="relative w-[30%] h-full">
+        <Image
+          source={{ uri: property.images[0] }}
+          className="w-full h-full rounded-r-none rounded-2xl"
+        />
 
-        {/* Text content */}
-        <View className="flex-col items-start gap-1 pr-3">
-          {/* Title */}
-          <Text
-            className="mb-1 text-base font-bold text-right"
-            style={{ color: COLORS.primary }}
-            numberOfLines={1}
-          >
-            {property.title}
-          </Text>
-
-          {/* Location */}
-          <View className="flex-row-reverse items-center gap-1 mb-1.5">
-            <Ionicons name="location" size={13} color={COLORS.darkGray} />
-            <Text className="text-xs text-gray-600" numberOfLines={1}>
-              {property.location}
-            </Text>
-          </View>
-
-          {/* Stats row — area + beds, small teal icon chips */}
-          <View className="flex-row-reverse items-center gap-3 mb-1.5">
-            <View className="flex-row-reverse items-center gap-1">
-              <MaterialCommunityIcons
-                name="ruler-square"
-                size={14}
-                color={COLORS.teal}
-              />
-              <Text className="text-xs font-semibold text-gray-700">
-                {property.area} م
-              </Text>
-            </View>
-            <View className="flex-row-reverse items-center gap-1">
-              <Ionicons name="bed-outline" size={14} color={COLORS.teal} />
-              <Text className="text-xs font-semibold text-gray-700">
-                {property.beds} غرف
-              </Text>
-            </View>
-          </View>
-
-          {/* Posted time */}
-          {property.postedAt && (
-            <Text
-              className="mb-1 text-[11px] text-right"
-              style={{ color: COLORS.lightGray }}
-            >
-              {property.postedAt}
-            </Text>
-          )}
-
-          {/* Price */}
-          <Text
-            className="text-lg font-bold text-right"
-            style={{ color: COLORS.primary }}
-          >
-            {property.price.toLocaleString("ar-EG")} جنيه
+        {/* Property type badge */}
+        <View className="absolute px-2 py-0.5 rounded-full top-1 right-1 bg-blue-500/40">
+          <Text className="text-[10px] font-semibold text-[#171947]">
+            للبيع
           </Text>
         </View>
       </View>
-      {/* Favorite heart, bottom of thumbnail */}
-      <View className="flex-row items-end justify-start h-full">
-        <Pressable
-          onPress={handleFavorite}
-          className="bg-white rounded-full bottom-1 left-1"
-          // style={{ width: 24, height: 24 }}
-        >
-          <Ionicons
-            name={isFavorited ? "heart" : "heart-outline"}
-            size={14}
-            color={isFavorited ? "#EF4444" : COLORS.darkGray}
-          />
-        </Pressable>
+      <View className="flex-col flex-1 gap-2">
+        <View className="flex-row items-end justify-between flex-1 gap-2 p-3 ">
+          <View className="flex-row h-full gap-2 w-fit">
+            {/* Text content */}
+            <View className="flex-col items-start gap-1 pr-3">
+              {/* Title - High priority */}
+              <Text
+                className="mb-1  text-xl font-bold text-right text-[#171947]"
+                numberOfLines={1}
+              >
+                {titleHandler(property.title, 19)}
+              </Text>
+
+              {/* Location - Medium priority */}
+              <View className="flex-row-reverse items-center gap-1 mb-1.5">
+                <Ionicons name="location" color={"#3b82f6"} size={13} />
+
+                <Text className="text-xs text-blue-900" numberOfLines={1}>
+                  {property.location}
+                </Text>
+              </View>
+
+              {/* Stats - Lower priority */}
+              <View className="flex-row-reverse items-center gap-3 mb-1.5">
+                <View className="flex-row-reverse items-center gap-1">
+                  <MaterialCommunityIcons
+                    name="ruler-square"
+                    size={14}
+                    color={"#3b82f6"}
+                  />
+
+                  <Text className="text-xs font-semibold text-[#5C5E82]">
+                    {property.area} م
+                  </Text>
+                </View>
+
+                <View className="flex-row-reverse items-center gap-1">
+                  <Ionicons name="bed-outline" size={14} color={"#3b82f6"} />
+
+                  <Text className="text-xs font-semibold text-[#5C5E82]">
+                    {property.beds} غرف
+                  </Text>
+                </View>
+              </View>
+
+              {/* Posted time - Lowest priority */}
+              {property.postedAt && (
+                <Text className="mb-1 text-[11px] text-right text-[#8587A3]">
+                  {property.postedAt}
+                </Text>
+              )}
+
+              {/* Price - Highest priority */}
+              <Text className="text-lg font-bold text-right text-blue-800">
+                {property.price.toLocaleString("ar-EG")} جنيه
+              </Text>
+            </View>
+          </View>
+
+          {/* Favorite */}
+          <View className="flex-row items-start justify-start h-full ">
+            <Pressable
+              onPress={handleFavorite}
+              className="items-center justify-center w-6 h-6 bg-white rounded-full bottom-1 left-1"
+            >
+              <FontAwesome
+                name={isFavorited ? "bookmark" : "bookmark-o"}
+                size={14}
+                color={isFavorited ? "#3b82f6" : "black"}
+              />
+            </Pressable>
+          </View>
+        </View>
+        <View className="flex-row justify-start gap-2">
+          <View className="flex-row w-[45%] p-2  mb-2 rounded-xl items-center justify-center bg-green-400/30">
+            <FontAwesome name="whatsapp" size={18} color="black" />
+          </View>
+          <View className="flex-row w-[45%] p-2  mb-2 rounded-xl items-center justify-center bg-blue-400/30">
+            <FontAwesome name="phone" size={18} color="black" />
+          </View>
+        </View>
       </View>
     </Pressable>
   );

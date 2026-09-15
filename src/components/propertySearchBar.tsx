@@ -2,13 +2,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
-const COLORS = {
-  primary: "#0F113C",
-  accent: "#10B981",
-  white: "#ffffff",
-  placeholder: "#9CA3AF",
-};
-
 type SearchBarProps = {
   value?: string;
   onChangeText?: (text: string) => void;
@@ -27,56 +20,26 @@ export default function PropertySearchBar({
   const handleChange = onChangeText ?? setInternalValue;
 
   return (
-    <View
-      style={{
-        flexDirection: "row-reverse",
-        alignItems: "center",
-        backgroundColor: COLORS.white,
-        borderRadius: 16,
-        paddingHorizontal: 14,
-        height: 52,
-        marginHorizontal: 12,
-        marginTop: 8,
-        marginBottom: 4,
-        // Same soft-card shadow as the tune icon / advanced-filter card
-        shadowColor: "#000",
-        shadowOpacity: 0.15,
-        shadowRadius: 6,
-        shadowOffset: { width: 0, height: 2 },
-        elevation: 2,
-      }}
-    >
-      <Ionicons name="search" size={20} color={COLORS.primary} />
+    <View className="flex-row-reverse items-center bg-white rounded-2xl px-[14px] h-[52px] mx-3 mt-2 mb-1 shadow-md">
+      <Ionicons name="search" size={20} color="#0F113C" />
 
       <TextInput
         value={text}
         onChangeText={handleChange}
         onSubmitEditing={onSubmit}
         placeholder={placeholder}
-        placeholderTextColor={COLORS.placeholder}
+        placeholderTextColor="#9CA3AF"
         textAlign="right"
         returnKeyType="search"
-        style={{
-          flex: 1,
-          marginHorizontal: 10,
-          fontSize: 15,
-          fontWeight: "500",
-          color: COLORS.primary,
-        }}
+        className="flex-1 mx-2.5 text-[15px] font-medium text-[#0F113C]"
       />
 
       {text.length > 0 && (
         <TouchableOpacity
           onPress={() => handleChange("")}
-          style={{
-            width: 24,
-            height: 24,
-            borderRadius: 12,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          className="w-6 h-6 rounded-full items-center justify-center"
         >
-          <Ionicons name="close-circle" size={18} color={COLORS.placeholder} />
+          <Ionicons name="close-circle" size={18} color="#9CA3AF" />
         </TouchableOpacity>
       )}
     </View>

@@ -1,0 +1,129 @@
+import { Ionicons } from "@expo/vector-icons";
+import { Control, UseFormSetValue, useWatch } from "react-hook-form";
+import { Linking, Pressable, ScrollView, Text, View } from "react-native";
+import type { UploadFormFields } from "../../app/add-property";
+import AppNumberInput from "../InputsComponents/Appnumberinput";
+import AppTextInput from "../InputsComponents/Apptextinput";
+
+type StepTwoProps = {
+  control: Control<UploadFormFields>;
+  setValue: UseFormSetValue<UploadFormFields>;
+  onNext: () => void;
+};
+
+export default function StepTwo({ control, setValue, onNext }: StepTwoProps) {
+  const termsAccepted = useWatch({ control, name: "termsAccepted" }) ?? false;
+
+  return (
+    <ScrollView
+      className="flex-1 w-full"
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 30 }}
+    >
+      <View className="gap-5 p-5">
+        {/* Title */}
+        <View className="gap-1">
+          <AppTextInput
+            name="title"
+            control={control}
+            placeholder="مثال: شقة للإيجار في حي الرياض"
+            label="العنوان"
+          />
+        </View>
+
+        {/* Total price */}
+        <View className="flex-row items-center justify-between">
+          <AppNumberInput
+            label="السعر الإجمالي"
+            suffix="جنيه"
+            name="price"
+            placeholder="120000"
+            control={control}
+            containerClassName=" w-full"
+          />
+        </View>
+
+        {/* Area */}
+        <View className="flex-row items-center justify-between">
+          <AppNumberInput
+            label="المساحة"
+            suffix="م²"
+            name="area"
+            placeholder="200"
+            control={control}
+            containerClassName=" w-full"
+          />
+        </View>
+
+        {/* Description */}
+        <View className="gap-1">
+          <AppTextInput
+            name={"description"}
+            control={control}
+            multiline
+            placeholder="اكتب وصف عقارك هنا"
+            label="وصف العقار"
+          />
+        </View>
+
+        {/* Terms checkbox */}
+        <View className="flex-row items-center gap-2 mt-2">
+          <Pressable
+            onPress={() =>
+              setValue("termsAccepted", !termsAccepted, {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            }
+            className="items-center justify-center border rounded"
+            style={{
+              width: 20,
+              height: 20,
+              borderColor: "#0F113C",
+              backgroundColor: termsAccepted ? "#0F113C" : "transparent",
+            }}
+          >
+            {termsAccepted && (
+              <Ionicons name="checkmark" size={14} color="#ffffff" />
+            )}
+          </Pressable>
+
+          <Text className="flex-1 text-sm leading-6 text-[#374151]">
+            أوافق على{" "}
+            <Text
+              onPress={() => Linking.openURL("https://example.com/terms")}
+              className="font-semibold text-blue-900"
+            >
+              شروط الاستخدام
+            </Text>{" "}
+            و ألتزم{" "}
+            <Text
+              onPress={() => Linking.openURL("https://example.com/ad-fees")}
+              className="font-semibold text-blue-900"
+            >
+              برسوم الإعلان
+            </Text>
+          </Text>
+        </View>
+
+        {/* Publish */}
+        <Pressable
+          onPress={onNext}
+          disabled={!termsAccepted}
+          className="items-center justify-center py-3.5 mt-1 border rounded-xl"
+          style={{
+            borderColor: termsAccepted ? "#0F113C" : "#D1D5DB",
+            opacity: termsAccepted ? 1 : 0.5,
+          }}
+        >
+          <Text
+            className="text-base font-bold"
+            style={{ color: termsAccepted ? "#0F113C" : "#9CA3AF" }}
+          >
+            التالي
+          </Text>
+        </Pressable>
+      </View>
+    </ScrollView>
+  );
+}

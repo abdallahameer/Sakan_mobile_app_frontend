@@ -1,14 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-
-const COLORS = {
-  primary: "#0F113C", // page/nav background + unselected pill bg
-  selected: "#151743", // lighter navy — selected pill bg
-  accent: "#10B981", // teal
-  white: "#ffffff",
-  textGray: "#6B7280",
-};
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 type FilterOption = {
   key: string;
@@ -31,7 +23,7 @@ export default function PropertyFilter() {
   return (
     // Sits directly on the app's dark navy page background — same bg as
     // the home screen, not a separate white bar.
-    <View className=" border-b-white border-b-[1px]">
+    <View>
       <View className="flex-row-reverse items-center  px-3 py-2.5">
         {/* Tune icon — white circle, same treatment as the heart icon on
             the property card (white circle floating on the image) */}
@@ -39,47 +31,43 @@ export default function PropertyFilter() {
           onPress={() => setShowAdvanced((prev) => !prev)}
           className="items-center justify-center w-10 h-10 bg-white rounded-full shadow-md ms-2"
         >
-          <Ionicons name="options-outline" size={20} color={COLORS.primary} />
+          <Ionicons name="options-outline" size={20} color="#0F113C" />
         </TouchableOpacity>
 
-        <ScrollView
+        <FlatList
           horizontal
+          ItemSeparatorComponent={() => <View className=" w-2" />}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            flexDirection: "row-reverse",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          {FILTERS.map((filter) => {
-            const isSelected = selected === filter.key;
-            return (
-              <TouchableOpacity
-                key={filter.key}
-                onPress={() => setSelected(filter.key)}
-                className={`flex-row-reverse items-center px-4 py-2 rounded-lg border border-gray-500 ${
-                  isSelected ? "bg-[#424474]" : "bg-white"
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              key={item.key}
+              onPress={() => setSelected(item.key)}
+              className={`flex-row-reverse items-center px-4 py-2 rounded-lg border border-gray-500 ${
+                selected == item.key ? "bg-[#424474]" : "bg-white"
+              }`}
+            >
+              <Text
+                className={`text-sm  ${
+                  selected == item.key
+                    ? "font-bold text-white"
+                    : "font-semibold text-[#0F113C]"
                 }`}
               >
-                <Text
-                  className={`text-sm text-white ${
-                    isSelected ? "font-bold" : "font-semibold text-[#0F113C]"
-                  }`}
-                >
-                  {filter.label}
-                </Text>
-                {filter.hasDropdown && (
-                  <Ionicons
-                    name="chevron-down"
-                    size={14}
-                    color={COLORS.white}
-                    className="ms-1"
-                  />
-                )}
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+                {item.label}
+              </Text>
+              {item.hasDropdown && (
+                <Ionicons
+                  name="chevron-down"
+                  size={14}
+                  color={selected == item.key ? "#ffffff" : "#0F113C"}
+                  className="ms-1"
+                />
+              )}
+            </TouchableOpacity>
+          )}
+          data={FILTERS}
+          keyExtractor={(item) => item.key}
+        />
       </View>
 
       {/* Advanced filter options — shown as a white card, same as the
