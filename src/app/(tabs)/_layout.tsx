@@ -1,21 +1,16 @@
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
-
-const COLORS = {
-  primary: "#0F113C", // Dark blue - MAIN
-  secondary: "#ffffff", // White - SECONDARY
-  active: "#ffffff", // White for active icons
-  inactive: "#A0AEC0", // Light gray for inactive
-};
+import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Tabs, useRouter } from "expo-router";
+import { Pressable } from "react-native";
 
 export default function TabBar() {
+  const router = useRouter();
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: COLORS.primary, // Dark blue background
-          borderTopColor: COLORS.secondary, // White border
+          backgroundColor: "#0F113C", // Dark blue background
+          borderTopColor: "#ffffff", // White border
           borderTopWidth: 1,
           height: 100,
           paddingBottom: 8,
@@ -25,8 +20,8 @@ export default function TabBar() {
           justifyContent: "center",
           paddingVertical: 8,
         },
-        tabBarActiveTintColor: COLORS.active, // White when active
-        tabBarInactiveTintColor: COLORS.inactive, // Light gray when inactive
+        tabBarActiveTintColor: "#ffffff", // White when active
+        tabBarInactiveTintColor: "#A0AEC0", // Light gray when inactive
         tabBarShowLabel: false,
       }}
     >
@@ -54,6 +49,19 @@ export default function TabBar() {
               size={28}
               color={color}
             />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="upload"
+        options={{
+          tabBarButton: () => (
+            <Pressable
+              className="flex-1 items-center"
+              onPress={() => router.replace("/add-property")}
+            >
+              <AntDesign name="plus" size={28} color="#a0aec0" />
+            </Pressable>
           ),
         }}
       />
