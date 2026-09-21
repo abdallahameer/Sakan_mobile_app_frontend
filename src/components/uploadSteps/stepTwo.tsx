@@ -1,19 +1,25 @@
+import { UploadFormFields } from "@/data/typs";
 import { Ionicons } from "@expo/vector-icons";
-import { Control, UseFormSetValue, useWatch } from "react-hook-form";
+import { Control, UseFormSetValue } from "react-hook-form";
 import { Linking, Pressable, ScrollView, Text, View } from "react-native";
-import type { UploadFormFields } from "../../app/add-property";
 import AppNumberInput from "../InputsComponents/Appnumberinput";
 import AppTextInput from "../InputsComponents/Apptextinput";
 
 type StepTwoProps = {
   control: Control<UploadFormFields>;
+  formValues: UploadFormFields;
   setValue: UseFormSetValue<UploadFormFields>;
   onNext: () => void;
+  update?: boolean;
 };
 
-export default function StepTwo({ control, setValue, onNext }: StepTwoProps) {
-  const termsAccepted = useWatch({ control, name: "termsAccepted" }) ?? false;
-
+export default function StepTwo({
+  control,
+  formValues,
+  setValue,
+  onNext,
+  update = false,
+}: StepTwoProps) {
   return (
     <ScrollView
       className="flex-1 w-full"
@@ -21,7 +27,6 @@ export default function StepTwo({ control, setValue, onNext }: StepTwoProps) {
       contentContainerStyle={{ paddingBottom: 30 }}
     >
       <View className="gap-5 p-5">
-        {/* Title */}
         <View className="gap-1">
           <AppTextInput
             name="title"
@@ -31,7 +36,6 @@ export default function StepTwo({ control, setValue, onNext }: StepTwoProps) {
           />
         </View>
 
-        {/* Total price */}
         <View className="flex-row items-center justify-between">
           <AppNumberInput
             label="السعر الإجمالي"
@@ -43,7 +47,6 @@ export default function StepTwo({ control, setValue, onNext }: StepTwoProps) {
           />
         </View>
 
-        {/* Area */}
         <View className="flex-row items-center justify-between">
           <AppNumberInput
             label="المساحة"
@@ -55,7 +58,6 @@ export default function StepTwo({ control, setValue, onNext }: StepTwoProps) {
           />
         </View>
 
-        {/* Description */}
         <View className="gap-1">
           <AppTextInput
             name={"description"}
@@ -66,63 +68,69 @@ export default function StepTwo({ control, setValue, onNext }: StepTwoProps) {
           />
         </View>
 
-        {/* Terms checkbox */}
-        <View className="flex-row items-center gap-2 mt-2">
+        {update == false ? (
+          <View className="flex-row items-center gap-2 mt-2">
+            <Pressable
+              onPress={() =>
+                setValue("termsAccepted", !formValues.termsAccepted, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }
+              className="items-center justify-center border rounded"
+              style={{
+                width: 20,
+                height: 20,
+                borderColor: "#0F113C",
+                backgroundColor: formValues.termsAccepted
+                  ? "#0F113C"
+                  : "transparent",
+              }}
+            >
+              {formValues.termsAccepted && (
+                <Ionicons name="checkmark" size={14} color="#ffffff" />
+              )}
+            </Pressable>
+
+            <Text className="flex-1 text-sm leading-6 text-[#374151]">
+              أوافق على{" "}
+              <Text
+                onPress={() => Linking.openURL("https://example.com/terms")}
+                className="font-semibold text-blue-900"
+              >
+                شروط الاستخدام
+              </Text>{" "}
+              و ألتزم{" "}
+              <Text
+                onPress={() => Linking.openURL("https://example.com/ad-fees")}
+                className="font-semibold text-blue-900"
+              >
+                برسوم الإعلان
+              </Text>
+            </Text>
+          </View>
+        ) : null}
+
+        {update == false ? (
           <Pressable
-            onPress={() =>
-              setValue("termsAccepted", !termsAccepted, {
-                shouldValidate: true,
-                shouldDirty: true,
-              })
-            }
-            className="items-center justify-center border rounded"
+            onPress={onNext}
+            disabled={!formValues.termsAccepted}
+            className="items-center justify-center py-3.5 mt-1 border rounded-xl"
             style={{
-              width: 20,
-              height: 20,
-              borderColor: "#0F113C",
-              backgroundColor: termsAccepted ? "#0F113C" : "transparent",
+              borderColor: formValues.termsAccepted ? "#0F113C" : "#D1D5DB",
+              opacity: formValues.termsAccepted ? 1 : 0.5,
             }}
           >
-            {termsAccepted && (
-              <Ionicons name="checkmark" size={14} color="#ffffff" />
-            )}
-          </Pressable>
-
-          <Text className="flex-1 text-sm leading-6 text-[#374151]">
-            أوافق على{" "}
             <Text
-              onPress={() => Linking.openURL("https://example.com/terms")}
-              className="font-semibold text-blue-900"
+              className="text-base font-bold"
+              style={{
+                color: formValues.termsAccepted ? "#0F113C" : "#9CA3AF",
+              }}
             >
-              شروط الاستخدام
-            </Text>{" "}
-            و ألتزم{" "}
-            <Text
-              onPress={() => Linking.openURL("https://example.com/ad-fees")}
-              className="font-semibold text-blue-900"
-            >
-              برسوم الإعلان
+              التالي
             </Text>
-          </Text>
-        </View>
-
-        {/* Publish */}
-        <Pressable
-          onPress={onNext}
-          disabled={!termsAccepted}
-          className="items-center justify-center py-3.5 mt-1 border rounded-xl"
-          style={{
-            borderColor: termsAccepted ? "#0F113C" : "#D1D5DB",
-            opacity: termsAccepted ? 1 : 0.5,
-          }}
-        >
-          <Text
-            className="text-base font-bold"
-            style={{ color: termsAccepted ? "#0F113C" : "#9CA3AF" }}
-          >
-            التالي
-          </Text>
-        </Pressable>
+          </Pressable>
+        ) : null}
       </View>
     </ScrollView>
   );

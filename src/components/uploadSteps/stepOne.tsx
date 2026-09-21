@@ -1,30 +1,27 @@
+import { UploadFormFields } from "@/data/typs";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { Control, UseFormSetValue, useWatch } from "react-hook-form";
+import { Control, UseFormSetValue } from "react-hook-form";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
-import type { UploadFormFields } from "../../app/add-property";
 
 type StepOneProps = {
   control: Control<UploadFormFields>;
+  formValues: UploadFormFields;
   setValue: UseFormSetValue<UploadFormFields>;
   onNext: () => void;
+  update?: boolean;
 };
 
-export default function StepOne({ control, setValue, onNext }: StepOneProps) {
-  // 👇 useWatch subscribes to these fields
-  const images =
-    useWatch({
-      control,
-      name: "images",
-    }) ?? [];
-
-  const videos =
-    useWatch({
-      control,
-      name: "videos",
-    }) ?? [];
-
-  const canContinue = images.length > 0 || videos.length > 0;
+export default function StepOne({
+  control,
+  formValues,
+  setValue,
+  onNext,
+  update = false,
+}: StepOneProps) {
+  const canContinue =
+    (formValues.images?.length ?? 0) > 0 ||
+    (formValues.videos?.length ?? 0) > 0;
 
   const pickImages = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -36,7 +33,7 @@ export default function StepOne({ control, setValue, onNext }: StepOneProps) {
     if (!result.canceled) {
       const uris = result.assets.map((asset) => asset.uri);
 
-      setValue("images", [...images, ...uris], {
+      setValue("images", [...(formValues.images ?? []), ...uris], {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -52,7 +49,7 @@ export default function StepOne({ control, setValue, onNext }: StepOneProps) {
     if (!result.canceled) {
       const uris = result.assets.map((asset) => asset.uri);
 
-      setValue("videos", [...videos, ...uris], {
+      setValue("videos", [...(formValues.videos ?? []), ...uris], {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -60,7 +57,9 @@ export default function StepOne({ control, setValue, onNext }: StepOneProps) {
   };
 
   const removeImage = (indexToRemove: number) => {
-    const updatedImages = images.filter((_, index) => index !== indexToRemove);
+    const updatedImages = (formValues.images ?? []).filter(
+      (_, index) => index !== indexToRemove,
+    );
 
     setValue("images", updatedImages, {
       shouldValidate: true,
@@ -77,15 +76,14 @@ export default function StepOne({ control, setValue, onNext }: StepOneProps) {
       }}
     >
       <View className="gap-3 p-5">
-        {/* Image previews */}
-        {images.length > 0 && (
+        {(formValues.images?.length ?? 0) > 0 && (
           <View className="mb-2">
             <Text className="mb-3 text-right text-sm font-semibold text-[#0F113C]">
-              الصور المرفقة ({images.length})
+              الصور المرفقة ({formValues.images?.length ?? 0})
             </Text>
 
             <View className="gap-3">
-              {images.map((item, index) => (
+              {(formValues.images ?? []).map((item, index) => (
                 <View key={`${item}-${index}`} className="relative">
                   <Image
                     source={{ uri: item }}
@@ -93,10 +91,9 @@ export default function StepOne({ control, setValue, onNext }: StepOneProps) {
                     resizeMode="cover"
                   />
 
-                  {/* Delete button */}
                   <Pressable
                     onPress={() => removeImage(index)}
-                    className="absolute items-center justify-center w-7 h-7 rounded-full bg-white -top-2 -right-2"
+                    className="absolute items-center justify-center bg-white rounded-full w-7 h-7 -top-2 -right-2"
                     style={{
                       elevation: 3,
                       shadowColor: "#000",
@@ -116,10 +113,9 @@ export default function StepOne({ control, setValue, onNext }: StepOneProps) {
           </View>
         )}
 
-        {/* Attach photo */}
         <Pressable
           onPress={pickImages}
-          className="flex-row items-center justify-between px-4 py-3.5 border border-[#0F113C] rounded-xl"
+          className="flex-row items-center justify-between px-4 py-3.5 border bg-white border-[#0F113C] rounded-xl"
         >
           <View className="items-center justify-center w-8 h-8 rounded-lg bg-[#0F113C]/10">
             <Ionicons name="camera-outline" size={18} color="#0F113C" />
@@ -127,14 +123,15 @@ export default function StepOne({ control, setValue, onNext }: StepOneProps) {
 
           <Text className="text-base font-semibold text-[#0F113C]">
             إرفاق صورة
-            {images.length > 0 ? ` (${images.length})` : ""}
+            {(formValues.images?.length ?? 0) > 0
+              ? ` (${formValues.images?.length ?? 0})`
+              : ""}
           </Text>
         </Pressable>
 
-        {/* Attach video */}
         <Pressable
           onPress={pickVideo}
-          className="flex-row items-center justify-between px-4 py-3.5 border border-[#0F113C] rounded-xl"
+          className="flex-row items-center justify-between px-4 py-3.5 border bg-white border-[#0F113C] rounded-xl"
         >
           <View className="items-center justify-center w-8 h-8 rounded-lg bg-[#0F113C]/10">
             <Ionicons name="videocam-outline" size={18} color="#0F113C" />
@@ -142,32 +139,34 @@ export default function StepOne({ control, setValue, onNext }: StepOneProps) {
 
           <Text className="text-base font-semibold text-[#0F113C]">
             إضافة فيديو
-            {videos.length > 0 ? ` (${videos.length})` : ""}
+            {(formValues.videos?.length ?? 0) > 0
+              ? ` (${formValues.videos?.length ?? 0})`
+              : ""}
           </Text>
         </Pressable>
 
-        {/* Continue */}
-        <Pressable
-          onPress={onNext}
-          disabled={!canContinue}
-          className="items-center justify-center py-3.5 mt-1 border rounded-xl"
-          style={{
-            borderColor: canContinue ? "#10B981" : "#D1D5DB",
-            opacity: canContinue ? 1 : 0.5,
-          }}
-        >
-          <Text
-            className="text-base font-bold"
+        {update == false ? (
+          <Pressable
+            onPress={onNext}
+            disabled={!canContinue}
+            className="items-center justify-center py-3.5 mt-1 border rounded-xl"
             style={{
-              color: canContinue ? "#10B981" : "#9CA3AF",
+              borderColor: canContinue ? "#10B981" : "#D1D5DB",
+              opacity: canContinue ? 1 : 0.5,
             }}
           >
-            استمرار
-          </Text>
-        </Pressable>
+            <Text
+              className="text-base font-bold"
+              style={{
+                color: canContinue ? "#10B981" : "#9CA3AF",
+              }}
+            >
+              استمرار
+            </Text>
+          </Pressable>
+        ) : null}
 
-        {/* Note */}
-        <Text className="mt-2 text-sm leading-6 text-right text-[#6B7280]">
+        <Text className="mt-2 text-sm leading-6 text-left text-[#6B7280]">
           إضافة فيديوهات و صور لإعلانك سيرفع من أولوية ظهور إعلانك في التطبيق
         </Text>
       </View>

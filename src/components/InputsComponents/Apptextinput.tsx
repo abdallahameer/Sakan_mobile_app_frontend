@@ -19,7 +19,6 @@ type BaseProps = {
   containerClassName?: string;
 };
 
-// Plain, uncontrolled-by-form usage: pass value/onChangeText yourself.
 type UncontrolledProps = BaseProps & {
   value: string;
   onChangeText: (text: string) => void;
@@ -27,7 +26,6 @@ type UncontrolledProps = BaseProps & {
   name?: undefined;
 };
 
-// react-hook-form usage: pass control+name, no value/onChangeText needed.
 type ControlledProps<TFieldValues extends FieldValues> = BaseProps & {
   control: Control<TFieldValues>;
   name: FieldPath<TFieldValues>;

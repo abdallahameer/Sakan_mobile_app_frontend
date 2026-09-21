@@ -6,22 +6,24 @@ type BaseProps = {
   label?: string;
   placeholder?: string;
   error?: string;
-  suffix?: string; // e.g. "جنيه", "م²" — shown after the value, inside the box
+  suffix?: string;
   editable?: boolean;
   containerClassName?: string;
+  onValueChange?: (value: string) => void;
 };
 
 type UncontrolledProps = BaseProps & {
-  value: string;
+  value: string | null;
   onChangeText: (text: string) => void;
   control?: undefined;
   name?: undefined;
 };
 
 type ControlledProps<TFieldValues extends FieldValues> = BaseProps & {
-  control: Control<TFieldValues>;
   name: FieldPath<TFieldValues>;
   value?: undefined;
+  control?: Control<TFieldValues>;
+
   onChangeText?: undefined;
 };
 
@@ -29,7 +31,6 @@ export type AppNumberInputProps<
   TFieldValues extends FieldValues = FieldValues,
 > = UncontrolledProps | ControlledProps<TFieldValues>;
 
-// Strips everything except digits, so the field can never hold non-numeric text.
 function sanitizeDigits(text: string) {
   return text.replace(/[^0-9]/g, "");
 }
@@ -71,7 +72,12 @@ export default function AppNumberInput<TFieldValues extends FieldValues>(
             render={({ field: { value, onChange } }) => (
               <RNTextInput
                 value={value ?? ""}
-                onChangeText={(text) => onChange(sanitizeDigits(text))}
+                onChangeText={(text) => {
+                  const sanitized = sanitizeDigits(text);
+
+                  onChange(sanitized);
+                  props.onValueChange?.(sanitized);
+                }}
                 placeholder={placeholder}
                 placeholderTextColor="#9CA3AF"
                 keyboardType="number-pad"

@@ -1,5 +1,6 @@
 import StepThree from "@/components/uploadSteps/stepThree";
 import StepTwo from "@/components/uploadSteps/stepTwo";
+import { UploadFormFields } from "@/data/typs";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -7,38 +8,6 @@ import { useForm } from "react-hook-form";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import StepOne from "../components/uploadSteps/stepOne";
-
-export type UploadFormFields = {
-  images: string[];
-  videos: string[];
-  title: string;
-  price: string;
-  description: string;
-  area: string;
-
-  termsAccepted: boolean;
-  propertyType: "عوائل" | "عزاب";
-  paymentType: "سنوي" | "شهري" | "يومي";
-
-  rooms: number;
-  bathrooms: number;
-  livingRoom: number;
-
-  floorNumber: number;
-  propertyAge: number;
-  furnished: boolean;
-  kitchen: boolean;
-  annex: boolean;
-  carEntrance: boolean;
-  elevator: boolean;
-  airConditioners: boolean;
-  water: boolean;
-  roof: boolean;
-  electricity: boolean;
-  solarSystem: boolean;
-  forRent: boolean;
-  forSell: boolean;
-};
 
 export default function UploadProperty() {
   const router = useRouter();
@@ -52,7 +21,9 @@ export default function UploadProperty() {
       price: "",
       area: "",
       description: "",
-      propertyType: "عوائل",
+      propertyType: "resedencial",
+      familyOrSingle: "family",
+      propertyStatus: null,
       paymentType: "شهري",
 
       rooms: 1,
@@ -77,10 +48,9 @@ export default function UploadProperty() {
     },
   });
   const formValues = watch();
-  console.log(formValues);
+
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
-      {/* Header */}
       <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
         <Pressable
           onPress={() => {
@@ -107,31 +77,30 @@ export default function UploadProperty() {
         </View>
       </View>
 
-      {/* Step 1 */}
       {steps === 1 && (
         <StepOne
           control={control}
+          formValues={formValues}
           setValue={setValue}
           onNext={() => setSteps(2)}
         />
       )}
 
-      {/* Future steps */}
       {steps === 2 && (
         <StepTwo
           control={control}
+          formValues={formValues}
           setValue={setValue}
           onNext={() => setSteps(3)}
-          // onBack={() => setSteps(1)}
         />
       )}
 
       {steps === 3 && (
         <StepThree
           control={control}
+          formValues={formValues}
           setValue={setValue}
           onNext={() => {
-            console.log("FORM DATA:", getValues());
             router.replace("/(tabs)");
           }}
           onBack={() => setSteps(2)}

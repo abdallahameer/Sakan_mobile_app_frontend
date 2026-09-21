@@ -9,19 +9,18 @@ export default function TabBar() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#0F113C", // Dark blue background
-          borderTopColor: "#ffffff", // White border
+          backgroundColor: "#0F113C",
+          borderTopColor: "#ffffff",
           borderTopWidth: 1,
-          height: 100,
-          paddingBottom: 8,
         },
         tabBarItemStyle: {
           alignItems: "center",
           justifyContent: "center",
+          height: 100,
           paddingVertical: 8,
         },
-        tabBarActiveTintColor: "#ffffff", // White when active
-        tabBarInactiveTintColor: "#A0AEC0", // Light gray when inactive
+        tabBarActiveTintColor: "#ffffff",
+        tabBarInactiveTintColor: "#A0AEC0",
         tabBarShowLabel: false,
       }}
     >
@@ -32,7 +31,7 @@ export default function TabBar() {
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name={focused ? "home" : "home-outline"}
-              size={28}
+              size={size}
               color={color}
             />
           ),
@@ -46,7 +45,7 @@ export default function TabBar() {
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name={focused ? "search" : "search-outline"}
-              size={28}
+              size={size}
               color={color}
             />
           ),
@@ -57,7 +56,7 @@ export default function TabBar() {
         options={{
           tabBarButton: () => (
             <Pressable
-              className="flex-1 items-center"
+              className="items-center flex-1"
               onPress={() => router.replace("/add-property")}
             >
               <AntDesign name="plus" size={28} color="#a0aec0" />
@@ -73,7 +72,7 @@ export default function TabBar() {
           tabBarIcon: ({ color, size, focused }) => (
             <FontAwesome
               name={focused ? "bookmark" : "bookmark-o"}
-              size={24}
+              size={size}
               color={color}
             />
           ),
@@ -87,7 +86,7 @@ export default function TabBar() {
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name={focused ? "person" : "person-outline"}
-              size={28}
+              size={size}
               color={color}
             />
           ),

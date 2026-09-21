@@ -15,12 +15,11 @@ export default function Advertisements() {
   };
 
   const handleEdit = (id: string) => {
-    router.push(`/edit-property/${id}` as any); // built in the next step
+    router.push(`/edit-property/${id}` as any);
   };
 
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
-      {/* Header */}
       <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
         <Pressable
           onPress={() => {

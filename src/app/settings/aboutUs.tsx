@@ -16,8 +16,6 @@ export default function AboutUs() {
   return (
     <>
       <SafeAreaView className="flex-1  bg-[#F0F1FA]">
-        {/* Header */}
-
         <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
           <Pressable
             onPress={() => {
@@ -34,14 +32,13 @@ export default function AboutUs() {
 
         <View className="flex-row items-center justify-center">
           <Image
-            className="w-36 h-32 "
+            className="h-32 w-36 "
             resizeMode="contain"
-            source={require("../../../assets/progectImages/sakanLogo.png")}
+            source={require("../../../assets/progectImages/maskanLogo.png")}
           />
         </View>
 
         <ScrollView>
-          {/* About section */}
           <View className="gap-4 px-5 pt-8 pb-6">
             <Text className="text-3xl font-bold text-center text-[#0F113C]">
               من نحن؟
@@ -60,7 +57,6 @@ export default function AboutUs() {
             </Text>
           </View>
 
-          {/* Values section */}
           <View className="gap-4 px-5 py-8 mx-4 mt-2 bg-blue-400/30 rounded-2xl">
             <View className="items-center">
               <Text className="text-2xl font-bold text-[#0F113C]">قيمنا</Text>

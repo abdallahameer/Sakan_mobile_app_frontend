@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Pressable, ScrollView, Switch, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -20,14 +20,22 @@ const LANGUAGES: { key: Language; label: string }[] = [
   { key: "en", label: "English" },
 ];
 
+type LanguageAndThemeFormValues = {
+  isDarkMode: boolean;
+  language: Language;
+};
+
 export default function LanguageAndTheme() {
   const router = useRouter();
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [language, setLanguage] = useState<Language>("ar");
+  const { control } = useForm<LanguageAndThemeFormValues>({
+    defaultValues: {
+      isDarkMode: false,
+      language: "ar",
+    },
+  });
 
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
-      {/* Header */}
       <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
         <Pressable
           onPress={() => {
@@ -45,7 +53,6 @@ export default function LanguageAndTheme() {
       </View>
 
       <ScrollView contentContainerStyle={{ padding: 16, gap: 24 }}>
-        {/* Theme section */}
         <View style={{ gap: 8 }}>
           <Text
             className="text-sm font-semibold text-left"
@@ -54,51 +61,56 @@ export default function LanguageAndTheme() {
             المظهر
           </Text>
 
-          <View
-            className="overflow-hidden bg-white border rounded-2xl"
-            style={{ borderColor: COLORS.border }}
-          >
-            <View className="flex-row items-center justify-between px-4 py-4">
-              <Text
-                className="text-base font-semibold"
-                style={{ color: COLORS.primary }}
+          <Controller
+            control={control}
+            name="isDarkMode"
+            render={({ field: { value, onChange } }) => (
+              <View
+                className="overflow-hidden bg-white border rounded-2xl"
+                style={{ borderColor: COLORS.border }}
               >
-                الوضع الفاتح
-              </Text>
-              <Switch
-                value={!isDarkMode}
-                onValueChange={(value) => setIsDarkMode(!value)}
-                trackColor={{
-                  false: COLORS.border,
-                  true: `${COLORS.accent}55`,
-                }}
-                thumbColor={!isDarkMode ? COLORS.accent : COLORS.white}
-              />
-            </View>
+                <View className="flex-row items-center justify-between px-4 py-4">
+                  <Text
+                    className="text-base font-semibold"
+                    style={{ color: COLORS.primary }}
+                  >
+                    الوضع الفاتح
+                  </Text>
+                  <Switch
+                    value={!value}
+                    onValueChange={(nextValue) => onChange(!nextValue)}
+                    trackColor={{
+                      false: COLORS.border,
+                      true: `${COLORS.accent}55`,
+                    }}
+                    thumbColor={!value ? COLORS.accent : COLORS.white}
+                  />
+                </View>
 
-            <View style={{ height: 1, backgroundColor: COLORS.border }} />
+                <View style={{ height: 1, backgroundColor: COLORS.border }} />
 
-            <View className="flex-row items-center justify-between px-4 py-4">
-              <Text
-                className="text-base font-semibold"
-                style={{ color: COLORS.primary }}
-              >
-                الوضع الداكن
-              </Text>
-              <Switch
-                value={isDarkMode}
-                onValueChange={setIsDarkMode}
-                trackColor={{
-                  false: COLORS.border,
-                  true: `${COLORS.accent}55`,
-                }}
-                thumbColor={isDarkMode ? COLORS.accent : COLORS.white}
-              />
-            </View>
-          </View>
+                <View className="flex-row items-center justify-between px-4 py-4">
+                  <Text
+                    className="text-base font-semibold"
+                    style={{ color: COLORS.primary }}
+                  >
+                    الوضع الداكن
+                  </Text>
+                  <Switch
+                    value={value}
+                    onValueChange={onChange}
+                    trackColor={{
+                      false: COLORS.border,
+                      true: `${COLORS.accent}55`,
+                    }}
+                    thumbColor={value ? COLORS.accent : COLORS.white}
+                  />
+                </View>
+              </View>
+            )}
+          />
         </View>
 
-        {/* Language section */}
         <View style={{ gap: 8 }}>
           <Text
             className="text-sm font-semibold text-left"
@@ -107,41 +119,47 @@ export default function LanguageAndTheme() {
             اللغة
           </Text>
 
-          <View
-            className="overflow-hidden bg-white border rounded-2xl"
-            style={{ borderColor: COLORS.border }}
-          >
-            {LANGUAGES.map((lang, index) => {
-              const isSelected = language === lang.key;
-              return (
-                <View key={lang.key}>
-                  <Pressable
-                    onPress={() => setLanguage(lang.key)}
-                    className="flex-row items-center justify-between px-4 py-4"
-                  >
-                    <Text
-                      className="text-base font-semibold"
-                      style={{ color: COLORS.primary }}
-                    >
-                      {lang.label}
-                    </Text>
-                    {isSelected && (
-                      <Ionicons
-                        name="checkmark-circle"
-                        size={20}
-                        color={COLORS.accent}
-                      />
-                    )}
-                  </Pressable>
-                  {index < LANGUAGES.length - 1 && (
-                    <View
-                      style={{ height: 1, backgroundColor: COLORS.border }}
-                    />
-                  )}
-                </View>
-              );
-            })}
-          </View>
+          <Controller
+            control={control}
+            name="language"
+            render={({ field: { value, onChange } }) => (
+              <View
+                className="overflow-hidden bg-white border rounded-2xl"
+                style={{ borderColor: COLORS.border }}
+              >
+                {LANGUAGES.map((lang, index) => {
+                  const isSelected = value === lang.key;
+                  return (
+                    <View key={lang.key}>
+                      <Pressable
+                        onPress={() => onChange(lang.key)}
+                        className="flex-row items-center justify-between px-4 py-4"
+                      >
+                        <Text
+                          className="text-base font-semibold"
+                          style={{ color: COLORS.primary }}
+                        >
+                          {lang.label}
+                        </Text>
+                        {isSelected && (
+                          <Ionicons
+                            name="checkmark-circle"
+                            size={20}
+                            color={COLORS.accent}
+                          />
+                        )}
+                      </Pressable>
+                      {index < LANGUAGES.length - 1 && (
+                        <View
+                          style={{ height: 1, backgroundColor: COLORS.border }}
+                        />
+                      )}
+                    </View>
+                  );
+                })}
+              </View>
+            )}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -78,7 +78,6 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
       <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
-        {/* Header */}
         <View
           className="items-center px-4 pt-6 pb-6 "
           style={{
@@ -86,7 +85,6 @@ export default function ProfileScreen() {
             borderBottomRightRadius: 24,
           }}
         >
-          {/* Avatar + edit badge */}
           <View className="relative">
             <View
               className="items-center justify-center overflow-hidden bg-gray-100 rounded-full"
@@ -105,7 +103,6 @@ export default function ProfileScreen() {
               />
             </View>
 
-            {/* Edit/camera badge — bottom-start, overlapping the circle */}
             <Pressable
               className="absolute items-center justify-center rounded-full"
               style={{
@@ -122,7 +119,6 @@ export default function ProfileScreen() {
             </Pressable>
           </View>
 
-          {/* Username */}
           <Text
             className="mt-3 text-lg font-bold"
             style={{ color: COLORS.primary }}
@@ -130,7 +126,6 @@ export default function ProfileScreen() {
             username
           </Text>
 
-          {/* Role tag */}
           <View
             className="px-3 py-1 mt-2 rounded-full"
             style={{ backgroundColor: `${COLORS.accent}1A` }}
@@ -144,7 +139,6 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        {/* Menu list */}
         <View
           className="mx-4 mt-4 overflow-hidden bg-white rounded-2xl"
           style={{
@@ -168,7 +162,6 @@ export default function ProfileScreen() {
                   borderBottomColor: COLORS.border,
                 }}
               >
-                {/* Icon */}
                 <View
                   className="items-center justify-center rounded-full"
                   style={{
@@ -180,7 +173,6 @@ export default function ProfileScreen() {
                   <Ionicons name={item.icon} size={18} color={COLORS.primary} />
                 </View>
 
-                {/* Label */}
                 <Text
                   className="flex-1 mr-3 text-base font-semibold text-right"
                   style={{ color: COLORS.primary, marginEnd: 12 }}
@@ -188,7 +180,6 @@ export default function ProfileScreen() {
                   {item.label}
                 </Text>
 
-                {/* Chevron */}
                 <Ionicons
                   name="chevron-back"
                   size={18}
@@ -199,7 +190,6 @@ export default function ProfileScreen() {
           />
         </View>
 
-        {/* Logout */}
         <Pressable
           className="flex-row-reverse items-center justify-center gap-2 py-3 mx-4 mt-4 border rounded-2xl"
           style={{ borderColor: "#FCA5A5" }}

@@ -33,7 +33,6 @@ export default function PropertyCard({
 
   const handleFavorite = () => {
     setIsFavorited(!isFavorited);
-    // onFavorite(property.id);
   };
 
   const titleHandler = (title: string, length: number) => {
@@ -45,16 +44,14 @@ export default function PropertyCard({
   return (
     <Pressable
       onPress={() => router.push(`/${property.id}`)}
-      className="flex-row items-center gap-2 mb-3 bg-white shadow-sm max-h-44 rounded-2xl"
+      className="flex-row items-center gap-2 mb-3 bg-white shadow-sm max-h-48 rounded-2xl"
     >
-      {/* Image thumbnail */}
       <View className="relative w-[30%] h-full">
         <Image
           source={{ uri: property.images[0] }}
           className="w-full h-full rounded-r-none rounded-2xl"
         />
 
-        {/* Property type badge */}
         <View className="absolute px-2 py-0.5 rounded-full top-1 right-1 bg-blue-500/40">
           <Text className="text-[10px] font-semibold text-[#171947]">
             للبيع
@@ -64,9 +61,7 @@ export default function PropertyCard({
       <View className="flex-col flex-1 gap-2">
         <View className="flex-row items-end justify-between flex-1 gap-2 p-3 ">
           <View className="flex-row h-full gap-2 w-fit">
-            {/* Text content */}
             <View className="flex-col items-start gap-1 pr-3">
-              {/* Title - High priority */}
               <Text
                 className="mb-1  text-xl font-bold text-right text-[#171947]"
                 numberOfLines={1}
@@ -74,7 +69,6 @@ export default function PropertyCard({
                 {titleHandler(property.title, 19)}
               </Text>
 
-              {/* Location - Medium priority */}
               <View className="flex-row-reverse items-center gap-1 mb-1.5">
                 <Ionicons name="location" color={"#3b82f6"} size={13} />
 
@@ -83,7 +77,6 @@ export default function PropertyCard({
                 </Text>
               </View>
 
-              {/* Stats - Lower priority */}
               <View className="flex-row-reverse items-center gap-3 mb-1.5">
                 <View className="flex-row-reverse items-center gap-1">
                   <MaterialCommunityIcons
@@ -106,21 +99,18 @@ export default function PropertyCard({
                 </View>
               </View>
 
-              {/* Posted time - Lowest priority */}
               {property.postedAt && (
                 <Text className="mb-1 text-[11px] text-right text-[#8587A3]">
                   {property.postedAt}
                 </Text>
               )}
 
-              {/* Price - Highest priority */}
-              <Text className="text-lg font-bold text-right text-blue-800">
+              <Text className="text-lg font-bold text-right text-blue-500">
                 {property.price.toLocaleString("ar-EG")} جنيه
               </Text>
             </View>
           </View>
 
-          {/* Favorite */}
           <View className="flex-row items-start justify-start h-full ">
             <Pressable
               onPress={handleFavorite}
