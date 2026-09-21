@@ -8,7 +8,7 @@ export default function RootLayout() {
 
   return (
     <>
-      <StatusBar barStyle={"dark-content"} />
+      <StatusBar barStyle={"default"} />
       <NavigationBar style="inverted" />
       <SafeAreaProvider>
         <Stack

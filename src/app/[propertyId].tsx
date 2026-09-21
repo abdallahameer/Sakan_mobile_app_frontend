@@ -37,7 +37,6 @@ interface PropertyDetails {
   phone: string;
 }
 
-// Placeholder — replace with a real fetch keyed on the route's `id` param.
 const MOCK_PROPERTY: PropertyDetails = {
   id: "1",
   title: "شقة للبيع",
@@ -76,7 +75,6 @@ const MOCK_PROPERTY: PropertyDetails = {
 
 const screenWidth = Dimensions.get("screen").width;
 
-// Chunk a flat list into pairs for the two-column features grid
 function chunkPairs<T>(items: T[]): T[][] {
   const pairs: T[][] = [];
   for (let i = 0; i < items.length; i += 2) {
@@ -89,7 +87,7 @@ export default function PropertyDetailsScreen() {
   const router = useRouter();
   const { propertyId } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
-  const property = MOCK_PROPERTY; // swap for real data lookup using `id`
+  const property = MOCK_PROPERTY;
 
   const [currentImage, setCurrentImage] = useState(0);
   const [isFavorited, setIsFavorited] = useState(property.isFavorite);
@@ -108,14 +106,12 @@ export default function PropertyDetailsScreen() {
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]" edges={["top"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 33 }}>
-        {/* Full-width image */}
         <View className="relative">
           <Image
             source={{ uri: property.images[currentImage] }}
             style={{ width: screenWidth, height: 320 }}
           />
 
-          {/* Top overlay row */}
           <View className="absolute flex-row items-center justify-between w-full px-4 top-4">
             <Pressable
               onPress={() => router.back()}
@@ -145,7 +141,6 @@ export default function PropertyDetailsScreen() {
             </View>
           </View>
 
-          {/* Photo counter badge */}
           <Pressable className="absolute flex-row items-center gap-1 px-3 py-1.5 rounded-full bottom-4 left-4 bg-black/50">
             <Ionicons name="images-outline" size={14} color="#ffffff" />
             <Text className="text-xs font-semibold text-white">
@@ -154,13 +149,10 @@ export default function PropertyDetailsScreen() {
           </Pressable>
         </View>
 
-        {/* Details */}
         <View className="gap-3 px-5 pt-5">
-          {/* Title */}
           <Text className="text-xl font-bold text-left text-[#0F113C]">
             {propertyId}
           </Text>
-          {/* Address */}
           <View className="flex-row items-center gap-1">
             <Ionicons name="location-outline" size={15} color="#6B7280" />
             <Text className="flex-1 text-sm text-left text-[#6B7280]">
@@ -168,14 +160,12 @@ export default function PropertyDetailsScreen() {
             </Text>
           </View>
 
-          {/* Price */}
           <View className="flex-row items-center gap-2">
             <Text className="text-2xl font-bold text-[#10B981]">
               {property.price.toLocaleString("ar-EG")} ريال
             </Text>
           </View>
 
-          {/* Property info */}
           <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C]">
             معلومات العقار
           </Text>
@@ -204,7 +194,6 @@ export default function PropertyDetailsScreen() {
             ))}
           </View>
 
-          {/* Features */}
           <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C]">
             مميزات العقار
           </Text>
@@ -233,13 +222,11 @@ export default function PropertyDetailsScreen() {
                     />
                   </View>
                 ))}
-                {/* Fill the second cell if the last row has an odd item out */}
                 {pair.length === 1 && <View className="flex-1" />}
               </View>
             ))}
           </View>
 
-          {/* Description */}
           <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C]">
             وصف العقار
           </Text>
@@ -260,7 +247,6 @@ export default function PropertyDetailsScreen() {
           </Pressable>
         </View>
       </ScrollView>
-      {/* Bottom action bar */}
       <View
         className="flex-row items-center justify-between w-full gap-2 px-4 pt-3 border-t border-[#E5E7EB] bg-[#F8F9FA]"
         style={{ paddingBottom: insets.bottom + 12 }}

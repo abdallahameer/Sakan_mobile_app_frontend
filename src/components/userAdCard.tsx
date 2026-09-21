@@ -27,12 +27,10 @@ export default function UserAdCard({
       className="overflow-hidden bg-white shadow-sm rounded-2xl"
     >
       <View className="flex-row items-center gap-2">
-        {/* Thumbnail */}
         <View className="relative w-[30%] h-32">
           <Image source={{ uri: ad.images[0] }} className="w-full h-full" />
         </View>
 
-        {/* Info */}
         <View className="flex-1 gap-1 py-2 pr-3">
           <Text
             className="text-base font-bold text-left text-[#171947]"
@@ -57,12 +55,11 @@ export default function UserAdCard({
           </View>
 
           <Text className="text-sm font-bold text-left text-blue-800">
-            {ad.price.toLocaleString("ar-EG")} جنيه
+            {ad.price.toLocaleString()} جنيه
           </Text>
         </View>
       </View>
 
-      {/* Actions */}
       <View className="flex-row border-t border-[#E5E7EB]">
         <Pressable
           onPress={() => onEdit(ad.id)}

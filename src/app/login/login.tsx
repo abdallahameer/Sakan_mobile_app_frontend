@@ -19,7 +19,6 @@ export default function Login() {
 
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
-      {/* Header */}
       <View className="flex-row items-center justify-start gap-2 px-4 py-4 border-b border-[#0F113C]">
         <Pressable onPress={() => router.back()}>
           <Ionicons name="arrow-forward" size={22} color="#0F113C" />
@@ -36,7 +35,6 @@ export default function Login() {
           />
         </View>
 
-        {/* Phone number */}
         <View className="gap-2">
           <Text className="text-base font-semibold text-left text-[#0F113C]">
             رقم الهاتف*
@@ -55,7 +53,6 @@ export default function Login() {
           </View>
         </View>
 
-        {/* Password */}
         <View className="gap-2">
           <Text className="text-base font-semibold text-left text-[#0F113C]">
             كلمة المرور*
@@ -79,7 +76,6 @@ export default function Login() {
           </View>
         </View>
 
-        {/* Forgot password */}
         <Pressable
           onPress={() => router.push("/forgot-password" as any)}
           className="self-start"
@@ -89,12 +85,10 @@ export default function Login() {
           </Text>
         </Pressable>
 
-        {/* Submit */}
         <Pressable className="items-center justify-center py-4 mt-2 rounded-xl bg-[#0F113C]">
           <Text className="text-base font-bold text-white">تسجيل الدخول</Text>
         </Pressable>
 
-        {/* Go to signup */}
         <View className="flex-row justify-center gap-1 mt-2">
           <Pressable onPress={() => router.push("/signup" as any)}>
             <Text className="text-sm font-bold text-[#10B981]">إنشاء حساب</Text>

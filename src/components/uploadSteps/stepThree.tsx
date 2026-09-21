@@ -1,136 +1,63 @@
-import { Control, UseFormSetValue, useWatch } from "react-hook-form";
+import { Control, UseFormSetValue } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
-import { UploadFormFields } from "../../app/add-property";
+import { MyAd } from "@/data/myAds";
+import { UploadFormFields } from "@/data/typs";
 import NumberRow from "../uploadpropertyHelperComponents/NumberRow";
 import SliderRow from "../uploadpropertyHelperComponents/SliderRow";
 import ToggleRow from "../uploadpropertyHelperComponents/ToggleRow";
 type StepThreeProps = {
   control: Control<UploadFormFields>;
+  formValues: UploadFormFields | MyAd;
   setValue: UseFormSetValue<UploadFormFields>;
   onNext: () => void;
   onBack: () => void;
+  update?: boolean;
 };
 
 export default function StepThree({
   control,
+  formValues,
   setValue,
   onNext,
   onBack,
+  update = false,
 }: StepThreeProps) {
-  const propertyType = useWatch({
-    control,
-    name: "propertyType",
-  });
+  const selectRent = () => {
+    setValue("forRent", true, { shouldDirty: true });
+    setValue("forSell", false, { shouldDirty: true });
+    setValue("propertyStatus", null, { shouldDirty: true });
+    setValue("propertyType", "resedencial", { shouldDirty: true });
+    setValue("familyOrSingle", "family", { shouldDirty: true });
+    setValue("paymentType", "شهري", { shouldDirty: true });
+  };
 
-  const paymentType = useWatch({
-    control,
-    name: "paymentType",
-  });
+  const selectSale = () => {
+    setValue("forRent", false, { shouldDirty: true });
+    setValue("forSell", true, { shouldDirty: true });
+    setValue("propertyStatus", "ready", { shouldDirty: true });
+    setValue("propertyType", null, { shouldDirty: true });
+    setValue("familyOrSingle", null, { shouldDirty: true });
+    setValue("paymentType", null, { shouldDirty: true });
+  };
 
-  const rooms =
-    useWatch({
-      control,
-      name: "rooms",
-    }) ?? 0;
-
-  const bathrooms =
-    useWatch({
-      control,
-      name: "bathrooms",
-    }) ?? 0;
-
-  const livingRoom =
-    useWatch({
-      control,
-      name: "livingRoom",
-    }) ?? 0;
-
-  const floorNumber =
-    useWatch({
-      control,
-      name: "floorNumber",
-    }) ?? 0;
-
-  const propertyAge =
-    useWatch({
-      control,
-      name: "propertyAge",
-    }) ?? 0;
-
-  const furnished =
-    useWatch({
-      control,
-      name: "furnished",
-    }) ?? false;
-
-  const kitchen =
-    useWatch({
-      control,
-      name: "kitchen",
-    }) ?? false;
-
-  const annex =
-    useWatch({
-      control,
-      name: "annex",
-    }) ?? false;
-
-  const carEntrance =
-    useWatch({
-      control,
-      name: "carEntrance",
-    }) ?? false;
-
-  const elevator =
-    useWatch({
-      control,
-      name: "elevator",
-    }) ?? false;
-
-  const airConditioners =
-    useWatch({
-      control,
-      name: "airConditioners",
-    }) ?? false;
-
-  const water =
-    useWatch({
-      control,
-      name: "water",
-    }) ?? false;
-
-  const roof =
-    useWatch({
-      control,
-      name: "roof",
-    }) ?? false;
-
-  const electricity =
-    useWatch({
-      control,
-      name: "electricity",
-    }) ?? false;
-
-  const solarSystem =
-    useWatch({
-      control,
-      name: "solarSystem",
-    }) ?? false;
-
-  const forRent =
-    useWatch({
-      control,
-      name: "forRent",
-    }) ?? false;
+  const selectPropertyType = (propertyType: "resedencial" | "commercial") => {
+    setValue("propertyType", propertyType, { shouldDirty: true });
+    setValue(
+      "familyOrSingle",
+      propertyType === "resedencial" ? "family" : null,
+      { shouldDirty: true },
+    );
+  };
 
   const updateNumber = (
     field: "floorNumber" | "propertyAge",
     amount: number,
   ) => {
-    const current = field === "floorNumber" ? floorNumber : propertyAge;
+    const current =
+      field === "floorNumber" ? formValues.floorNumber : formValues.propertyAge;
 
-    setValue(field, Math.max(0, (current ?? 0) + amount), {
+    setValue(field, Math.max(0, current + amount), {
       shouldDirty: true,
       shouldValidate: true,
     });
@@ -142,23 +69,17 @@ export default function StepThree({
         showsVerticalScrollIndicator={false}
         contentContainerClassName="pb-6"
       >
-        {/* Rent or Sell */}
         <View className="px-4 pt-3 ">
           <View className="flex-row h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
             <Pressable
-              onPress={() => {
-                setValue("forRent", true, {
-                  shouldDirty: true,
-                });
-                setValue("forSell", false);
-              }}
+              onPress={selectRent}
               className={`items-center justify-center flex-1 ${
-                forRent === true ? "bg-[#0F113C]" : "bg-transparent"
+                formValues.forRent === true ? "bg-[#0F113C]" : "bg-transparent"
               }`}
             >
               <Text
                 className={`text-xs font-semibold ${
-                  forRent === true ? "text-white" : "text-[#0F113C]"
+                  formValues.forRent === true ? "text-white" : "text-[#0F113C]"
                 }`}
               >
                 إيجار
@@ -166,19 +87,14 @@ export default function StepThree({
             </Pressable>
 
             <Pressable
-              onPress={() => {
-                setValue("forRent", false, {
-                  shouldDirty: true,
-                });
-                setValue("forSell", true);
-              }}
+              onPress={selectSale}
               className={`items-center justify-center flex-1 ${
-                forRent === false ? "bg-[#0F113C]" : "bg-transparent"
+                formValues.forRent === false ? "bg-[#0F113C]" : "bg-transparent"
               }`}
             >
               <Text
                 className={`text-xs font-semibold ${
-                  forRent === false ? "text-white" : "text-[#0F113C]"
+                  formValues.forRent === false ? "text-white" : "text-[#0F113C]"
                 }`}
               >
                 بيع
@@ -187,49 +103,101 @@ export default function StepThree({
           </View>
         </View>
 
-        {forRent ? (
+        {formValues.forRent ? (
           <>
             <View className="px-4 pt-3">
               <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
                 <Pressable
-                  onPress={() =>
-                    setValue("propertyType", "عزاب", {
-                      shouldDirty: true,
-                    })
-                  }
+                  onPress={() => selectPropertyType("resedencial")}
                   className={`items-center justify-center flex-1 ${
-                    propertyType === "عزاب" ? "bg-[#0F113C]" : "bg-transparent"
+                    formValues.propertyType === "resedencial"
+                      ? "bg-[#0F113C]"
+                      : "bg-transparent"
                   }`}
                 >
                   <Text
                     className={`text-xs font-semibold ${
-                      propertyType === "عزاب" ? "text-white" : "text-[#0F113C]"
+                      formValues.propertyType === "resedencial"
+                        ? "text-white"
+                        : "text-[#0F113C]"
                     }`}
                   >
-                    عزاب
+                    سكني
                   </Text>
                 </Pressable>
 
                 <Pressable
-                  onPress={() =>
-                    setValue("propertyType", "عوائل", {
-                      shouldDirty: true,
-                    })
-                  }
+                  onPress={() => selectPropertyType("commercial")}
                   className={`items-center justify-center flex-1 ${
-                    propertyType === "عوائل" ? "bg-[#0F113C]" : "bg-transparent"
+                    formValues.propertyType === "commercial"
+                      ? "bg-[#0F113C]"
+                      : "bg-transparent"
                   }`}
                 >
                   <Text
                     className={`text-xs font-semibold ${
-                      propertyType === "عوائل" ? "text-white" : "text-[#0F113C]"
+                      formValues.propertyType === "commercial"
+                        ? "text-white"
+                        : "text-[#0F113C]"
                     }`}
                   >
-                    عوائل
+                    تجاري
                   </Text>
                 </Pressable>
               </View>
             </View>
+
+            {formValues.propertyType === "resedencial" && (
+              <View className="px-4 pt-3">
+                <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
+                  <Pressable
+                    onPress={() =>
+                      setValue("familyOrSingle", "single", {
+                        shouldDirty: true,
+                      })
+                    }
+                    className={`items-center justify-center flex-1 ${
+                      formValues.familyOrSingle === "single"
+                        ? "bg-[#0F113C]"
+                        : "bg-transparent"
+                    }`}
+                  >
+                    <Text
+                      className={`text-xs font-semibold ${
+                        formValues.familyOrSingle === "single"
+                          ? "text-white"
+                          : "text-[#0F113C]"
+                      }`}
+                    >
+                      عزاب
+                    </Text>
+                  </Pressable>
+
+                  <Pressable
+                    onPress={() =>
+                      setValue("familyOrSingle", "family", {
+                        shouldDirty: true,
+                      })
+                    }
+                    className={`items-center justify-center flex-1 ${
+                      formValues.familyOrSingle === "family"
+                        ? "bg-[#0F113C]"
+                        : "bg-transparent"
+                    }`}
+                  >
+                    <Text
+                      className={`text-xs font-semibold ${
+                        formValues.familyOrSingle === "family"
+                          ? "text-white"
+                          : "text-[#0F113C]"
+                      }`}
+                    >
+                      عوائل
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            )}
 
             <View className="px-4 pt-3 ">
               <View className="flex-row-reverse h-9 overflow-hidden border border-[#0F113C] bg-[#F0F0F3] rounded-lg">
@@ -242,12 +210,16 @@ export default function StepThree({
                       })
                     }
                     className={`items-center justify-center flex-1 ${
-                      paymentType === type ? "bg-[#0F113C]" : "bg-transparent"
+                      formValues.paymentType === type
+                        ? "bg-[#0F113C]"
+                        : "bg-transparent"
                     }`}
                   >
                     <Text
                       className={`text-xs font-semibold ${
-                        paymentType === type ? "text-white" : "text-[#0F113C]"
+                        formValues.paymentType === type
+                          ? "text-white"
+                          : "text-[#0F113C]"
                       }`}
                     >
                       {type}
@@ -257,14 +229,63 @@ export default function StepThree({
               </View>
             </View>
           </>
-        ) : null}
+        ) : (
+          <View className="px-4 pt-3">
+            <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
+              <Pressable
+                onPress={() =>
+                  setValue("propertyStatus", "ready", {
+                    shouldDirty: true,
+                  })
+                }
+                className={`items-center justify-center flex-1 ${
+                  formValues.propertyStatus === "ready"
+                    ? "bg-[#0F113C]"
+                    : "bg-transparent"
+                }`}
+              >
+                <Text
+                  className={`text-xs font-semibold ${
+                    formValues.propertyStatus === "ready"
+                      ? "text-white"
+                      : "text-[#0F113C]"
+                  }`}
+                >
+                  جاهز
+                </Text>
+              </Pressable>
+
+              <Pressable
+                onPress={() =>
+                  setValue("propertyStatus", "underConstruction", {
+                    shouldDirty: true,
+                  })
+                }
+                className={`items-center justify-center flex-1 ${
+                  formValues.propertyStatus === "underConstruction"
+                    ? "bg-[#0F113C]"
+                    : "bg-transparent"
+                }`}
+              >
+                <Text
+                  className={`text-xs font-semibold ${
+                    formValues.propertyStatus === "underConstruction"
+                      ? "text-white"
+                      : "text-[#0F113C]"
+                  }`}
+                >
+                  قيد الإنشاء
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
         <View className="w-full h-0.5 mt-1 bg-[#0F113C]" />
 
-        {/* Sliders */}
         <View className="mt-2">
           <SliderRow
             label="الغرف"
-            value={rooms}
+            value={formValues.rooms}
             min={0}
             max={10}
             onChange={(value) =>
@@ -276,7 +297,7 @@ export default function StepThree({
 
           <SliderRow
             label="دورات المياه"
-            value={bathrooms}
+            value={formValues.bathrooms}
             min={0}
             max={10}
             onChange={(value) =>
@@ -288,7 +309,7 @@ export default function StepThree({
 
           <SliderRow
             label="الصالات"
-            value={livingRoom}
+            value={formValues.livingRoom}
             min={0}
             max={10}
             onChange={(value) =>
@@ -299,24 +320,22 @@ export default function StepThree({
           />
         </View>
 
-        {/* Number fields */}
         <NumberRow
           label="رقم الدور"
-          value={floorNumber}
+          value={formValues.floorNumber}
           onMinus={() => updateNumber("floorNumber", -1)}
           onPlus={() => updateNumber("floorNumber", 1)}
         />
 
         <NumberRow
           label="عمر العقار"
-          value={propertyAge}
+          value={formValues.propertyAge}
           onMinus={() => updateNumber("propertyAge", -1)}
           onPlus={() => updateNumber("propertyAge", 1)}
         />
-        {/* Boolean options */}
         <ToggleRow
           label="مؤثثة"
-          value={furnished}
+          value={formValues.furnished}
           onChange={(value) =>
             setValue("furnished", value, {
               shouldDirty: true,
@@ -326,7 +345,7 @@ export default function StepThree({
 
         <ToggleRow
           label="مطبخ"
-          value={kitchen}
+          value={formValues.kitchen}
           onChange={(value) =>
             setValue("kitchen", value, {
               shouldDirty: true,
@@ -336,7 +355,7 @@ export default function StepThree({
 
         <ToggleRow
           label="ملحق"
-          value={annex}
+          value={formValues.annex}
           onChange={(value) =>
             setValue("annex", value, {
               shouldDirty: true,
@@ -346,7 +365,7 @@ export default function StepThree({
 
         <ToggleRow
           label="مدخل سيارة"
-          value={carEntrance}
+          value={formValues.carEntrance}
           onChange={(value) =>
             setValue("carEntrance", value, {
               shouldDirty: true,
@@ -356,7 +375,7 @@ export default function StepThree({
 
         <ToggleRow
           label="سطح خاص"
-          value={roof}
+          value={formValues.roof}
           onChange={(value) =>
             setValue("roof", value, {
               shouldDirty: true,
@@ -365,7 +384,7 @@ export default function StepThree({
         />
         <ToggleRow
           label="توفر الماء"
-          value={water}
+          value={formValues.water}
           onChange={(value) =>
             setValue("water", value, {
               shouldDirty: true,
@@ -374,7 +393,7 @@ export default function StepThree({
         />
         <ToggleRow
           label="طاقة شمسية"
-          value={solarSystem}
+          value={formValues.solarSystem}
           onChange={(value) =>
             setValue("solarSystem", value, {
               shouldDirty: true,
@@ -383,7 +402,7 @@ export default function StepThree({
         />
         <ToggleRow
           label="توفر كهرباء"
-          value={electricity}
+          value={formValues.electricity}
           onChange={(value) =>
             setValue("electricity", value, {
               shouldDirty: true,
@@ -392,7 +411,7 @@ export default function StepThree({
         />
         <ToggleRow
           label="مصعد"
-          value={elevator}
+          value={formValues.elevator}
           onChange={(value) =>
             setValue("elevator", value, {
               shouldDirty: true,
@@ -402,7 +421,7 @@ export default function StepThree({
 
         <ToggleRow
           label="مكيف"
-          value={airConditioners}
+          value={formValues.airConditioners}
           onChange={(value) =>
             setValue("airConditioners", value, {
               shouldDirty: true,
@@ -410,15 +429,16 @@ export default function StepThree({
           }
         />
 
-        {/* Navigation */}
-        <View className="flex-row gap-3 px-4 mt-5">
-          <Pressable
-            onPress={onNext}
-            className="items-center justify-center flex-1 py-3.5 rounded-xl bg-[#0F113C]"
-          >
-            <Text className="text-base font-bold text-white">نشر</Text>
-          </Pressable>
-        </View>
+        {update == false ? (
+          <View className="flex-row gap-3 px-4 mt-5">
+            <Pressable
+              onPress={onNext}
+              className="items-center justify-center flex-1 py-3.5 rounded-xl bg-[#0F113C]"
+            >
+              <Text className="text-base font-bold text-white">نشر</Text>
+            </Pressable>
+          </View>
+        ) : null}
       </ScrollView>
     </View>
   );

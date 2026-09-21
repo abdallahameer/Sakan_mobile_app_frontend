@@ -4,8 +4,6 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, Pressable, Switch, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-// Adjust this import path to wherever PropertyCard actually lives in your project
-// (e.g. "@/components/PropertyCard" if you have that alias set up).
 
 interface Property {
   id: string;
@@ -173,8 +171,7 @@ export default function NotificationsSettings() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      {/* Header */}
+    <SafeAreaView className="flex-1 bg-[#F0F1FA]">
       <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
         <Pressable
           onPress={() => {
@@ -195,9 +192,8 @@ export default function NotificationsSettings() {
         contentContainerClassName="p-4"
         ListHeaderComponent={
           <View>
-            {/* Pause/resume switch */}
-            <View className="flex-row-reverse items-center justify-between px-4 py-4 mb-6 border border-[#E5E7EB] rounded-2xl">
-              <View className="flex-1 gap-1 pr-3">
+            <View className="flex-row bg-white items-center justify-between px-4 py-4 mb-6 border border-[#E5E7EB] rounded-2xl">
+              <View className="flex-col items-start flex-1 gap-1 pr-3">
                 <Text className="text-base font-semibold text-right text-[#0F113C]">
                   تفعيل الإشعارات
                 </Text>
@@ -215,7 +211,7 @@ export default function NotificationsSettings() {
               />
             </View>
 
-            <Text className="mb-3 text-base font-bold text-right text-[#0F113C]">
+            <Text className="mb-3 text-base font-bold text-left text-[#0F113C]">
               أحدث الإشعارات
             </Text>
           </View>
