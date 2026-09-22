@@ -1,12 +1,21 @@
+import PhoneNumberInput from "@/components/InputsComponents/PhoneNumberInput";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { useForm } from "react-hook-form";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+type ForgotPasswordForm = {
+  phone: string;
+  countryKey: string;
+};
 
 export default function ForgotPassword() {
   const router = useRouter();
-  const [phone, setPhone] = useState("");
+  const { control, handleSubmit, setValue, watch } =
+    useForm<ForgotPasswordForm>({
+      defaultValues: { phone: "", countryKey: "+249" },
+    });
 
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
@@ -30,25 +39,25 @@ export default function ForgotPassword() {
           </Text>
         </View>
 
-        <View className="gap-2">
-          <Text className="text-base font-semibold text-left text-[#0F113C]">
-            رقم الهاتف*
-          </Text>
-          <View className="flex-row-reverse items-center px-3 border border-[#0F113C] rounded-xl">
-            <Text className="text-lg">🇸🇩</Text>
-            <View className="w-px h-5 mx-2.5 bg-[#E5E7EB]" />
-            <TextInput
-              value={phone}
-              onChangeText={setPhone}
-              placeholder="9x xxxxxxxx"
-              placeholderTextColor="#9CA3AF"
-              keyboardType="phone-pad"
-              className="flex-1 py-3.5 text-right text-[#0F113C]"
-            />
-          </View>
-        </View>
+        {/* <AppNumberInput
+          control={control}
+          name="phone"
+          label="رقم الهاتف*"
+          placeholder="9x xxxxxxxx"
+          suffix="🇸🇩"
+        /> */}
 
-        <Pressable className="items-center justify-center py-4 mt-2 rounded-xl bg-[#0F113C]">
+        <PhoneNumberInput
+          countryFieldName="countryKey"
+          name="phone"
+          setValue={setValue}
+          control={control}
+        />
+
+        <Pressable
+          onPress={handleSubmit(() => undefined)}
+          className="items-center justify-center py-4 mt-2 rounded-xl bg-[#0F113C]"
+        >
           <Text className="text-base font-bold text-white">
             إرسال رمز التحقق
           </Text>

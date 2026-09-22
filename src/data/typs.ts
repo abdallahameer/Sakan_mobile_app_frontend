@@ -53,3 +53,9 @@ export type UploadFormFields = {
   forRent: boolean;
   forSell: boolean;
 };
+
+export type LoginForm = {
+  phone: string;
+  password: string;
+  countryKey: string;
+};

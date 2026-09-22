@@ -31,32 +31,32 @@ export default function PrivacyPolicy() {
       </SafeAreaView>
 
       <ScrollView style={{ flex: 1 }} contentContainerClassName=" pb-10">
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView className=" px-2.5" style={{ flex: 1 }}>
           {/* Logo */}
           <View className="flex-row items-center justify-center">
             <Image
               className="h-32 w-36"
               resizeMode="contain"
-              source={require("../../../assets/progectImages/sakanLogo.png")}
+              source={require("../../../assets/progectImages/maskanLogo.png")}
             />
           </View>
 
           <Text className="mb-1 text-2xl font-bold text-left text-[#0F113C]">
-            سياسة الخصوصية لتطبيق سكن
+            سياسة الخصوصية لتطبيق مسكن
           </Text>
           <Text className="mb-4 text-sm text-left text-[#9CA3AF]">
             آخر تحديث: [ضع التاريخ هنا]
           </Text>
           <Text className="mb-3 text-base leading-7 text-left text-[#374151]">
-            مرحبًا بك في تطبيق "سكن". نحن نحترم خصوصيتك ونلتزم بحماية بياناتك
+            مرحبًا بك في تطبيق "مسكن". نحن نحترم خصوصيتك ونلتزم بحماية بياناتك
             الشخصية. توضح سياسة الخصوصية هذه نوع المعلومات التي نجمعها، وكيف
-            نستخدمها، وكيف نحميها عند استخدامك لتطبيق سكن.
+            نستخدمها، وكيف نحميها عند استخدامك لتطبيق مسكن.
           </Text>
           <Text className="mb-3 text-base leading-7 text-left text-[#374151]">
-            يتم تشغيل التطبيق وإدارته بواسطة فريق سكن.
+            يتم تشغيل التطبيق وإدارته بواسطة فريق مسكن.
           </Text>
           <Text className="mb-6 text-base leading-7 text-left text-[#374151]">
-            باستخدامك لتطبيق سكن، فإنك توافق على جمع واستخدام المعلومات وفقًا
+            باستخدامك لتطبيق مسكن فإنك توافق على جمع واستخدام المعلومات وفقًا
             لما هو موضح في سياسة الخصوصية هذه.
           </Text>
 
@@ -66,7 +66,7 @@ export default function PrivacyPolicy() {
               1. المعلومات التي نجمعها
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              عند إنشاء حساب في تطبيق سكن، قد نجمع المعلومات التالية:
+              عند إنشاء حساب في تطبيق مسكن قد نجمع المعلومات التالية:
             </Text>
             <View className="flex-row-reverse items-start gap-1.5 mb-1.5 pr-1">
               <Text className="text-base leading-7 text-[#0F113C]">•</Text>
@@ -118,7 +118,7 @@ export default function PrivacyPolicy() {
               2. إنشاء الحساب وتسجيل الدخول
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              يتطلب استخدام تطبيق سكن إنشاء حساب وتسجيل الدخول.
+              يتطلب استخدام تطبيق مسكن إنشاء حساب وتسجيل الدخول.
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
               نستخدم رقم الهاتف لأغراض تشمل:
@@ -255,7 +255,7 @@ export default function PrivacyPolicy() {
               قد يتم التواصل مع صاحب العقار من خلال الاتصال الهاتفي أو WhatsApp.
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              لا يوفر تطبيق سكن نظام محادثة داخليًا في الوقت الحالي، ولا يقوم
+              لا يوفر تطبيق مسكن نظام محادثة داخليًا في الوقت الحالي، ولا يقوم
               التطبيق بتخزين محادثات WhatsApp التي تتم خارج التطبيق.
             </Text>
           </View>
@@ -315,7 +315,7 @@ export default function PrivacyPolicy() {
               7. الموقع الجغرافي
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              قد يطلب تطبيق سكن إذن الوصول إلى موقع الجهاز.
+              قد يطلب تطبيق مسكن إذن الوصول إلى موقع الجهاز.
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
               يتم استخدام الموقع الحالي للجهاز بهدف:
@@ -377,7 +377,7 @@ export default function PrivacyPolicy() {
               10. الإشعارات
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              يستخدم تطبيق سكن الإشعارات لإرسال تحديثات متعلقة بالعقارات وبعض
+              يستخدم تطبيق مسكن الإشعارات لإرسال تحديثات متعلقة بالعقارات وبعض
               وظائف التطبيق.
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
@@ -392,8 +392,8 @@ export default function PrivacyPolicy() {
               11. المعلومات التي لا نجمعها حاليًا
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              لا يقوم تطبيق سكن حاليًا بجمع أو استخدام بعض أنواع البيانات لأغراض
-              التحليل، ومنها:
+              لا يقوم تطبيق مسكن حاليًا بجمع أو استخدام بعض أنواع البيانات
+              لأغراض التحليل، ومنها:
             </Text>
             <View className="flex-row-reverse items-start gap-1.5 mb-1.5 pr-1">
               <Text className="text-base leading-7 text-[#0F113C]">•</Text>
@@ -424,7 +424,7 @@ export default function PrivacyPolicy() {
               12. خدمات الطرف الثالث والبنية التحتية
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              يستخدم تطبيق سكن خدمات وبنية تحتية خارجية ضرورية لتشغيل التطبيق
+              يستخدم تطبيق مسكن خدمات وبنية تحتية خارجية ضرورية لتشغيل التطبيق
               وتخزين البيانات وحمايتها.
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
@@ -436,7 +436,7 @@ export default function PrivacyPolicy() {
               اللازم لتوفير وظائف التطبيق وحمايته.
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              لا يقوم فريق سكن ببيع البيانات الشخصية للمستخدمين.
+              لا يقوم فريق مسكن ببيع البيانات الشخصية للمستخدمين.
             </Text>
           </View>
 
@@ -568,7 +568,7 @@ export default function PrivacyPolicy() {
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
               إذا لم يتمكن المستخدم من حذف بعض بياناته من داخل التطبيق، يمكنه
-              التواصل مع فريق سكن وطلب حذف بياناته.
+              التواصل مع فريق مسكن وطلب حذف بياناته.
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
               سنراجع الطلب ونتخذ الإجراءات المناسبة وفقًا للقوانين والالتزامات
@@ -582,7 +582,7 @@ export default function PrivacyPolicy() {
               17. بيانات الأطفال
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              تطبيق سكن موجه بشكل عام للطلاب والعائلات والبالغين وغيرهم من
+              تطبيق مسكن موجه بشكل عام للطلاب والعائلات والبالغين وغيرهم من
               المستخدمين.
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
@@ -625,7 +625,7 @@ export default function PrivacyPolicy() {
               WhatsApp تخضع أيضًا لسياسات الخصوصية الخاصة بتلك الخدمات.
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              لا يقوم تطبيق سكن بتخزين محادثات WhatsApp التي تتم خارج التطبيق.
+              لا يقوم تطبيق مسكن بتخزين محادثات WhatsApp التي تتم خارج التطبيق.
             </Text>
           </View>
 
@@ -654,7 +654,7 @@ export default function PrivacyPolicy() {
               21. الميزات المستقبلية
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              قد تتم إضافة ميزات جديدة إلى تطبيق سكن مستقبلًا.
+              قد تتم إضافة ميزات جديدة إلى تطبيق مسكن مستقبلًا.
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
               إذا تمت إضافة ميزات تؤثر على طريقة جمع أو استخدام أو مشاركة
@@ -670,7 +670,7 @@ export default function PrivacyPolicy() {
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
               إذا كان لديك أي سؤال أو استفسار متعلق بسياسة الخصوصية أو بياناتك
-              الشخصية، يمكنك التواصل مع فريق سكن من خلال وسائل التواصل المتاحة
+              الشخصية، يمكنك التواصل مع فريق مسكن من خلال وسائل التواصل المتاحة
               داخل التطبيق.
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
@@ -684,7 +684,7 @@ export default function PrivacyPolicy() {
               23. الموافقة
             </Text>
             <Text className="mb-2 text-base leading-7 text-left text-[#374151]">
-              باستخدامك تطبيق سكن وإنشاء حساب فيه، فإنك تقر بأنك قرأت سياسة
+              باستخدامك تطبيق مسكن وإنشاء حساب فيه، فإنك تقر بأنك قرأت سياسة
               الخصوصية هذه وفهمت كيفية جمع واستخدام وحماية بياناتك كما هو موضح
               فيها.
             </Text>
