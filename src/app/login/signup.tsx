@@ -1,15 +1,25 @@
+import AppTextInput from "@/components/InputsComponents/Apptextinput";
+import PhoneNumberInput from "@/components/InputsComponents/PhoneNumberInput";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { useForm } from "react-hook-form";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+type SignUpForm = {
+  name: string;
+  phone: string;
+  password: string;
+  countryKey: string;
+};
 
 export default function SignUp() {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { control, handleSubmit, watch, setValue } = useForm<SignUpForm>({
+    defaultValues: { name: "", phone: "", password: "", countryKey: "+249" },
+  });
 
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
@@ -30,52 +40,35 @@ export default function SignUp() {
           </Text>
         </View>
 
-        <View className="gap-2">
-          <Text className="text-base font-semibold text-left text-[#0F113C]">
-            الاسم*
-          </Text>
-          <View className="border border-[#0F113C] rounded-xl">
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              placeholder="الاسم الكامل"
-              placeholderTextColor="#9CA3AF"
-              className="px-3.5 py-3.5 text-right text-[#0F113C]"
-            />
-          </View>
-        </View>
+        <AppTextInput
+          control={control}
+          name="name"
+          label="الاسم*"
+          placeholder="الاسم الكامل"
+        />
 
-        <View className="gap-2">
-          <Text className="text-base font-semibold text-left text-[#0F113C]">
-            رقم الهاتف*
-          </Text>
-          <View className="flex-row-reverse items-center px-3 border border-[#0F113C] rounded-xl">
-            <Text className="text-lg">🇸🇩</Text>
-            <View className="w-px h-5 mx-2.5 bg-[#E5E7EB]" />
-            <TextInput
-              value={phone}
-              onChangeText={setPhone}
-              placeholder="9x xxxxxxxx"
-              placeholderTextColor="#9CA3AF"
-              keyboardType="phone-pad"
-              className="flex-1 py-3.5 text-right text-[#0F113C]"
-            />
-          </View>
-        </View>
+        {/* <AppNumberInput
+          control={control}
+          name="phone"
+          label="رقم الهاتف*"
+          placeholder="9x xxxxxxxx"
+          suffix="🇸🇩"
+        /> */}
 
-        <View className="gap-2">
-          <Text className="text-base font-semibold text-left text-[#0F113C]">
-            كلمة المرور*
-          </Text>
-          <View className="flex-row items-center px-3 border border-[#0F113C] rounded-xl">
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              placeholder="أدخل 8 احرف على الأقل"
-              placeholderTextColor="#9CA3AF"
-              secureTextEntry={!showPassword}
-              className="flex-1 py-3.5 text-right text-[#0F113C]"
-            />
+        <PhoneNumberInput
+          countryFieldName="countryKey"
+          setValue={setValue}
+          name="phone"
+          control={control}
+        />
+
+        <AppTextInput
+          control={control}
+          name="password"
+          label="كلمة المرور*"
+          placeholder="أدخل 8 احرف على الأقل"
+          secureTextEntry={!showPassword}
+          rightElement={
             <Pressable onPress={() => setShowPassword((prev) => !prev)}>
               <Ionicons
                 name={showPassword ? "eye-off-outline" : "eye-outline"}
@@ -83,10 +76,13 @@ export default function SignUp() {
                 color="#9CA3AF"
               />
             </Pressable>
-          </View>
-        </View>
+          }
+        />
 
-        <Pressable className="items-center justify-center py-4 mt-2 rounded-xl bg-[#0F113C]">
+        <Pressable
+          onPress={handleSubmit(() => undefined)}
+          className="items-center justify-center py-4 mt-2 rounded-xl bg-[#0F113C]"
+        >
           <Text className="text-base font-bold text-white">إنشاء حساب</Text>
         </Pressable>
 

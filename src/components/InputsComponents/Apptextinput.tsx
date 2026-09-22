@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
 import {
   KeyboardTypeOptions,
@@ -17,6 +17,7 @@ type BaseProps = {
   keyboardType?: KeyboardTypeOptions;
   editable?: boolean;
   containerClassName?: string;
+  rightElement?: ReactNode;
 };
 
 type UncontrolledProps = BaseProps & {
@@ -49,6 +50,7 @@ export default function AppTextInput<TFieldValues extends FieldValues>(
     keyboardType = "default",
     editable = true,
     containerClassName = "",
+    rightElement,
   } = props;
 
   const [isFocused, setIsFocused] = useState(false);
@@ -80,33 +82,38 @@ export default function AppTextInput<TFieldValues extends FieldValues>(
       )}
 
       <View
-        className="border rounded-xl"
+        className={`flex-row items-center border rounded-xl ${
+          rightElement ? "px-3" : ""
+        }`}
         style={{
           borderColor,
           backgroundColor: editable ? "#ffffff" : "#F3F4F6",
         }}
       >
-        {"control" in props && props.control ? (
-          <Controller
-            control={props.control}
-            name={props.name}
-            render={({ field: { value, onChange } }) => (
-              <RNTextInput
-                {...sharedInputProps}
-                value={value ?? ""}
-                onChangeText={onChange}
-              />
-            )}
-          />
-        ) : (
-          <RNTextInput
-            {...sharedInputProps}
-            value={"value" in props ? props.value : ""}
-            onChangeText={
-              "onChangeText" in props ? props.onChangeText : undefined
-            }
-          />
-        )}
+        <View className="flex-1">
+          {"control" in props && props.control ? (
+            <Controller
+              control={props.control}
+              name={props.name}
+              render={({ field: { value, onChange } }) => (
+                <RNTextInput
+                  {...sharedInputProps}
+                  value={value ?? ""}
+                  onChangeText={onChange}
+                />
+              )}
+            />
+          ) : (
+            <RNTextInput
+              {...sharedInputProps}
+              value={"value" in props ? props.value : ""}
+              onChangeText={
+                "onChangeText" in props ? props.onChangeText : undefined
+              }
+            />
+          )}
+        </View>
+        {rightElement}
       </View>
 
       {error && (

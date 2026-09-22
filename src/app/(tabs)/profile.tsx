@@ -191,6 +191,7 @@ export default function ProfileScreen() {
         </View>
 
         <Pressable
+          onPress={() => router.replace("/login/login")}
           className="flex-row-reverse items-center justify-center gap-2 py-3 mx-4 mt-4 border rounded-2xl"
           style={{ borderColor: "#FCA5A5" }}
         >
