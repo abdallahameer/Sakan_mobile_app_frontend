@@ -1,4 +1,4 @@
-import { Control, UseFormSetValue } from "react-hook-form";
+import { UseFormSetValue } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 import { MyAd } from "@/data/myAds";
@@ -7,20 +7,16 @@ import NumberRow from "../uploadpropertyHelperComponents/NumberRow";
 import SliderRow from "../uploadpropertyHelperComponents/SliderRow";
 import ToggleRow from "../uploadpropertyHelperComponents/ToggleRow";
 type StepThreeProps = {
-  control: Control<UploadFormFields>;
   formValues: UploadFormFields | MyAd;
   setValue: UseFormSetValue<UploadFormFields>;
-  onNext: () => void;
-  onBack: () => void;
+  onSubmit: (formValues: UploadFormFields) => void;
   update?: boolean;
 };
 
 export default function StepThree({
-  control,
   formValues,
   setValue,
-  onNext,
-  onBack,
+  onSubmit,
   update = false,
 }: StepThreeProps) {
   const selectRent = () => {
@@ -432,7 +428,7 @@ export default function StepThree({
         {update == false ? (
           <View className="flex-row gap-3 px-4 mt-5">
             <Pressable
-              onPress={onNext}
+              onPress={() => onSubmit(formValues)}
               className="items-center justify-center flex-1 py-3.5 rounded-xl bg-[#0F113C]"
             >
               <Text className="text-base font-bold text-white">نشر</Text>

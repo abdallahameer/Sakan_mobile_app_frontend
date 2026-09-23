@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import StepOne from "../components/uploadSteps/stepOne";
 
 export default function UploadProperty() {
@@ -48,6 +49,14 @@ export default function UploadProperty() {
     },
   });
   const formValues = watch();
+
+  const onSumbit = (formValues: UploadFormFields) => {
+    Toast.show({
+      type: "success",
+      text1: "تم النشر",
+      text2: "تم نشر اعلانك بنجاح 🎊",
+    });
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
@@ -97,13 +106,9 @@ export default function UploadProperty() {
 
       {steps === 3 && (
         <StepThree
-          control={control}
           formValues={formValues}
           setValue={setValue}
-          onNext={() => {
-            router.replace("/(tabs)");
-          }}
-          onBack={() => setSteps(2)}
+          onSubmit={onSumbit}
         />
       )}
     </SafeAreaView>

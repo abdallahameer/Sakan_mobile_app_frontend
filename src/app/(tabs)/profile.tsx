@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 const COLORS = {
   primary: "#0F113C",
@@ -191,7 +192,16 @@ export default function ProfileScreen() {
         </View>
 
         <Pressable
-          onPress={() => router.replace("/login/login")}
+          onPress={() => {
+            // router.replace("/login/login");
+
+            Toast.show({
+              type: "success",
+              text1: "تسجيل خروج",
+              text2: "تم تسجيل الخروج بنجاح",
+            });
+            console.log("worked");
+          }}
           className="flex-row-reverse items-center justify-center gap-2 py-3 mx-4 mt-4 border rounded-2xl"
           style={{ borderColor: "#FCA5A5" }}
         >

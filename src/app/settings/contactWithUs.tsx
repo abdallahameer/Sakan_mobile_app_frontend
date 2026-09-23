@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 type ContactFormValues = {
   name: string;
@@ -24,7 +25,13 @@ export default function ContactWithUs() {
     },
   });
 
-  const onSubmit = (_values: ContactFormValues) => {};
+  const onSubmit = (_values: ContactFormValues) => {
+    Toast.show({
+      type: "success",
+      text1: "إرسال الرسالة",
+      text2: "تم إرسال رسالتك بنجاح",
+    });
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
