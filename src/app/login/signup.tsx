@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 type SignUpForm = {
   name: string;
@@ -20,6 +21,14 @@ export default function SignUp() {
   const { control, handleSubmit, watch, setValue } = useForm<SignUpForm>({
     defaultValues: { name: "", phone: "", password: "", countryKey: "+249" },
   });
+
+  const onSubmit = (_values: SignUpForm) => {
+    Toast.show({
+      type: "success",
+      text1: "إنشاء الحساب",
+      text2: "تم إنشاء الحساب بنجاح",
+    });
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
@@ -80,7 +89,7 @@ export default function SignUp() {
         />
 
         <Pressable
-          onPress={handleSubmit(() => undefined)}
+          onPress={handleSubmit(onSubmit)}
           className="items-center justify-center py-4 mt-2 rounded-xl bg-[#0F113C]"
         >
           <Text className="text-base font-bold text-white">إنشاء حساب</Text>

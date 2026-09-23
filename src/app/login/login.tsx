@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 export default function Login() {
   const router = useRouter();
@@ -14,6 +15,14 @@ export default function Login() {
   const { control, handleSubmit, watch, setValue } = useForm<LoginForm>({
     defaultValues: { phone: "", password: "", countryKey: "+249" },
   });
+
+  const onSubmit = (_values: LoginForm) => {
+    Toast.show({
+      type: "success",
+      text1: "تسجيل الدخول",
+      text2: "تم تسجيل الدخول بنجاح",
+    });
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
@@ -68,7 +77,7 @@ export default function Login() {
         </Pressable>
 
         <Pressable
-          onPress={handleSubmit(() => undefined)}
+          onPress={handleSubmit(onSubmit)}
           className="items-center justify-center py-4 mt-2 rounded-xl bg-[#0F113C]"
         >
           <Text className="text-base font-bold text-white">تسجيل الدخول</Text>
