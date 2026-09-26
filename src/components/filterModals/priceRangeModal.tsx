@@ -1,4 +1,4 @@
-import { FilterText } from "@/data/typs";
+import type { FilterText } from "@/types";
 import { useEffect, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 import AppNumberInput from "../InputsComponents/Appnumberinput";

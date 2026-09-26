@@ -1,4 +1,4 @@
-import { RoomsNumber } from "@/data/typs";
+import type { RoomsNumber } from "@/types";
 import { useEffect, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 

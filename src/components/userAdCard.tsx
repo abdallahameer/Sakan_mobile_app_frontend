@@ -1,4 +1,4 @@
-import type { MyAd } from "@/data/myAds";
+import type { MyAd } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Alert, Image, Pressable, Text, View } from "react-native";

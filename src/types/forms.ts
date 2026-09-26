@@ -1,21 +1,25 @@
+import type {
+  FamilyOrSingle,
+  ListingType,
+  PaymentFrequency,
+  PropertyCategory,
+  PropertyStatus,
+} from "./property";
+
 export type RoomsNumber = null | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "+8";
 export type FilterText = string | null;
-export type FamilyOrSingle = "family" | "single";
 
 export type PropertyFilterForm = {
-  propertyType: "sale" | "rent" | null;
+  propertyType: ListingType | null;
   familyOrSingle: FamilyOrSingle | null;
-  paymentType: "monthly" | "yearly" | "daily" | null;
-  status: "all" | "ready" | "underConstruction" | null;
-  residentialOrCommercial: "residential" | "commercial" | null;
+  paymentType: PaymentFrequency | null;
+  status: "all" | PropertyStatus;
+  residentialOrCommercial: PropertyCategory | null;
   furnished: "furnished" | "unfurnished" | null;
-
   rooms: RoomsNumber;
   bathRooms: RoomsNumber;
-
   minPrice: FilterText;
   maxPrice: FilterText;
-
   minSpace: FilterText;
   maxSpace: FilterText;
 };
@@ -27,17 +31,14 @@ export type UploadFormFields = {
   price: string;
   description: string;
   area: string;
-  propertyStatus: "ready" | "underConstruction" | null;
-
+  propertyStatus: PropertyStatus | null;
   termsAccepted: boolean;
-  propertyType: "resedencial" | "commercial" | null;
+  propertyType: PropertyCategory | null;
   familyOrSingle: FamilyOrSingle | null;
   paymentType: "سنوي" | "شهري" | "يومي" | null;
-
   rooms: number;
   bathrooms: number;
   livingRoom: number;
-
   floorNumber: number;
   propertyAge: number;
   furnished: boolean;
@@ -52,6 +53,13 @@ export type UploadFormFields = {
   solarSystem: boolean;
   forRent: boolean;
   forSell: boolean;
+};
+
+export type MyAd = UploadFormFields & {
+  id: string;
+  location: string;
+  views: number;
+  postedAt: string;
 };
 
 export type LoginForm = {

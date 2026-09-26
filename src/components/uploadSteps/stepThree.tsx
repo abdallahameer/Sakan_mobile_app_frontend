@@ -1,8 +1,7 @@
 import { UseFormSetValue } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
-import { MyAd } from "@/data/myAds";
-import { UploadFormFields } from "@/data/typs";
+import type { MyAd, UploadFormFields } from "@/types";
 import NumberRow from "../uploadpropertyHelperComponents/NumberRow";
 import SliderRow from "../uploadpropertyHelperComponents/SliderRow";
 import ToggleRow from "../uploadpropertyHelperComponents/ToggleRow";
@@ -23,7 +22,7 @@ export default function StepThree({
     setValue("forRent", true, { shouldDirty: true });
     setValue("forSell", false, { shouldDirty: true });
     setValue("propertyStatus", null, { shouldDirty: true });
-    setValue("propertyType", "resedencial", { shouldDirty: true });
+    setValue("propertyType", "residential", { shouldDirty: true });
     setValue("familyOrSingle", "family", { shouldDirty: true });
     setValue("paymentType", "شهري", { shouldDirty: true });
   };
@@ -37,11 +36,11 @@ export default function StepThree({
     setValue("paymentType", null, { shouldDirty: true });
   };
 
-  const selectPropertyType = (propertyType: "resedencial" | "commercial") => {
+  const selectPropertyType = (propertyType: "residential" | "commercial") => {
     setValue("propertyType", propertyType, { shouldDirty: true });
     setValue(
       "familyOrSingle",
-      propertyType === "resedencial" ? "family" : null,
+      propertyType === "residential" ? "family" : null,
       { shouldDirty: true },
     );
   };
@@ -104,16 +103,16 @@ export default function StepThree({
             <View className="px-4 pt-3">
               <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
                 <Pressable
-                  onPress={() => selectPropertyType("resedencial")}
+                  onPress={() => selectPropertyType("residential")}
                   className={`items-center justify-center flex-1 ${
-                    formValues.propertyType === "resedencial"
+                    formValues.propertyType === "residential"
                       ? "bg-[#0F113C]"
                       : "bg-transparent"
                   }`}
                 >
                   <Text
                     className={`text-xs font-semibold ${
-                      formValues.propertyType === "resedencial"
+                      formValues.propertyType === "residential"
                         ? "text-white"
                         : "text-[#0F113C]"
                     }`}
@@ -143,7 +142,7 @@ export default function StepThree({
               </View>
             </View>
 
-            {formValues.propertyType === "resedencial" && (
+            {formValues.propertyType === "residential" && (
               <View className="px-4 pt-3">
                 <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
                   <Pressable

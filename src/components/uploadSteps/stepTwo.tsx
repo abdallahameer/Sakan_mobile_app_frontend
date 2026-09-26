@@ -1,4 +1,4 @@
-import { UploadFormFields } from "@/data/typs";
+import type { UploadFormFields } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { Control, UseFormSetValue } from "react-hook-form";
 import { Linking, Pressable, ScrollView, Text, View } from "react-native";

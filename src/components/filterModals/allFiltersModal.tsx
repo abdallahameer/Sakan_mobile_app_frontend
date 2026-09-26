@@ -1,4 +1,4 @@
-import { PropertyFilterForm, RoomsNumber } from "@/data/typs";
+import type { PropertyFilterForm, RoomsNumber } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import {

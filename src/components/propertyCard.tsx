@@ -1,3 +1,5 @@
+import type { Property } from "@/types";
+import { titleHandler } from "@/utilities/functions";
 import {
   FontAwesome,
   Ionicons,
@@ -7,20 +9,6 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
-interface Property {
-  id: string;
-  title: string;
-  location: string;
-  price: number;
-  beds: number;
-  baths: number;
-  area: number;
-  description: string;
-  images: string[];
-  isFavorite: boolean;
-  postedAt?: string;
-}
-
 export default function PropertyCard({
   property,
   onFavorite,
@@ -29,16 +17,10 @@ export default function PropertyCard({
   onFavorite?: (id: string) => void;
 }) {
   const router = useRouter();
-  const [isFavorited, setIsFavorited] = useState(property.isFavorite);
+  const [isFavorited, setIsFavorited] = useState(property.isFavorite ?? false);
 
   const handleFavorite = () => {
     setIsFavorited(!isFavorited);
-  };
-
-  const titleHandler = (title: string, length: number) => {
-    if (title.length <= length) return title;
-
-    return title.slice(0, length) + "...";
   };
 
   return (
@@ -73,7 +55,7 @@ export default function PropertyCard({
                 <Ionicons name="location" color={"#3b82f6"} size={13} />
 
                 <Text className="text-xs text-blue-900" numberOfLines={1}>
-                  {property.location}
+                  {property.location.address}
                 </Text>
               </View>
 
@@ -94,7 +76,7 @@ export default function PropertyCard({
                   <Ionicons name="bed-outline" size={14} color={"#3b82f6"} />
 
                   <Text className="text-xs font-semibold text-[#5C5E82]">
-                    {property.beds} غرف
+                    {property.rooms} غرف
                   </Text>
                 </View>
               </View>

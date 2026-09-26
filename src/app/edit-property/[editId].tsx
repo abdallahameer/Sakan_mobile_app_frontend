@@ -1,8 +1,7 @@
 import StepOne from "@/components/uploadSteps/stepOne";
 import StepThree from "@/components/uploadSteps/stepThree";
 import StepTwo from "@/components/uploadSteps/stepTwo";
-import { MyAd } from "@/data/myAds";
-import { UploadFormFields } from "@/data/typs";
+import type { MyAd, UploadFormFields } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
@@ -19,7 +18,7 @@ const propData: MyAd = {
   videos: [],
   propertyStatus: "ready",
   termsAccepted: true,
-  propertyType: "resedencial",
+  propertyType: "residential",
   familyOrSingle: "family",
   paymentType: "شهري",
   rooms: 3,

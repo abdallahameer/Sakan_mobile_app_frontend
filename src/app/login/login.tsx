@@ -1,6 +1,6 @@
 import AppTextInput from "@/components/InputsComponents/Apptextinput";
 import PhoneNumberInput from "@/components/InputsComponents/PhoneNumberInput";
-import { LoginForm } from "@/data/typs";
+import type { LoginForm } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
