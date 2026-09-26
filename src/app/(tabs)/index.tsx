@@ -2,7 +2,7 @@ import PropertyCard from "@/components/propertyCard";
 import PropertyFilter from "@/components/propertyFilter";
 import PropertySearchBar from "@/components/propertySearchBar";
 import { PROPERTIES } from "@/data/myAds";
-import { PropertyFilterForm } from "@/data/typs";
+import type { PropertyFilterForm } from "@/types";
 import { useForm } from "react-hook-form";
 import { FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -35,7 +35,7 @@ export default function Index() {
   });
   const formValues = watch();
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 bg-[#F0F1FA]">
+    <SafeAreaView edges={["top"]} className="flex-1   bg-[#F0F1FA]">
       <PropertySearchBar />
       <PropertyFilter
         getValues={getValues}
@@ -50,9 +50,10 @@ export default function Index() {
 
       <FlatList
         keyExtractor={(p) => p.id}
+        className="flex-1"
         data={PROPERTIES}
         renderItem={({ item }) => <PropertyCard property={item} />}
-        contentContainerClassName="px-4 pt-4 pb-4"
+        contentContainerClassName="px-4 py-4 "
       />
     </SafeAreaView>
   );

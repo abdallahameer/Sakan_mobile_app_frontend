@@ -1,4 +1,4 @@
-import { UploadFormFields } from "@/data/typs";
+import type { UploadFormFields } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { Control, UseFormSetValue } from "react-hook-form";

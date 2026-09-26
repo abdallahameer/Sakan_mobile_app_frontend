@@ -1,5 +1,6 @@
 import UserAdCard from "@/components/userAdCard";
-import { MOCK_MY_ADS, MyAd } from "@/data/myAds";
+import { MOCK_MY_ADS } from "@/data/myAds";
+import type { MyAd } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";

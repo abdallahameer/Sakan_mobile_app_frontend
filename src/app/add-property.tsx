@@ -1,6 +1,6 @@
 import StepThree from "@/components/uploadSteps/stepThree";
 import StepTwo from "@/components/uploadSteps/stepTwo";
-import { UploadFormFields } from "@/data/typs";
+import type { UploadFormFields } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -22,7 +22,7 @@ export default function UploadProperty() {
       price: "",
       area: "",
       description: "",
-      propertyType: "resedencial",
+      propertyType: "residential",
       familyOrSingle: "family",
       propertyStatus: null,
       paymentType: "شهري",
