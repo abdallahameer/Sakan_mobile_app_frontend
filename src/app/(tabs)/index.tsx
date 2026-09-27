@@ -50,7 +50,7 @@ export default function Index() {
 
       <FlatList
         keyExtractor={(p) => p.id}
-        className="flex-1"
+        // className="flex-1 "
         data={PROPERTIES}
         renderItem={({ item }) => <PropertyCard property={item} />}
         contentContainerClassName="px-4 py-4 "
