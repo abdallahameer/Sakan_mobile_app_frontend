@@ -23,8 +23,6 @@ export default function Search() {
     null,
   );
 
-  console.log(selectedProperty);
-
   return (
     <SafeAreaView className="flex-1" edges={["top"]}>
       <View className="flex-1">
@@ -48,7 +46,6 @@ export default function Search() {
                 longitude: property.location.longitude,
               }}
               onPress={() => {
-                console.log("MARKER PRESSED:", property.id);
                 setSelectedProperty(property);
               }}
             >

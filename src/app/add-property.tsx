@@ -1,3 +1,4 @@
+import StepFour from "@/components/uploadSteps/stepFour";
 import StepThree from "@/components/uploadSteps/stepThree";
 import StepTwo from "@/components/uploadSteps/stepTwo";
 import type { UploadFormFields } from "@/types";
@@ -14,7 +15,7 @@ export default function UploadProperty() {
   const router = useRouter();
   const [steps, setSteps] = useState(1);
 
-  const { control, watch, setValue, getValues } = useForm<UploadFormFields>({
+  const { control, watch, setValue } = useForm<UploadFormFields>({
     defaultValues: {
       images: [],
       videos: [],
@@ -46,6 +47,8 @@ export default function UploadProperty() {
       solarSystem: false,
       forRent: true,
       forSell: false,
+      latitude: null,
+      longitude: null,
     },
   });
   const formValues = watch();
@@ -81,7 +84,9 @@ export default function UploadProperty() {
                 ? "السعر و الوصف"
                 : steps == 3
                   ? "تفاصيل العقار"
-                  : ""}
+                  : steps == 4
+                    ? "موقع العقار"
+                    : ""}
           </Text>
         </View>
       </View>
@@ -106,6 +111,15 @@ export default function UploadProperty() {
 
       {steps === 3 && (
         <StepThree
+          formValues={formValues}
+          setValue={setValue}
+          onNext={() => setSteps(4)}
+          onSubmit={onSumbit}
+        />
+      )}
+
+      {steps === 4 && (
+        <StepFour
           formValues={formValues}
           setValue={setValue}
           onSubmit={onSumbit}

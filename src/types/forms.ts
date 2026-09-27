@@ -53,6 +53,8 @@ export type UploadFormFields = {
   solarSystem: boolean;
   forRent: boolean;
   forSell: boolean;
+  latitude: number | null;
+  longitude: number | null;
 };
 
 export type MyAd = UploadFormFields & {

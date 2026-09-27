@@ -200,7 +200,6 @@ export default function ProfileScreen() {
               text1: "تسجيل خروج",
               text2: "تم تسجيل الخروج بنجاح",
             });
-            console.log("worked");
           }}
           className="flex-row-reverse items-center justify-center gap-2 py-3 mx-4 mt-4 border rounded-2xl"
           style={{ borderColor: "#FCA5A5" }}

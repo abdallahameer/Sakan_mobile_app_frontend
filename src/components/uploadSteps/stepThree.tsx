@@ -9,6 +9,7 @@ type StepThreeProps = {
   formValues: UploadFormFields | MyAd;
   setValue: UseFormSetValue<UploadFormFields>;
   onSubmit: (formValues: UploadFormFields) => void;
+  onNext?: () => void;
   update?: boolean;
 };
 
@@ -16,6 +17,7 @@ export default function StepThree({
   formValues,
   setValue,
   onSubmit,
+  onNext,
   update = false,
 }: StepThreeProps) {
   const selectRent = () => {
@@ -427,10 +429,12 @@ export default function StepThree({
         {update == false ? (
           <View className="flex-row gap-3 px-4 mt-5">
             <Pressable
-              onPress={() => onSubmit(formValues)}
+              onPress={() => (onNext ? onNext() : onSubmit(formValues))}
               className="items-center justify-center flex-1 py-3.5 rounded-xl bg-[#0F113C]"
             >
-              <Text className="text-base font-bold text-white">نشر</Text>
+              <Text className="text-base font-bold text-white">
+                {onNext ? "التالي" : "نشر"}
+              </Text>
             </Pressable>
           </View>
         ) : null}
