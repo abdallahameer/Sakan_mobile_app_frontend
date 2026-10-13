@@ -1,6 +1,6 @@
 import UserAdCard from "@/components/userAdCard";
-import { MOCK_MY_ADS } from "@/data/myAds";
-import type { MyAd } from "@/types";
+import { PROPERTIES } from "@/data/myAds";
+import type { Property } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Advertisements() {
   const router = useRouter();
-  const [ads, setAds] = useState<MyAd[]>(MOCK_MY_ADS);
+  const [ads, setAds] = useState<Property[]>(PROPERTIES.slice(0, 3));
 
   const handleDelete = (id: string) => {
     setAds((prev) => prev.filter((ad) => ad.id !== id));

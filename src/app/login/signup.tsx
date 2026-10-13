@@ -1,5 +1,5 @@
 import AppTextInput from "@/components/InputsComponents/Apptextinput";
-import PhoneNumberInput from "@/components/InputsComponents/PhoneNumberInput";
+import EmailInput from "@/components/InputsComponents/EmailInput";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -10,16 +10,15 @@ import Toast from "react-native-toast-message";
 
 type SignUpForm = {
   name: string;
-  phone: string;
+  email: string;
   password: string;
-  countryKey: string;
 };
 
 export default function SignUp() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { control, handleSubmit, watch, setValue } = useForm<SignUpForm>({
-    defaultValues: { name: "", phone: "", password: "", countryKey: "+249" },
+  const { control, handleSubmit } = useForm<SignUpForm>({
+    defaultValues: { name: "", email: "", password: "" },
   });
 
   const onSubmit = (_values: SignUpForm) => {
@@ -56,20 +55,7 @@ export default function SignUp() {
           placeholder="الاسم الكامل"
         />
 
-        {/* <AppNumberInput
-          control={control}
-          name="phone"
-          label="رقم الهاتف*"
-          placeholder="9x xxxxxxxx"
-          suffix="🇸🇩"
-        /> */}
-
-        <PhoneNumberInput
-          countryFieldName="countryKey"
-          setValue={setValue}
-          name="phone"
-          control={control}
-        />
+        <EmailInput control={control} name="email" />
 
         <AppTextInput
           control={control}

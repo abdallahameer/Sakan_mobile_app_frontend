@@ -1,9 +1,9 @@
+import { UploadFormFields } from "@/types";
 import {
   Control,
   Controller,
   FieldValues,
   Path,
-  PathValue,
   UseFormSetValue,
 } from "react-hook-form";
 import { Text, View } from "react-native";
@@ -12,9 +12,10 @@ import PhoneInput, { ICountry } from "rn-international-phone-number";
 type PhoneNumberInputProps<T extends FieldValues> = {
   control: Control<T>;
   name: Path<T>;
-  setValue?: UseFormSetValue<T>;
-  countryFieldName?: Path<T>;
+  setValue?: UseFormSetValue<UploadFormFields>;
+  countryKeyField?: "phoneKey" | "whatsAppKey";
   label?: string;
+  required?: boolean;
   error?: string;
   defaultCountry?: ICountry["cca2"];
 };
@@ -22,9 +23,10 @@ type PhoneNumberInputProps<T extends FieldValues> = {
 export default function PhoneNumberInput<T extends FieldValues>({
   control,
   setValue,
-  countryFieldName,
+  countryKeyField,
   name,
   label = "رقم الهاتف",
+  required = true,
   error,
   defaultCountry = "SD",
 }: PhoneNumberInputProps<T>) {
@@ -32,7 +34,8 @@ export default function PhoneNumberInput<T extends FieldValues>({
     <View className="w-full">
       {label && (
         <Text className="mb-2 text-left text-base font-bold  text-[#0F113C]">
-          {label}*
+          {label}
+          {required ? "*" : ""}
         </Text>
       )}
 
@@ -46,11 +49,8 @@ export default function PhoneNumberInput<T extends FieldValues>({
               onChangePhoneNumber={onChange}
               defaultCountry={defaultCountry}
               onChangeCountry={(country) => {
-                if (setValue && countryFieldName) {
-                  setValue(
-                    countryFieldName,
-                    country.idd.root as PathValue<T, Path<T>>,
-                  );
+                if (setValue && countryKeyField) {
+                  setValue(countryKeyField, country.idd.root);
                 }
               }}
               language="ar"
@@ -94,7 +94,7 @@ export default function PhoneNumberInput<T extends FieldValues>({
       />
 
       {error && (
-        <Text className="mt-1 text-right text-xs text-red-500">{error}</Text>
+        <Text className="mt-1 text-xs text-right text-red-500">{error}</Text>
       )}
     </View>
   );

@@ -1,9 +1,15 @@
+import LocationPicker, {
+  type LocationOption,
+} from "@/components/locationPicker";
+import { api } from "@/lib/api";
 import type { UploadFormFields } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
 import { Control, UseFormSetValue } from "react-hook-form";
 import { Linking, Pressable, ScrollView, Text, View } from "react-native";
 import AppNumberInput from "../InputsComponents/Appnumberinput";
 import AppTextInput from "../InputsComponents/Apptextinput";
+import PhoneNumberInput from "../InputsComponents/PhoneNumberInput";
 
 type StepTwoProps = {
   control: Control<UploadFormFields>;
@@ -20,6 +26,41 @@ export default function StepTwo({
   onNext,
   update = false,
 }: StepTwoProps) {
+  const {
+    data: cities = [],
+    isPending: loadingCities,
+    isError: citiesError,
+  } = useQuery({
+    queryKey: ["cities"],
+    queryFn: async () => {
+      const response = await api.get<{ cities: LocationOption[] }>(
+        "/locations/cities",
+      );
+      return response.data.cities;
+    },
+  });
+
+  const selectedCityId = cities.find(
+    (item) => item.name === formValues.city,
+  )?.id;
+  const {
+    data: neighborhoods = [],
+    isPending: loadingNeighborhood,
+    isError: neighborhoodsError,
+  } = useQuery({
+    queryKey: ["neighborhoods", selectedCityId],
+    enabled: selectedCityId !== undefined,
+    queryFn: async () => {
+      const response = await api.get<{ areas: LocationOption[] }>(
+        "/locations/areas",
+        { params: { cityId: selectedCityId } },
+      );
+      return response.data.areas;
+    },
+  });
+
+  console.log(neighborhoods);
+
   return (
     <ScrollView
       className="flex-1 w-full"
@@ -32,13 +73,13 @@ export default function StepTwo({
             name="title"
             control={control}
             placeholder="مثال: شقة للإيجار في حي الرياض"
-            label="العنوان"
+            label="العنوان*"
           />
         </View>
 
         <View className="flex-row items-center justify-between">
           <AppNumberInput
-            label="السعر الإجمالي"
+            label="السعر الإجمالي*"
             suffix="جنيه"
             name="price"
             placeholder="120000"
@@ -49,7 +90,7 @@ export default function StepTwo({
 
         <View className="flex-row items-center justify-between">
           <AppNumberInput
-            label="المساحة"
+            label="المساحة*"
             suffix="م²"
             name="area"
             placeholder="200"
@@ -58,15 +99,54 @@ export default function StepTwo({
           />
         </View>
 
+        <LocationPicker
+          cities={cities}
+          neighborhoods={neighborhoods}
+          loadingCities={loadingCities}
+          loadingNeighborhood={
+            selectedCityId !== undefined && loadingNeighborhood
+          }
+          citiesError={citiesError}
+          neighborhoodsError={neighborhoodsError}
+          city={formValues.city}
+          neighborhood={formValues.neighborhood}
+          onChange={({ city, neighborhood }) => {
+            setValue("city", city, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
+            setValue("neighborhood", neighborhood, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
+          }}
+        />
+
         <View className="gap-1">
           <AppTextInput
             name={"description"}
             control={control}
             multiline
             placeholder="اكتب وصف عقارك هنا"
-            label="وصف العقار"
+            label="وصف العقار*"
           />
         </View>
+
+        <PhoneNumberInput
+          control={control}
+          name="phone"
+          label="رقم الهاتف للتواصل"
+          setValue={setValue}
+          countryKeyField="phoneKey"
+        />
+
+        <PhoneNumberInput
+          control={control}
+          name="whatsapp"
+          label="رقم واتساب"
+          setValue={setValue}
+          countryKeyField="whatsAppKey"
+        />
 
         {update == false ? (
           <View className="flex-row items-center gap-2 mt-2">

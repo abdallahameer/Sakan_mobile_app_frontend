@@ -193,7 +193,7 @@ export default function ProfileScreen() {
 
         <Pressable
           onPress={() => {
-            // router.replace("/login/login");
+            router.replace("/login/login");
 
             Toast.show({
               type: "success",

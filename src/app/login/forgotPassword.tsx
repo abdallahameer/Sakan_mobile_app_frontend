@@ -1,4 +1,4 @@
-import PhoneNumberInput from "@/components/InputsComponents/PhoneNumberInput";
+import EmailInput from "@/components/InputsComponents/EmailInput";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
@@ -7,16 +7,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 type ForgotPasswordForm = {
-  phone: string;
-  countryKey: string;
+  email: string;
 };
 
 export default function ForgotPassword() {
   const router = useRouter();
-  const { control, handleSubmit, setValue, watch } =
-    useForm<ForgotPasswordForm>({
-      defaultValues: { phone: "", countryKey: "+249" },
-    });
+  const { control, handleSubmit } = useForm<ForgotPasswordForm>({
+    defaultValues: { email: "" },
+  });
 
   const onSubmit = (_values: ForgotPasswordForm) => {
     Toast.show({
@@ -43,25 +41,12 @@ export default function ForgotPassword() {
             استعادة كلمة المرور
           </Text>
           <Text className="text-sm leading-6 text-left text-[#9CA3AF]">
-            أدخل رقم هاتفك المسجل في سكن، وسنرسل لك رمز تحقق لإعادة تعيين كلمة
+            أدخل بريدك الإلكتروني المسجل في سكن، وسنرسل لك رمز تحقق لإعادة تعيين كلمة
             المرور.
           </Text>
         </View>
 
-        {/* <AppNumberInput
-          control={control}
-          name="phone"
-          label="رقم الهاتف*"
-          placeholder="9x xxxxxxxx"
-          suffix="🇸🇩"
-        /> */}
-
-        <PhoneNumberInput
-          countryFieldName="countryKey"
-          name="phone"
-          setValue={setValue}
-          control={control}
-        />
+        <EmailInput control={control} name="email" />
 
         <Pressable
           onPress={handleSubmit(onSubmit)}

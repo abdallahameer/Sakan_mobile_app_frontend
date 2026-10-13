@@ -1,4 +1,5 @@
 import CustomToast from "@/components/notifications/CustomToast";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NavigationBar } from "expo-navigation-bar";
 import { Stack } from "expo-router";
 import { I18nManager, StatusBar, View } from "react-native";
@@ -19,28 +20,32 @@ export default function RootLayout() {
 
     info: (props: any) => <CustomToast {...props} type="info" />,
   };
+
+  const queryClient = new QueryClient();
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="default" />
       <NavigationBar style="inverted" />
 
-      <View style={{ flex: 1 }}>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: {
-              backgroundColor: "#0F113C",
-            },
-          }}
-        />
+      <QueryClientProvider client={queryClient}>
+        <View style={{ flex: 1 }}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: {
+                backgroundColor: "#0F113C",
+              },
+            }}
+          />
 
-        <Toast
-          config={toastConfig}
-          position="top"
-          topOffset={60}
-          visibilityTime={4000}
-        />
-      </View>
+          <Toast
+            config={toastConfig}
+            position="top"
+            topOffset={60}
+            visibilityTime={4000}
+          />
+        </View>
+      </QueryClientProvider>
     </SafeAreaProvider>
   );
 }

@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { Control, UseFormSetValue } from "react-hook-form";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 type StepOneProps = {
   control: Control<UploadFormFields>;
@@ -19,10 +20,6 @@ export default function StepOne({
   onNext,
   update = false,
 }: StepOneProps) {
-  const canContinue =
-    (formValues.images?.length ?? 0) > 0 ||
-    (formValues.videos?.length ?? 0) > 0;
-
   const pickImages = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -31,12 +28,24 @@ export default function StepOne({
     });
 
     if (!result.canceled) {
-      const uris = result.assets.map((asset) => asset.uri);
+      const uris = result.assets
+        .filter(
+          (asset) =>
+            asset.mimeType === undefined || asset.mimeType === "image/jpeg",
+        )
+        .map((asset) => asset.uri);
 
       setValue("images", [...(formValues.images ?? []), ...uris], {
         shouldValidate: true,
         shouldDirty: true,
       });
+      if (uris.length !== result.assets.length) {
+        Toast.show({
+          type: "error",
+          text1: "صيغة صورة غير مدعومة",
+          text2: "يرجى اختيار الصور بصيغة JPEG",
+        });
+      }
     }
   };
 
@@ -47,9 +56,9 @@ export default function StepOne({
     });
 
     if (!result.canceled) {
-      const uris = result.assets.map((asset) => asset.uri);
+      const uri = result.assets[0]?.uri;
 
-      setValue("videos", [...(formValues.videos ?? []), ...uris], {
+      setValue("videos", uri ? [uri] : [], {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -148,21 +157,10 @@ export default function StepOne({
         {update == false ? (
           <Pressable
             onPress={onNext}
-            disabled={!canContinue}
             className="items-center justify-center py-3.5 mt-1 border rounded-xl"
-            style={{
-              borderColor: canContinue ? "#10B981" : "#D1D5DB",
-              opacity: canContinue ? 1 : 0.5,
-            }}
+            style={{ borderColor: "#10B981" }}
           >
-            <Text
-              className="text-base font-bold"
-              style={{
-                color: canContinue ? "#10B981" : "#9CA3AF",
-              }}
-            >
-              استمرار
-            </Text>
+            <Text className="text-base font-bold text-[#10B981]">استمرار</Text>
           </Pressable>
         ) : null}
 

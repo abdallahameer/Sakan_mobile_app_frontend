@@ -1,4 +1,4 @@
-import type { MyAd } from "@/types";
+import type { Property } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Alert, Image, Pressable, Text, View } from "react-native";
@@ -8,7 +8,7 @@ export default function UserAdCard({
   onEdit,
   onDelete,
 }: {
-  ad: MyAd;
+  ad: Property;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
 }) {
@@ -42,7 +42,7 @@ export default function UserAdCard({
           <View className="flex-row items-center gap-1">
             <Ionicons name="location" size={12} color="#3b82f6" />
             <Text className="text-xs text-blue-900" numberOfLines={1}>
-              {ad.location}
+              {ad.location.address}
             </Text>
           </View>
 
@@ -51,7 +51,10 @@ export default function UserAdCard({
               <Ionicons name="eye-outline" size={13} color="#6B7280" />
               <Text className="text-xs text-[#6B7280]">{ad.views} مشاهدة</Text>
             </View>
-            <Text className="text-[11px] text-[#8587A3]">{ad.postedAt}</Text>
+            <Text className="text-[11px] text-[#8587A3]">
+              {ad.postedAt ??
+                new Date(ad.createdAt).toLocaleDateString("ar-EG")}
+            </Text>
           </View>
 
           <Text className="text-sm font-bold text-left text-blue-800">

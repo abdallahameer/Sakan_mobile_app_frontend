@@ -31,11 +31,18 @@ export type UploadFormFields = {
   price: string;
   description: string;
   area: string;
-  propertyStatus: PropertyStatus | null;
+  phone?: string;
+  whatsapp?: string;
+  propertyStatus: PropertyStatus;
   termsAccepted: boolean;
-  propertyType: PropertyCategory | null;
+  listingType: ListingType;
+  propertyType: PropertyCategory;
+  phoneKey: string;
+  whatsAppKey: string;
   familyOrSingle: FamilyOrSingle | null;
-  paymentType: "سنوي" | "شهري" | "يومي" | null;
+  paymentType: PaymentFrequency | null;
+  city: string;
+  neighborhood: string;
   rooms: number;
   bathrooms: number;
   livingRoom: number;
@@ -51,21 +58,14 @@ export type UploadFormFields = {
   roof: boolean;
   electricity: boolean;
   solarSystem: boolean;
-  forRent: boolean;
-  forSell: boolean;
   latitude: number | null;
   longitude: number | null;
-};
-
-export type MyAd = UploadFormFields & {
-  id: string;
-  location: string;
-  views: number;
-  postedAt: string;
+  cityId?: number | null;
+  areaId?: number | null;
+  addressDetail?: string;
 };
 
 export type LoginForm = {
-  phone: string;
+  email: string;
   password: string;
-  countryKey: string;
 };

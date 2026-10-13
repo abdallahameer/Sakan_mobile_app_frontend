@@ -1,8 +1,9 @@
 import PropertyCard from "@/components/propertyCard";
 import PropertyFilter from "@/components/propertyFilter";
 import PropertySearchBar from "@/components/propertySearchBar";
-import { PROPERTIES } from "@/data/myAds";
+import { api } from "@/lib/api";
 import type { PropertyFilterForm } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -34,6 +35,19 @@ export default function Index() {
     },
   });
   const formValues = watch();
+
+  const {
+    data: properties,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["properties"],
+    queryFn: async () => {
+      const response = await api.get("/properties");
+      return response.data;
+    },
+  });
+
   return (
     <SafeAreaView edges={["top"]} className="flex-1   bg-[#F0F1FA]">
       <PropertySearchBar />
@@ -51,7 +65,8 @@ export default function Index() {
       <FlatList
         keyExtractor={(p) => p.id}
         // className="flex-1 "
-        data={PROPERTIES}
+        // data={properties ? properties.properties : []}
+        data={properties?.properties ?? []}
         renderItem={({ item }) => <PropertyCard property={item} />}
         contentContainerClassName="px-4 py-4 "
       />

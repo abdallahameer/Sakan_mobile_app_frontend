@@ -1,7 +1,7 @@
 import StepOne from "@/components/uploadSteps/stepOne";
 import StepThree from "@/components/uploadSteps/stepThree";
 import StepTwo from "@/components/uploadSteps/stepTwo";
-import type { MyAd, UploadFormFields } from "@/types";
+import type { UploadFormFields } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
@@ -9,18 +9,19 @@ import { useForm } from "react-hook-form";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const propData: MyAd = {
-  id: "101",
+const propData: Partial<UploadFormFields> = {
   title: "شقة فاخرة في الرياض",
-  location: "الرياض، الخرطوم",
   price: "3900000",
   description: "شقة فاخرة بتشطيب مميز ومساحات واسعة.",
+  phone: "",
+  whatsapp: "",
   videos: [],
   propertyStatus: "ready",
   termsAccepted: true,
+  listingType: "rent",
   propertyType: "residential",
   familyOrSingle: "family",
-  paymentType: "شهري",
+  paymentType: "monthly",
   rooms: 3,
   bathrooms: 2,
   livingRoom: 1,
@@ -37,13 +38,9 @@ const propData: MyAd = {
   roof: false,
   electricity: true,
   solarSystem: false,
-  forRent: true,
-  forSell: false,
   images: [
     "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500&h=400&fit=crop",
   ],
-  views: 214,
-  postedAt: "12-5-2026",
 };
 
 export default function EditProperty() {
