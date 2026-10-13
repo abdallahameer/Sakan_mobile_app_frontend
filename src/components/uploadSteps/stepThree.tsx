@@ -1,12 +1,12 @@
 import { UseFormSetValue } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
-import type { MyAd, UploadFormFields } from "@/types";
+import type { UploadFormFields } from "@/types";
 import NumberRow from "../uploadpropertyHelperComponents/NumberRow";
 import SliderRow from "../uploadpropertyHelperComponents/SliderRow";
 import ToggleRow from "../uploadpropertyHelperComponents/ToggleRow";
 type StepThreeProps = {
-  formValues: UploadFormFields | MyAd;
+  formValues: UploadFormFields;
   setValue: UseFormSetValue<UploadFormFields>;
   onSubmit: (formValues: UploadFormFields) => void;
   onNext?: () => void;
@@ -21,19 +21,13 @@ export default function StepThree({
   update = false,
 }: StepThreeProps) {
   const selectRent = () => {
-    setValue("forRent", true, { shouldDirty: true });
-    setValue("forSell", false, { shouldDirty: true });
-    setValue("propertyStatus", null, { shouldDirty: true });
-    setValue("propertyType", "residential", { shouldDirty: true });
+    setValue("listingType", "rent", { shouldDirty: true });
     setValue("familyOrSingle", "family", { shouldDirty: true });
-    setValue("paymentType", "شهري", { shouldDirty: true });
+    setValue("paymentType", "monthly", { shouldDirty: true });
   };
 
   const selectSale = () => {
-    setValue("forRent", false, { shouldDirty: true });
-    setValue("forSell", true, { shouldDirty: true });
-    setValue("propertyStatus", "ready", { shouldDirty: true });
-    setValue("propertyType", null, { shouldDirty: true });
+    setValue("listingType", "sale", { shouldDirty: true });
     setValue("familyOrSingle", null, { shouldDirty: true });
     setValue("paymentType", null, { shouldDirty: true });
   };
@@ -42,7 +36,9 @@ export default function StepThree({
     setValue("propertyType", propertyType, { shouldDirty: true });
     setValue(
       "familyOrSingle",
-      propertyType === "residential" ? "family" : null,
+      propertyType === "residential" && formValues.listingType === "rent"
+        ? "family"
+        : null,
       { shouldDirty: true },
     );
   };
@@ -71,12 +67,16 @@ export default function StepThree({
             <Pressable
               onPress={selectRent}
               className={`items-center justify-center flex-1 ${
-                formValues.forRent === true ? "bg-[#0F113C]" : "bg-transparent"
+                formValues.listingType === "rent"
+                  ? "bg-[#0F113C]"
+                  : "bg-transparent"
               }`}
             >
               <Text
                 className={`text-xs font-semibold ${
-                  formValues.forRent === true ? "text-white" : "text-[#0F113C]"
+                  formValues.listingType === "rent"
+                    ? "text-white"
+                    : "text-[#0F113C]"
                 }`}
               >
                 إيجار
@@ -86,12 +86,16 @@ export default function StepThree({
             <Pressable
               onPress={selectSale}
               className={`items-center justify-center flex-1 ${
-                formValues.forRent === false ? "bg-[#0F113C]" : "bg-transparent"
+                formValues.listingType === "sale"
+                  ? "bg-[#0F113C]"
+                  : "bg-transparent"
               }`}
             >
               <Text
                 className={`text-xs font-semibold ${
-                  formValues.forRent === false ? "text-white" : "text-[#0F113C]"
+                  formValues.listingType === "sale"
+                    ? "text-white"
+                    : "text-[#0F113C]"
                 }`}
               >
                 بيع
@@ -100,183 +104,126 @@ export default function StepThree({
           </View>
         </View>
 
-        {formValues.forRent ? (
-          <>
+        <View className="px-4 pt-3">
+          <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
+            {(["residential", "commercial"] as const).map((type) => (
+              <Pressable
+                key={type}
+                onPress={() => selectPropertyType(type)}
+                className={`items-center justify-center flex-1 ${
+                  formValues.propertyType === type
+                    ? "bg-[#0F113C]"
+                    : "bg-transparent"
+                }`}
+              >
+                <Text
+                  className={`text-xs font-semibold ${
+                    formValues.propertyType === type
+                      ? "text-white"
+                      : "text-[#0F113C]"
+                  }`}
+                >
+                  {type === "residential" ? "سكني" : "تجاري"}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+
+        {formValues.listingType === "rent" &&
+          formValues.propertyType === "residential" && (
             <View className="px-4 pt-3">
               <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
-                <Pressable
-                  onPress={() => selectPropertyType("residential")}
-                  className={`items-center justify-center flex-1 ${
-                    formValues.propertyType === "residential"
-                      ? "bg-[#0F113C]"
-                      : "bg-transparent"
-                  }`}
-                >
-                  <Text
-                    className={`text-xs font-semibold ${
-                      formValues.propertyType === "residential"
-                        ? "text-white"
-                        : "text-[#0F113C]"
-                    }`}
-                  >
-                    سكني
-                  </Text>
-                </Pressable>
-
-                <Pressable
-                  onPress={() => selectPropertyType("commercial")}
-                  className={`items-center justify-center flex-1 ${
-                    formValues.propertyType === "commercial"
-                      ? "bg-[#0F113C]"
-                      : "bg-transparent"
-                  }`}
-                >
-                  <Text
-                    className={`text-xs font-semibold ${
-                      formValues.propertyType === "commercial"
-                        ? "text-white"
-                        : "text-[#0F113C]"
-                    }`}
-                  >
-                    تجاري
-                  </Text>
-                </Pressable>
-              </View>
-            </View>
-
-            {formValues.propertyType === "residential" && (
-              <View className="px-4 pt-3">
-                <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
-                  <Pressable
-                    onPress={() =>
-                      setValue("familyOrSingle", "single", {
-                        shouldDirty: true,
-                      })
-                    }
-                    className={`items-center justify-center flex-1 ${
-                      formValues.familyOrSingle === "single"
-                        ? "bg-[#0F113C]"
-                        : "bg-transparent"
-                    }`}
-                  >
-                    <Text
-                      className={`text-xs font-semibold ${
-                        formValues.familyOrSingle === "single"
-                          ? "text-white"
-                          : "text-[#0F113C]"
-                      }`}
-                    >
-                      عزاب
-                    </Text>
-                  </Pressable>
-
-                  <Pressable
-                    onPress={() =>
-                      setValue("familyOrSingle", "family", {
-                        shouldDirty: true,
-                      })
-                    }
-                    className={`items-center justify-center flex-1 ${
-                      formValues.familyOrSingle === "family"
-                        ? "bg-[#0F113C]"
-                        : "bg-transparent"
-                    }`}
-                  >
-                    <Text
-                      className={`text-xs font-semibold ${
-                        formValues.familyOrSingle === "family"
-                          ? "text-white"
-                          : "text-[#0F113C]"
-                      }`}
-                    >
-                      عوائل
-                    </Text>
-                  </Pressable>
-                </View>
-              </View>
-            )}
-
-            <View className="px-4 pt-3 ">
-              <View className="flex-row-reverse h-9 overflow-hidden border border-[#0F113C] bg-[#F0F0F3] rounded-lg">
-                {(["سنوي", "شهري", "يومي"] as const).map((type) => (
+                {(["family", "single"] as const).map((type) => (
                   <Pressable
                     key={type}
                     onPress={() =>
-                      setValue("paymentType", type, {
+                      setValue("familyOrSingle", type, {
                         shouldDirty: true,
                       })
                     }
                     className={`items-center justify-center flex-1 ${
-                      formValues.paymentType === type
+                      formValues.familyOrSingle === type
                         ? "bg-[#0F113C]"
                         : "bg-transparent"
                     }`}
                   >
                     <Text
                       className={`text-xs font-semibold ${
-                        formValues.paymentType === type
+                        formValues.familyOrSingle === type
                           ? "text-white"
                           : "text-[#0F113C]"
                       }`}
                     >
-                      {type}
+                      {type === "family" ? "عوائل" : "عزاب"}
                     </Text>
                   </Pressable>
                 ))}
               </View>
             </View>
-          </>
-        ) : (
-          <View className="px-4 pt-3">
-            <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
-              <Pressable
-                onPress={() =>
-                  setValue("propertyStatus", "ready", {
-                    shouldDirty: true,
-                  })
-                }
-                className={`items-center justify-center flex-1 ${
-                  formValues.propertyStatus === "ready"
-                    ? "bg-[#0F113C]"
-                    : "bg-transparent"
-                }`}
-              >
-                <Text
-                  className={`text-xs font-semibold ${
-                    formValues.propertyStatus === "ready"
-                      ? "text-white"
-                      : "text-[#0F113C]"
-                  }`}
-                >
-                  جاهز
-                </Text>
-              </Pressable>
+          )}
 
-              <Pressable
-                onPress={() =>
-                  setValue("propertyStatus", "underConstruction", {
-                    shouldDirty: true,
-                  })
-                }
-                className={`items-center justify-center flex-1 ${
-                  formValues.propertyStatus === "underConstruction"
-                    ? "bg-[#0F113C]"
-                    : "bg-transparent"
-                }`}
-              >
-                <Text
-                  className={`text-xs font-semibold ${
-                    formValues.propertyStatus === "underConstruction"
-                      ? "text-white"
-                      : "text-[#0F113C]"
+        {formValues.listingType === "rent" && (
+          <View className="px-4 pt-3">
+            <View className="flex-row-reverse h-9 overflow-hidden border border-[#0F113C] bg-[#F0F0F3] rounded-lg">
+              {(["monthly", "yearly", "daily"] as const).map((type) => (
+                <Pressable
+                  key={type}
+                  onPress={() =>
+                    setValue("paymentType", type, { shouldDirty: true })
+                  }
+                  className={`items-center justify-center flex-1 ${
+                    formValues.paymentType === type
+                      ? "bg-[#0F113C]"
+                      : "bg-transparent"
                   }`}
                 >
-                  قيد الإنشاء
-                </Text>
-              </Pressable>
+                  <Text
+                    className={`text-xs font-semibold ${
+                      formValues.paymentType === type
+                        ? "text-white"
+                        : "text-[#0F113C]"
+                    }`}
+                  >
+                    {type === "monthly"
+                      ? "شهري"
+                      : type === "yearly"
+                        ? "سنوي"
+                        : "يومي"}
+                  </Text>
+                </Pressable>
+              ))}
             </View>
           </View>
         )}
+
+        <View className="px-4 pt-3">
+          <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
+            {(["ready", "underConstruction"] as const).map((status) => (
+              <Pressable
+                key={status}
+                onPress={() =>
+                  setValue("propertyStatus", status, { shouldDirty: true })
+                }
+                className={`items-center justify-center flex-1 ${
+                  formValues.propertyStatus === status
+                    ? "bg-[#0F113C]"
+                    : "bg-transparent"
+                }`}
+              >
+                <Text
+                  className={`text-xs font-semibold ${
+                    formValues.propertyStatus === status
+                      ? "text-white"
+                      : "text-[#0F113C]"
+                  }`}
+                >
+                  {status === "ready" ? "جاهز" : "قيد الإنشاء"}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
         <View className="w-full h-0.5 mt-1 bg-[#0F113C]" />
 
         <View className="mt-2">

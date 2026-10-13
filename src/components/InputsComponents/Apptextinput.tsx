@@ -18,7 +18,10 @@ type BaseProps = {
   editable?: boolean;
   containerClassName?: string;
   rightElement?: ReactNode;
-};
+} & Pick<
+  RNTextInputProps,
+  "autoCapitalize" | "autoCorrect" | "autoComplete" | "textContentType"
+>;
 
 type UncontrolledProps = BaseProps & {
   value: string;
@@ -51,6 +54,10 @@ export default function AppTextInput<TFieldValues extends FieldValues>(
     editable = true,
     containerClassName = "",
     rightElement,
+    autoCapitalize,
+    autoCorrect,
+    autoComplete,
+    textContentType,
   } = props;
 
   const [isFocused, setIsFocused] = useState(false);
@@ -64,6 +71,10 @@ export default function AppTextInput<TFieldValues extends FieldValues>(
     secureTextEntry,
     keyboardType,
     editable,
+    autoCapitalize,
+    autoCorrect,
+    autoComplete,
+    textContentType,
     textAlign: "right",
     textAlignVertical: multiline ? "top" : "center",
     onFocus: () => setIsFocused(true),

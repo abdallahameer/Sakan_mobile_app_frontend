@@ -1,7 +1,6 @@
 export type {
   FilterText,
   LoginForm,
-  MyAd,
   PropertyFilterForm,
   RoomsNumber,
   UploadFormFields,

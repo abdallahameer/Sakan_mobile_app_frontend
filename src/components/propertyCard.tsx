@@ -30,13 +30,14 @@ export default function PropertyCard({
     >
       <View className="relative w-[30%] h-full">
         <Image
-          source={{ uri: property.images[0] }}
+          source={{ uri: property.images?.[0] }}
           className="w-full h-full rounded-r-none rounded-2xl"
+          resizeMode="cover"
         />
 
         <View className="absolute px-2 py-0.5 rounded-full top-1 right-1 bg-blue-500/40">
           <Text className="text-[10px] font-semibold text-[#171947]">
-            للبيع
+            {property.listingType == "rent" ? "إيجار" : "بيع"}
           </Text>
         </View>
       </View>
@@ -55,7 +56,7 @@ export default function PropertyCard({
                 <Ionicons name="location" color={"#3b82f6"} size={13} />
 
                 <Text className="text-xs text-blue-900" numberOfLines={1}>
-                  {property.location.address}
+                  {`${property.location.city}-${property.location.neighborhood}`}
                 </Text>
               </View>
 

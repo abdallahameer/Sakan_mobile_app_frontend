@@ -390,3 +390,7 @@ export const PROPERTIES: Property[] = [
     updatedAt: "2026-07-26T12:40:00.000Z",
   },
 ];
+
+export const SAVEDPROPERTIES: Property[] = PROPERTIES.slice(0, 2).map(
+  (property) => ({ ...property, isFavorite: true }),
+);

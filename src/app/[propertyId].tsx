@@ -3,10 +3,13 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { api } from "@/lib/api";
+import type { Property } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
-  Dimensions,
+  ActivityIndicator,
   Image,
   Linking,
   Pressable,
@@ -19,98 +22,169 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-interface PropertyDetails {
-  id: string;
-  title: string;
-  address: string;
-  price: number;
-  originalPrice?: number;
-  images: string[];
-  isFavorite: boolean;
-  info: {
-    icon: keyof typeof MaterialCommunityIcons.glyphMap;
-    label: string;
-    value: string;
-  }[];
-  features: string[];
-  description: string;
-  phone: string;
-}
-
-const MOCK_PROPERTY: PropertyDetails = {
-  id: "1",
-  title: "شقة للبيع",
-  address: "شارع 7127967، حي اليرموك، مدينة الرياض، منطقة الرياض",
-  price: 800000,
-  originalPrice: 900000,
-  images: [
-    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
-    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
-  ],
-  isFavorite: false,
-  info: [
-    { icon: "ruler-square", label: "المساحة", value: "89 م²" },
-    { icon: "compass-outline", label: "الواجهة", value: "شمال" },
-    { icon: "bed-outline", label: "غرف النوم", value: "1" },
-    { icon: "sofa-outline", label: "الصالات", value: "2" },
-    { icon: "toilet", label: "دورات مياه", value: "2" },
-    { icon: "road-variant", label: "عرض الشارع", value: "30 م" },
-  ],
-  features: [
-    "مطبخ",
-    "ملحق",
-    "مدخل سيارة",
-    "مصعد",
-    "توفر الماء",
-    "توفر الكهرباء",
-    "سطح خاص",
-    "مدخلين",
-    "مدخل خاص",
-    "قريب من محطة باص",
-  ],
-  description:
-    "للبيع مباشرة من المالك — شقة مع ملحق علوي في حي اليرموك بالرياض. تتميز بوجود سطح خاص كبير يوفر مساحة خارجية ممتازة، بالإضافة إلى مدخل مستقل وموقع قريب من الخدمات ووسائل المواصلات. تشطيبات حديثة وتصميم عملي يناسب العائلات.",
-  phone: "+249900000000",
+type PropertyDetails = Omit<Property, "location"> & {
+  location: Omit<Property["location"], "address"> & { address?: string };
+  phoneKey?: string;
+  whatsAppKey?: string;
 };
 
-const screenWidth = Dimensions.get("screen").width;
-
 function chunkPairs<T>(items: T[]): T[][] {
-  const pairs: T[][] = [];
-  for (let i = 0; i < items.length; i += 2) {
-    pairs.push(items.slice(i, i + 2));
+  const rows: T[][] = [];
+  for (let index = 0; index < items.length; index += 2) {
+    rows.push(items.slice(index, index + 2));
   }
-  return pairs;
+  return rows;
 }
 
 export default function PropertyDetailsScreen() {
   const router = useRouter();
-  const { propertyId } = useLocalSearchParams();
+  const params = useLocalSearchParams<{ propertyId: string | string[] }>();
+  const propertyId = Array.isArray(params.propertyId)
+    ? params.propertyId[0]
+    : params.propertyId;
   const insets = useSafeAreaInsets();
-  const property = MOCK_PROPERTY;
-
   const [currentImage, setCurrentImage] = useState(0);
-  const [isFavorited, setIsFavorited] = useState(property.isFavorite);
+  const [favoriteOverride, setFavoriteOverride] = useState<boolean | null>(null);
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
 
-  const discountPercent =
-    property.originalPrice && property.originalPrice > property.price
-      ? Math.round(
-          ((property.originalPrice - property.price) / property.originalPrice) *
-            100,
-        )
-      : null;
+  const {
+    data: property,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["property", propertyId],
+    enabled: Boolean(propertyId),
+    queryFn: async () => {
+      const response = await api.get<
+        PropertyDetails | { property: PropertyDetails }
+      >(`/properties/${encodeURIComponent(propertyId!)}`);
+      return "property" in response.data
+        ? response.data.property
+        : response.data;
+    },
+  });
 
-  const featureRows = chunkPairs(property.features);
+  if (isPending) {
+    return (
+      <SafeAreaView className="items-center justify-center flex-1 bg-[#F0F1FA]">
+        <ActivityIndicator size="large" color="#10B981" />
+      </SafeAreaView>
+    );
+  }
+
+  if (isError || !property) {
+    return (
+      <SafeAreaView className="items-center justify-center flex-1 gap-4 bg-[#F0F1FA]">
+        <Text className="text-base text-[#6B7280]">
+          تعذر تحميل بيانات العقار
+        </Text>
+        <Pressable onPress={() => router.back()}>
+          <Text className="font-semibold text-[#10B981]">العودة</Text>
+        </Pressable>
+      </SafeAreaView>
+    );
+  }
+
+  const features = [
+    property.kitchen && "مطبخ",
+    property.annex && "ملحق",
+    property.carEntrance && "مدخل سيارة",
+    property.elevator && "مصعد",
+    property.airConditioners && "مكيفات",
+    property.water && "توفر الماء",
+    property.electricity && "توفر الكهرباء",
+    property.solarSystem && "نظام طاقة شمسية",
+    property.roof && "سطح",
+  ].filter((feature): feature is string => Boolean(feature));
+
+  const propertyInfo = [
+    {
+      icon: "home-city-outline",
+      label: "نوع العقار",
+      value: property.propertyType === "residential" ? "سكني" : "تجاري",
+    },
+    {
+      icon: "tag-outline",
+      label: "نوع الإعلان",
+      value: property.listingType === "rent" ? "للإيجار" : "للبيع",
+    },
+    {
+      icon: "ruler-square",
+      label: "المساحة",
+      value: `${property.area} م²`,
+    },
+    {
+      icon: "bed-outline",
+      label: "غرف النوم",
+      value: String(property.rooms),
+    },
+    {
+      icon: "sofa-outline",
+      label: "الصالات",
+      value: String(property.livingRoom),
+    },
+    {
+      icon: "toilet",
+      label: "دورات المياه",
+      value: String(property.bathrooms),
+    },
+    {
+      icon: "stairs",
+      label: "الطابق",
+      value: String(property.floorNumber),
+    },
+    {
+      icon: "home-outline",
+      label: "عمر العقار",
+      value: `${property.propertyAge} سنوات`,
+    },
+    {
+      icon: "account-group-outline",
+      label: "مناسب لـ",
+      value: property.familyOrSingle === "family" ? "عائلات" : "أفراد",
+    },
+    {
+      icon: "calendar-month-outline",
+      label: "حالة العقار",
+      value:
+        property.propertyStatus === "ready" ? "جاهز" : "قيد الإنشاء",
+    },
+    {
+      icon: "sofa-outline",
+      label: "التأثيث",
+      value: property.furnished ? "مفروش" : "غير مفروش",
+    },
+    {
+      icon: "cash-clock",
+      label: "طريقة الدفع",
+      value:
+        property.paymentType === "monthly"
+          ? "شهري"
+          : property.paymentType === "yearly"
+            ? "سنوي"
+            : "يومي",
+    },
+  ] as const;
+
+  const isFavorited = favoriteOverride ?? property.isFavorite ?? false;
+  const phoneNumber = `${property.phoneKey ?? ""}${property.phone ?? ""}`;
+  const whatsappNumber = `${property.whatsAppKey ?? property.phoneKey ?? ""}${property.whatsapp ?? property.phone ?? ""}`;
 
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]" edges={["top"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 33 }}>
         <View className="relative">
-          <Image
-            source={{ uri: property.images[currentImage] }}
-            style={{ width: screenWidth, height: 320 }}
-          />
+          {property.images.length > 0 ? (
+            <Image
+              source={{ uri: property.images[currentImage] }}
+              style={{ width: "100%", height: 320 }}
+              onError={() => setCurrentImage(0)}
+            />
+          ) : (
+            <View className="items-center justify-center w-full h-80 bg-[#E5E7EB]">
+              <Ionicons name="image-outline" size={40} color="#9CA3AF" />
+            </View>
+          )}
 
           <View className="absolute flex-row items-center justify-between w-full px-4 top-4">
             <Pressable
@@ -122,7 +196,7 @@ export default function PropertyDetailsScreen() {
 
             <View className="flex-row items-center gap-3">
               <Pressable
-                onPress={() => setIsFavorited((prev) => !prev)}
+                onPress={() => setFavoriteOverride((previous) => !isFavorited)}
                 className="items-center justify-center bg-white rounded-full w-11 h-11"
               >
                 <Ionicons
@@ -141,28 +215,36 @@ export default function PropertyDetailsScreen() {
             </View>
           </View>
 
-          <Pressable className="absolute flex-row items-center gap-1 px-3 py-1.5 rounded-full bottom-4 left-4 bg-black/50">
-            <Ionicons name="images-outline" size={14} color="#ffffff" />
-            <Text className="text-xs font-semibold text-white">
-              {property.images.length} · شاهد الصور
-            </Text>
-          </Pressable>
+          {property.images.length > 0 && (
+            <Pressable
+              onPress={() =>
+                setCurrentImage((index) => (index + 1) % property.images.length)
+              }
+              className="absolute flex-row items-center gap-1 px-3 py-1.5 rounded-full bottom-4 left-4 bg-black/50"
+            >
+              <Ionicons name="images-outline" size={14} color="#ffffff" />
+              <Text className="text-xs font-semibold text-white">
+                {property.images.length} · شاهد الصور
+              </Text>
+            </Pressable>
+          )}
         </View>
 
         <View className="gap-3 px-5 pt-5">
           <Text className="text-xl font-bold text-left text-[#0F113C]">
-            {propertyId}
+            {property.title}
           </Text>
           <View className="flex-row items-center gap-1">
             <Ionicons name="location-outline" size={15} color="#6B7280" />
             <Text className="flex-1 text-sm text-left text-[#6B7280]">
-              {property.address}
+              {property.location.address ??
+                `${property.location.city}، ${property.location.neighborhood}`}
             </Text>
           </View>
 
           <View className="flex-row items-center gap-2">
             <Text className="text-2xl font-bold text-[#10B981]">
-              {property.price.toLocaleString("ar-EG")} ريال
+              {property.price.toLocaleString("ar-EG")} جنيه
             </Text>
           </View>
 
@@ -171,7 +253,7 @@ export default function PropertyDetailsScreen() {
           </Text>
 
           <View className="overflow-hidden border border-[#E5E7EB] rounded-2xl">
-            {property.info.map((item, index) => (
+            {propertyInfo.map((item, index) => (
               <View
                 key={item.label}
                 className="flex-row items-center justify-between px-4 py-3.5"
@@ -194,38 +276,42 @@ export default function PropertyDetailsScreen() {
             ))}
           </View>
 
-          <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C]">
-            مميزات العقار
-          </Text>
-
-          <View className="overflow-hidden border border-[#E5E7EB] rounded-2xl">
-            {featureRows.map((pair, rowIndex) => (
-              <View
-                key={rowIndex}
-                className="flex-row"
-                style={{
-                  backgroundColor: rowIndex % 2 === 0 ? "#F8F9FA" : "#ffffff",
-                }}
-              >
-                {pair.map((feature) => (
+          {features.length > 0 && (
+            <>
+              <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C]">
+                مميزات العقار
+              </Text>
+              <View className="overflow-hidden border border-[#E5E7EB] rounded-2xl">
+                {chunkPairs(features).map((pair, rowIndex) => (
                   <View
-                    key={feature}
-                    className="flex-row items-center justify-start flex-1 gap-2 px-2 py-3.5"
+                    key={pair.join("-")}
+                    className="flex-row"
+                    style={{
+                      backgroundColor:
+                        rowIndex % 2 === 0 ? "#F8F9FA" : "#ffffff",
+                    }}
                   >
-                    <Text className="text-sm font-medium text-[#374151]">
-                      {feature}
-                    </Text>
-                    <Ionicons
-                      name="checkmark-circle"
-                      size={16}
-                      color="#10B981"
-                    />
+                    {pair.map((feature) => (
+                      <View
+                        key={feature}
+                        className="flex-row items-center justify-start flex-1 gap-2 px-2 py-3.5"
+                      >
+                        <Text className="text-sm font-medium text-[#374151]">
+                          {feature}
+                        </Text>
+                        <Ionicons
+                          name="checkmark-circle"
+                          size={16}
+                          color="#10B981"
+                        />
+                      </View>
+                    ))}
+                    {pair.length === 1 && <View className="flex-1" />}
                   </View>
                 ))}
-                {pair.length === 1 && <View className="flex-1" />}
               </View>
-            ))}
-          </View>
+            </>
+          )}
 
           <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C]">
             وصف العقار
@@ -238,7 +324,7 @@ export default function PropertyDetailsScreen() {
             {property.description}
           </Text>
           <Pressable
-            onPress={() => setDescriptionExpanded((prev) => !prev)}
+            onPress={() => setDescriptionExpanded((previous) => !previous)}
             className="self-start"
           >
             <Text className="text-sm font-semibold underline text-[#10B981]">
@@ -252,14 +338,20 @@ export default function PropertyDetailsScreen() {
         style={{ paddingBottom: insets.bottom + 12 }}
       >
         <Pressable
-          onPress={() => Linking.openURL(`https://wa.me/${property.phone}`)}
+          onPress={() =>
+            Linking.openURL(
+              `https://wa.me/${whatsappNumber.replace(/\D/g, "")}`,
+            )
+          }
+          disabled={!property.whatsapp && !property.phone}
           className="flex-row w-[50%] p-2 rounded-xl border border-green-800 items-center justify-center bg-green-400/30"
         >
           <FontAwesome name="whatsapp" size={18} color="black" />
         </Pressable>
 
         <Pressable
-          onPress={() => Linking.openURL(`tel:${property.phone}`)}
+          onPress={() => Linking.openURL(`tel:${phoneNumber}`)}
+          disabled={!property.phone}
           className="flex-row w-[50%] p-2 rounded-xl border border-gray-500 items-center justify-center bg-blue-400/30"
         >
           <FontAwesome name="phone" size={18} color="black" />

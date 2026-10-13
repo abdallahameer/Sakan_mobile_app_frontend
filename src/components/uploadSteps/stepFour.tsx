@@ -17,7 +17,7 @@ const INITIAL_REGION: Region = {
 type StepFourProps = {
   formValues: UploadFormFields;
   setValue: UseFormSetValue<UploadFormFields>;
-  onSubmit: (formValues: UploadFormFields) => void;
+  onSubmit: (formValues: UploadFormFields) => void | Promise<void>;
 };
 
 export default function StepFour({
@@ -61,12 +61,8 @@ export default function StepFour({
 
       <Pressable
         onPress={() => onSubmit(formValues)}
-        disabled={!selectedLocation}
         className="items-center justify-center py-3.5 mt-4 rounded-xl"
-        style={{
-          backgroundColor: selectedLocation ? "#0F113C" : "#D1D5DB",
-          opacity: selectedLocation ? 1 : 0.7,
-        }}
+        style={{ backgroundColor: "#0F113C" }}
       >
         <Text className="text-base font-bold text-white">
           اختيار الموقع والنشر
