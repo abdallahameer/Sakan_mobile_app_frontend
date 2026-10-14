@@ -29,7 +29,7 @@ export default function Login() {
   const { signIn } = useGoogleAuth(async (idToken) => {
     try {
       const { data } = await api.post("/auth/google", { idToken });
-      await setAuthToken(data.token); // saves it on the phone
+      await setAuthToken(data.token);
       router.replace("/(tabs)");
     } catch (err: any) {
       Toast.show({

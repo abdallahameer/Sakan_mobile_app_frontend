@@ -59,8 +59,6 @@ export default function StepTwo({
     },
   });
 
-  console.log(neighborhoods);
-
   return (
     <ScrollView
       className="flex-1 w-full"

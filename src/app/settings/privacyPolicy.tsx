@@ -15,7 +15,6 @@ export default function PrivacyPolicy() {
 
   return (
     <View className="flex-1 bg-[#F0F1FA]">
-      {/* Header */}
       <SafeAreaView>
         <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
           <Pressable onPress={() => router.back()}>
@@ -32,7 +31,6 @@ export default function PrivacyPolicy() {
 
       <ScrollView style={{ flex: 1 }} contentContainerClassName=" pb-10">
         <SafeAreaView className=" px-2.5" style={{ flex: 1 }}>
-          {/* Logo */}
           <View className="flex-row items-center justify-center">
             <Image
               className="h-32 w-36"
@@ -60,7 +58,6 @@ export default function PrivacyPolicy() {
             لما هو موضح في سياسة الخصوصية هذه.
           </Text>
 
-          {/* 1. المعلومات التي نجمعها */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               1. المعلومات التي نجمعها
@@ -112,7 +109,6 @@ export default function PrivacyPolicy() {
             </View>
           </View>
 
-          {/* 2. إنشاء الحساب وتسجيل الدخول */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               2. إنشاء الحساب وتسجيل الدخول
@@ -159,7 +155,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 3. معلومات العقارات */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               3. معلومات العقارات
@@ -242,7 +237,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 4. ظهور رقم الهاتف */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               4. ظهور رقم الهاتف
@@ -260,7 +254,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 5. الصور */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               5. الصور
@@ -289,7 +282,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 6. مستندات إثبات الملكية */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               6. مستندات إثبات الملكية
@@ -309,7 +301,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 7. الموقع الجغرافي */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               7. الموقع الجغرافي
@@ -344,7 +335,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 8. سجل البحث */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               8. سجل البحث
@@ -359,7 +349,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 9. المفضلة */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               9. المفضلة
@@ -371,7 +360,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 10. الإشعارات */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               10. الإشعارات
@@ -386,7 +374,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 11. المعلومات التي لا نجمعها حاليًا */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               11. المعلومات التي لا نجمعها حاليًا
@@ -418,7 +405,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 12. خدمات الطرف الثالث والبنية التحتية */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               12. خدمات الطرف الثالث والبنية التحتية
@@ -440,7 +426,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 13. مشاركة المعلومات */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               13. مشاركة المعلومات
@@ -488,7 +473,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 14. حماية البيانات */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               14. حماية البيانات
@@ -508,7 +492,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 15. حذف الحساب والبيانات */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               15. حذف الحساب والبيانات
@@ -561,7 +544,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 16. طلب حذف البيانات */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               16. طلب حذف البيانات
@@ -576,7 +558,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 17. بيانات الأطفال */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               17. بيانات الأطفال
@@ -595,7 +576,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 18. الاحتيال والتحقق من العقارات */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               18. الاحتيال والتحقق من العقارات
@@ -611,7 +591,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 19. التواصل مع أصحاب العقارات */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               19. التواصل مع أصحاب العقارات
@@ -629,7 +608,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 20. التغييرات على سياسة الخصوصية */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               20. التغييرات على سياسة الخصوصية
@@ -648,7 +626,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 21. الميزات المستقبلية */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               21. الميزات المستقبلية
@@ -663,7 +640,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 22. التواصل معنا */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               22. التواصل معنا
@@ -678,7 +654,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
 
-          {/* 23. الموافقة */}
           <View className="mb-6">
             <Text className="mb-2 text-lg font-bold text-left text-[#0F113C]">
               23. الموافقة
@@ -690,7 +665,6 @@ export default function PrivacyPolicy() {
             </Text>
           </View>
         </SafeAreaView>
-        {/* Footer */}
         <View className="w-full flex-col items-center pt-5  pb-10 justify-start gap-5 bg-[#0F113C] h-[20%]">
           <View className="flex-row gap-5">
             <Pressable

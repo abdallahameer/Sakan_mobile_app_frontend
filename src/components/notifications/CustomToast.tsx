@@ -51,12 +51,10 @@ export default function CustomToast({
       className={`w-[92%] min-h-[72px] flex-row items-center justify-between rounded-[18px] border px-3.5 py-3 shadow-lg elevation-8 ${config.backgroundClassName}`}
     >
       <View className="flex-row items-center gap-2 max-w-[70%] justify-start  ">
-        {/* Icon */}
         <View className="mr-0 ml-3 h-11 w-11 items-center justify-center rounded-full bg-white">
           <Ionicons name={config.icon} size={25} color={config.iconColor} />
         </View>
 
-        {/* Text */}
         <View className="flex-1 flex-col   items-start">
           {!!text1 && (
             <Text
@@ -78,7 +76,6 @@ export default function CustomToast({
         </View>
       </View>
 
-      {/* Close */}
       <Pressable
         onPress={hide}
         hitSlop={10}

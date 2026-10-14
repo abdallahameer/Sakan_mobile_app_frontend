@@ -1,4 +1,3 @@
-// Put this file at: components/LocationPicker.tsx
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
@@ -24,9 +23,6 @@ type Props = {
   onChange: (value: { city: string; neighborhood: string }) => void;
 };
 
-// Two dropdowns: the city, then the neighborhood of that city.
-// The lists come from the backend (/locations), so they always match the
-// names the backend accepts.
 export default function LocationPicker({
   cities,
   neighborhoods,
