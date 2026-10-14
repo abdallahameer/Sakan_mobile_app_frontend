@@ -9,7 +9,6 @@ import { Pressable, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-// Centered roughly on Khartoum.
 const INITIAL_REGION = {
   latitude: 15.5896,
   longitude: 32.5599,
@@ -27,7 +26,6 @@ export default function Search() {
     <SafeAreaView className="flex-1" edges={["top"]}>
       <View className="flex-1">
         <MapView
-          // provider={PROVIDER_GOOGLE}
           style={{ flex: 1 }}
           initialRegion={INITIAL_REGION}
           onPress={() => {
@@ -54,7 +52,6 @@ export default function Search() {
           ))}
         </MapView>
 
-        {/* Search bar overlay */}
         <View className="absolute top-0 left-0 right-0">
           <PropertySearchBar
             value={searchText}
@@ -63,7 +60,6 @@ export default function Search() {
           />
         </View>
 
-        {/* My-location button */}
         <Pressable className="absolute items-center justify-center bg-white rounded-full shadow-md w-11 h-11 right-4 bottom-4">
           <Ionicons name="locate" size={20} color="#0F113C" />
         </Pressable>

@@ -23,7 +23,7 @@ export default function UploadProperty() {
       videos: [],
       title: "",
       price: "",
-      area: "", // property size in m²
+      area: "",
       city: "",
       neighborhood: "",
       description: "",
@@ -64,7 +64,6 @@ export default function UploadProperty() {
     const price = Number(values.price);
     const areaSize = Number(values.area);
 
-    // Everything below is required by the backend
     const missing: string[] = [];
     if (!values.title.trim()) missing.push("العنوان");
     if (!Number.isFinite(price) || price <= 0) missing.push("السعر");
@@ -123,7 +122,6 @@ export default function UploadProperty() {
       ...(values.longitude !== null && { longitude: values.longitude }),
     };
 
-    // One request: the ad fields + photos + video together
     const form = new FormData();
     form.append("data", JSON.stringify(payload));
 
@@ -147,7 +145,7 @@ export default function UploadProperty() {
     try {
       await api.post("/properties", form, {
         headers: { "Content-Type": "multipart/form-data" },
-        transformRequest: (d) => d, // send the form as it is
+        transformRequest: (d) => d,
         timeout: 180000,
       });
 

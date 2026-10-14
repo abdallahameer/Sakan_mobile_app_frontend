@@ -64,8 +64,6 @@ export default function Index() {
 
       <FlatList
         keyExtractor={(p) => p.id}
-        // className="flex-1 "
-        // data={properties ? properties.properties : []}
         data={properties?.properties ?? []}
         renderItem={({ item }) => <PropertyCard property={item} />}
         contentContainerClassName="px-4 py-4 "
