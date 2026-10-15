@@ -1,10 +1,19 @@
 import type { UploadFormFields } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
+import * as FileSystem from "expo-file-system/legacy";
 import * as ImagePicker from "expo-image-picker";
+import { useState } from "react";
 import { Control, UseFormSetValue } from "react-hook-form";
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
+import { Video } from "react-native-compressor";
 import Toast from "react-native-toast-message";
-
 const MIN_IMAGES = 1;
 const MAX_IMAGES = 10;
 
@@ -23,8 +32,12 @@ export default function StepOne({
   onNext,
   update = false,
 }: StepOneProps) {
+  const [compressing, setCompressing] = useState<number | null>(null);
+  const isCompressing = compressing !== null;
+
   const imageCount = formValues.images?.length ?? 0;
   const isFull = imageCount >= MAX_IMAGES;
+  const hasVideo = (formValues.videos?.length ?? 0) > 0;
 
   const pickImages = async () => {
     const remaining = MAX_IMAGES - imageCount;
@@ -39,7 +52,7 @@ export default function StepOne({
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       allowsMultipleSelection: true,
       selectionLimit: remaining,
       quality: 0.8,
@@ -77,19 +90,68 @@ export default function StepOne({
   };
 
   const pickVideo = async () => {
+    if (isCompressing) return;
+
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-      quality: 0.8,
+      mediaTypes: ["videos"],
     });
 
-    if (!result.canceled) {
-      const uri = result.assets[0]?.uri;
+    if (result.canceled) return;
 
-      setValue("videos", uri ? [uri] : [], {
+    const asset = result.assets[0];
+    if (!asset?.uri) return;
+
+    const MAX_SIZE = 40 * 1024 * 1024;
+    const size = asset.fileSize;
+
+    if (size != null && size <= MAX_SIZE) {
+      setValue("videos", [asset.uri], {
         shouldValidate: true,
         shouldDirty: true,
       });
+      return;
     }
+
+    setCompressing(0);
+
+    try {
+      const compressedUri = await Video.compress(
+        asset.uri,
+        { compressionMethod: "auto" },
+        (progress) => setCompressing(Math.round(progress * 100)),
+      );
+
+      const info = await FileSystem.getInfoAsync(compressedUri);
+
+      if (!info.exists || info.size == null || info.size > MAX_SIZE) {
+        Toast.show({
+          type: "error",
+          text1: "حجم الفيديو كبير جدًا",
+          text2: "تعذر تقليل حجم الفيديو إلى 40 ميغابايت أو أقل",
+        });
+        return;
+      }
+
+      setValue("videos", [compressedUri], {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "تعذر ضغط الفيديو",
+        text2: "حاول اختيار فيديو آخر",
+      });
+    } finally {
+      setCompressing(null);
+    }
+  };
+
+  const removeVideo = () => {
+    setValue("videos", [], {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
   };
 
   const removeImage = (indexToRemove: number) => {
@@ -104,6 +166,7 @@ export default function StepOne({
   };
 
   const goNext = () => {
+    if (isCompressing) return;
     if (imageCount < MIN_IMAGES) {
       Toast.show({
         type: "error",
@@ -181,25 +244,50 @@ export default function StepOne({
 
         <Pressable
           onPress={pickVideo}
+          disabled={isCompressing}
           className="flex-row items-center justify-between px-4 py-3.5 border bg-white border-[#0F113C] rounded-xl"
+          style={{ opacity: isCompressing ? 0.5 : 1 }}
         >
           <View className="items-center justify-center w-8 h-8 rounded-lg bg-[#0F113C]/10">
             <Ionicons name="videocam-outline" size={18} color="#0F113C" />
           </View>
 
           <Text className="text-base font-semibold text-[#0F113C]">
-            إضافة فيديو
-            {(formValues.videos?.length ?? 0) > 0
-              ? ` (${formValues.videos?.length ?? 0})`
-              : ""}
+            {hasVideo ? "تغيير الفيديو" : "إضافة فيديو (اختياري)"}
           </Text>
         </Pressable>
+
+        {isCompressing ? (
+          <View className="flex-row items-center justify-between px-4 py-3 bg-white border border-[#E5E7EB] rounded-xl">
+            <ActivityIndicator color="#0F113C" />
+            <Text className="text-sm font-semibold text-[#0F113C]">
+              جاري تحميل الفيديو... {compressing}%
+            </Text>
+          </View>
+        ) : hasVideo ? (
+          <View className="flex-row items-center justify-between px-4 py-3 bg-white border border-[#E5E7EB] rounded-xl">
+            <Pressable onPress={removeVideo} hitSlop={10}>
+              <Ionicons name="close-circle" size={22} color="#EF4444" />
+            </Pressable>
+            <Text className="text-sm font-semibold text-[#0F113C]">
+              تم إرفاق فيديو
+            </Text>
+          </View>
+        ) : (
+          <Text className="text-sm text-left text-[#6B7280]">
+            فيديو واحد فقط، بحد أقصى دقيقة واحدة
+          </Text>
+        )}
 
         {update == false ? (
           <Pressable
             onPress={goNext}
+            disabled={isCompressing}
             className="items-center justify-center py-3.5 mt-1 border rounded-xl"
-            style={{ borderColor: "#10B981" }}
+            style={{
+              borderColor: "#10B981",
+              opacity: isCompressing ? 0.5 : 1,
+            }}
           >
             <Text className="text-base font-bold text-[#10B981]">استمرار</Text>
           </Pressable>
