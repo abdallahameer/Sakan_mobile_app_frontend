@@ -1,5 +1,4 @@
-import type { UploadFormFields } from "@/types";
-import { UseFormSetValue } from "react-hook-form";
+import { StepFourProps } from "@/types/forms";
 import { Pressable, Text, View } from "react-native";
 import MapView, {
   Marker,
@@ -12,12 +11,6 @@ const INITIAL_REGION: Region = {
   longitude: 32.5599,
   latitudeDelta: 0.15,
   longitudeDelta: 0.15,
-};
-
-type StepFourProps = {
-  formValues: UploadFormFields;
-  setValue: UseFormSetValue<UploadFormFields>;
-  onSubmit: (formValues: UploadFormFields) => void | Promise<void>;
 };
 
 export default function StepFour({
@@ -36,11 +29,8 @@ export default function StepFour({
   const selectLocation = (event: MapPressEvent) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
 
-    setValue("latitude", latitude, { shouldDirty: true, shouldValidate: true });
-    setValue("longitude", longitude, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
+    setValue("latitude", latitude);
+    setValue("longitude", longitude);
   };
 
   return (

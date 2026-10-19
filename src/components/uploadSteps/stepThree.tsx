@@ -1,17 +1,9 @@
-import { UseFormSetValue } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
-import type { UploadFormFields } from "@/types";
+import { StepThreeProps } from "@/types/forms";
 import NumberRow from "../uploadpropertyHelperComponents/NumberRow";
 import SliderRow from "../uploadpropertyHelperComponents/SliderRow";
 import ToggleRow from "../uploadpropertyHelperComponents/ToggleRow";
-type StepThreeProps = {
-  formValues: UploadFormFields;
-  setValue: UseFormSetValue<UploadFormFields>;
-  onSubmit: (formValues: UploadFormFields) => void;
-  onNext?: () => void;
-  update?: boolean;
-};
 
 export default function StepThree({
   formValues,

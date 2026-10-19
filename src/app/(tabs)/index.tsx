@@ -36,11 +36,7 @@ export default function Index() {
   });
   const formValues = watch();
 
-  const {
-    data: properties,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: properties } = useQuery({
     queryKey: ["properties"],
     queryFn: async () => {
       const response = await api.get("/properties");

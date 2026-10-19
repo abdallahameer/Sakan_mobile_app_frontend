@@ -1,5 +1,5 @@
-import AppNumberInput from "@/components/InputsComponents/Appnumberinput";
 import AppTextInput from "@/components/InputsComponents/Apptextinput";
+import EmailInput from "@/components/InputsComponents/EmailInput";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,7 @@ import Toast from "react-native-toast-message";
 
 type ContactFormValues = {
   name: string;
-  phone: string;
+  email: string;
   subject: string;
   message: string;
 };
@@ -19,7 +19,7 @@ export default function ContactWithUs() {
   const { control, handleSubmit } = useForm<ContactFormValues>({
     defaultValues: {
       name: "",
-      phone: "",
+      email: "",
       subject: "",
       message: "",
     },
@@ -66,13 +66,7 @@ export default function ContactWithUs() {
           label="الاسم*"
         />
 
-        <AppNumberInput
-          name="phone"
-          control={control}
-          label="رقم الهاتف*"
-          placeholder="xxxxxxxx"
-          suffix="🇾🇪"
-        />
+        <EmailInput name="email" control={control} />
 
         <AppTextInput
           placeholder="العنوان"

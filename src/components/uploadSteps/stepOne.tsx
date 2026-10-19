@@ -1,9 +1,8 @@
-import type { UploadFormFields } from "@/types";
+import { StepOneProps } from "@/types/forms";
 import { Ionicons } from "@expo/vector-icons";
 import * as FileSystem from "expo-file-system/legacy";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
-import { Control, UseFormSetValue } from "react-hook-form";
 import {
   ActivityIndicator,
   Image,
@@ -16,17 +15,9 @@ import { Video } from "react-native-compressor";
 import Toast from "react-native-toast-message";
 const MIN_IMAGES = 1;
 const MAX_IMAGES = 10;
-
-type StepOneProps = {
-  control: Control<UploadFormFields>;
-  formValues: UploadFormFields;
-  setValue: UseFormSetValue<UploadFormFields>;
-  onNext: () => void;
-  update?: boolean;
-};
+const MAX_SIZE = 40 * 1024 * 1024;
 
 export default function StepOne({
-  control,
   formValues,
   setValue,
   onNext,
@@ -101,7 +92,6 @@ export default function StepOne({
     const asset = result.assets[0];
     if (!asset?.uri) return;
 
-    const MAX_SIZE = 40 * 1024 * 1024;
     const size = asset.fileSize;
 
     if (size != null && size <= MAX_SIZE) {

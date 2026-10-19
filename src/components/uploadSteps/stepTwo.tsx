@@ -2,22 +2,14 @@ import LocationPicker, {
   type LocationOption,
 } from "@/components/locationPicker";
 import { api } from "@/lib/api";
-import type { UploadFormFields } from "@/types";
+import { StepTwoProps } from "@/types/forms";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
-import { Control, UseFormSetValue } from "react-hook-form";
+import { useState } from "react";
 import { Linking, Pressable, ScrollView, Text, View } from "react-native";
 import AppNumberInput from "../InputsComponents/Appnumberinput";
 import AppTextInput from "../InputsComponents/Apptextinput";
 import PhoneNumberInput from "../InputsComponents/PhoneNumberInput";
-
-type StepTwoProps = {
-  control: Control<UploadFormFields>;
-  formValues: UploadFormFields;
-  setValue: UseFormSetValue<UploadFormFields>;
-  onNext: () => void;
-  update?: boolean;
-};
 
 export default function StepTwo({
   control,
@@ -26,6 +18,7 @@ export default function StepTwo({
   onNext,
   update = false,
 }: StepTwoProps) {
+  const [selectedCityId, setSelectedCityid] = useState<string | null>(null);
   const {
     data: cities = [],
     isPending: loadingCities,
@@ -40,16 +33,13 @@ export default function StepTwo({
     },
   });
 
-  const selectedCityId = cities.find(
-    (item) => item.name === formValues.city,
-  )?.id;
   const {
     data: neighborhoods = [],
     isPending: loadingNeighborhood,
     isError: neighborhoodsError,
   } = useQuery({
     queryKey: ["neighborhoods", selectedCityId],
-    enabled: selectedCityId !== undefined,
+    enabled: selectedCityId !== null,
     queryFn: async () => {
       const response = await api.get<{ areas: LocationOption[] }>(
         "/locations/areas",
@@ -58,6 +48,9 @@ export default function StepTwo({
       return response.data.areas;
     },
   });
+
+  console.log(formValues.city);
+  console.log(formValues.neighborhood);
 
   return (
     <ScrollView
@@ -108,15 +101,13 @@ export default function StepTwo({
           neighborhoodsError={neighborhoodsError}
           city={formValues.city}
           neighborhood={formValues.neighborhood}
-          onChange={({ city, neighborhood }) => {
-            setValue("city", city, {
-              shouldDirty: true,
-              shouldValidate: true,
-            });
-            setValue("neighborhood", neighborhood, {
-              shouldDirty: true,
-              shouldValidate: true,
-            });
+          onChangeCity={({ city, cityId }) => {
+            setValue("city", city);
+            setValue("neighborhood", "");
+            setSelectedCityid(cityId.toString());
+          }}
+          onChangeNeighborhood={({ neighborhood }) => {
+            setValue("neighborhood", neighborhood);
           }}
         />
 

@@ -1,6 +1,5 @@
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
-import { Pressable } from "react-native";
 
 export default function TabBar() {
   const router = useRouter();
@@ -44,23 +43,20 @@ export default function TabBar() {
           title: "Search",
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
-              name={focused ? "search" : "search-outline"}
+              name={focused ? "location" : "location-outline"}
               size={size}
               color={color}
             />
           ),
         }}
       />
+
       <Tabs.Screen
         name="upload"
         options={{
-          tabBarButton: () => (
-            <Pressable
-              className="items-center flex-1"
-              onPress={() => router.replace("/add-property")}
-            >
-              <AntDesign name="plus" size={28} color="#a0aec0" />
-            </Pressable>
+          title: "upload",
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name={"plus"} size={size} color={color} />
           ),
         }}
       />

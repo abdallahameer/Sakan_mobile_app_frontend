@@ -20,7 +20,11 @@ type Props = {
   neighborhoodsError: boolean;
   city: string;
   neighborhood: string;
-  onChange: (value: { city: string; neighborhood: string }) => void;
+  onChangeNeighborhood: (value: {
+    neighborhood: string;
+    neighborhoodId: number;
+  }) => void;
+  onChangeCity: (value: { city: string; cityId: number }) => void;
 };
 
 export default function LocationPicker({
@@ -32,7 +36,8 @@ export default function LocationPicker({
   neighborhoodsError,
   city,
   neighborhood,
-  onChange,
+  onChangeCity,
+  onChangeNeighborhood,
 }: Props) {
   const [open, setOpen] = useState<"city" | "neighborhood" | null>(null);
 
@@ -41,11 +46,14 @@ export default function LocationPicker({
   const options = open === "city" ? cities : neighborhoods;
   const selected = open === "city" ? city : neighborhood;
 
-  const choose = (name: string) => {
+  const choose = (name: LocationOption) => {
     if (open === "city") {
-      onChange({ city: name, neighborhood: name === city ? neighborhood : "" });
+      onChangeCity({ city: name.name, cityId: name.id });
     } else {
-      onChange({ city, neighborhood: name });
+      onChangeNeighborhood({
+        neighborhood: name.name,
+        neighborhoodId: name.id,
+      });
     }
     setOpen(null);
   };
@@ -103,7 +111,7 @@ export default function LocationPicker({
                 keyExtractor={(item) => String(item.id)}
                 renderItem={({ item }) => (
                   <Pressable
-                    onPress={() => choose(item.name)}
+                    onPress={() => choose(item)}
                     className="flex-row items-center justify-between py-3 border-b border-[#E5E7EB]"
                   >
                     <Text className="text-base text-[#0F113C]">
