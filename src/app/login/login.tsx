@@ -19,6 +19,7 @@ export default function Login() {
   });
 
   const onSubmit = (_values: LoginForm) => {
+    // will be updated soon.
     Toast.show({
       type: "success",
       text1: "تسجيل الدخول",

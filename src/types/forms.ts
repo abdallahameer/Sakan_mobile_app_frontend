@@ -1,3 +1,4 @@
+import { Control, UseFormSetValue } from "react-hook-form";
 import type {
   FamilyOrSingle,
   ListingType,
@@ -68,4 +69,34 @@ export type UploadFormFields = {
 export type LoginForm = {
   email: string;
   password: string;
+};
+
+export type StepOneProps = {
+  control: Control<UploadFormFields>;
+  formValues: UploadFormFields;
+  setValue: UseFormSetValue<UploadFormFields>;
+  onNext: () => void;
+  update?: boolean;
+};
+
+export type StepTwoProps = {
+  control: Control<UploadFormFields>;
+  formValues: UploadFormFields;
+  setValue: UseFormSetValue<UploadFormFields>;
+  onNext: () => void;
+  update?: boolean;
+};
+
+export type StepThreeProps = {
+  formValues: UploadFormFields;
+  setValue: UseFormSetValue<UploadFormFields>;
+  onSubmit: (formValues: UploadFormFields) => void;
+  onNext?: () => void;
+  update?: boolean;
+};
+
+export type StepFourProps = {
+  formValues: UploadFormFields;
+  setValue: UseFormSetValue<UploadFormFields>;
+  onSubmit: (formValues: UploadFormFields) => void | Promise<void>;
 };

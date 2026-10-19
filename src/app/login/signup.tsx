@@ -82,7 +82,7 @@ export default function SignUp() {
         </Pressable>
 
         <View className="flex-row justify-center gap-1 mt-2">
-          <Pressable onPress={() => router.push("/login" as any)}>
+          <Pressable onPress={() => router.push("/login/login")}>
             <Text className="text-sm font-bold text-[#10B981]">
               تسجيل الدخول
             </Text>

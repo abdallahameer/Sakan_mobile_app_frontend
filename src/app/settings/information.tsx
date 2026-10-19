@@ -1,5 +1,5 @@
-import AppNumberInput from "@/components/InputsComponents/Appnumberinput";
 import AppTextInput from "@/components/InputsComponents/Apptextinput";
+import EmailInput from "@/components/InputsComponents/EmailInput";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
@@ -8,7 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 type UserInformationFormValues = {
   name: string;
-  phone: string;
+  email: string;
   password: string;
 };
 
@@ -17,7 +17,7 @@ export default function UserInformation() {
   const { control } = useForm<UserInformationFormValues>({
     defaultValues: {
       name: "",
-      phone: "",
+      email: "",
       password: "",
     },
   });
@@ -51,13 +51,7 @@ export default function UserInformation() {
           />
         </View>
 
-        <AppNumberInput
-          name="phone"
-          control={control}
-          label="رقم الهاتف"
-          placeholder="xxxxxxxx"
-          suffix="🇾🇪"
-        />
+        <EmailInput name="email" control={control} />
 
         <AppTextInput
           name="password"
