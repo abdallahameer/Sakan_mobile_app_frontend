@@ -3,9 +3,9 @@ import PropertyFilter from "@/components/propertyFilter";
 import PropertySearchBar from "@/components/propertySearchBar";
 import { api } from "@/lib/api";
 import type { PropertyFilterForm } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { FlatList } from "react-native";
+import { ActivityIndicator, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
@@ -36,13 +36,32 @@ export default function Index() {
   });
   const formValues = watch();
 
-  const { data: properties } = useQuery({
-    queryKey: ["properties"],
-    queryFn: async () => {
-      const response = await api.get("/properties");
-      return response.data;
-    },
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["properties"],
+      initialPageParam: 1,
+
+      queryFn: async ({ pageParam }) => {
+        const response = await api.get("/properties", {
+          params: {
+            page: pageParam,
+            limit: 10,
+          },
+        });
+
+        return response.data;
+      },
+
+      getNextPageParam: (lastPage) => {
+        if (!lastPage.pagination?.hasNextPage) {
+          return undefined;
+        }
+
+        return lastPage.pagination.page + 1;
+      },
+    });
+
+  const properties = data?.pages.flatMap((page) => page.properties ?? []) ?? [];
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1   bg-[#F0F1FA]">
@@ -59,10 +78,26 @@ export default function Index() {
       />
 
       <FlatList
-        keyExtractor={(p) => p.id}
-        data={properties?.properties ?? []}
+        keyExtractor={(property) => property.id}
+        data={properties}
         renderItem={({ item }) => <PropertyCard property={item} />}
-        contentContainerClassName="px-4 py-4 "
+        contentContainerClassName="px-4 py-4"
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.1}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <ActivityIndicator size="large" className="my-4 text-[#0F113C]" />
+          ) : null
+        }
+        ListEmptyComponent={
+          isLoading ? (
+            <ActivityIndicator size="large" className="my-4 text-[#0F113C]" />
+          ) : null
+        }
       />
     </SafeAreaView>
   );
