@@ -1,4 +1,5 @@
 import CustomToast from "@/components/notifications/CustomToast";
+import UploadBanner from "@/components/Uploadbanner ";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NavigationBar } from "expo-navigation-bar";
 import { Stack } from "expo-router";
@@ -37,6 +38,8 @@ export default function RootLayout() {
               },
             }}
           />
+
+          <UploadBanner />
 
           <Toast
             config={toastConfig}

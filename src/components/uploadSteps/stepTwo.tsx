@@ -49,9 +49,6 @@ export default function StepTwo({
     },
   });
 
-  console.log(formValues.city);
-  console.log(formValues.neighborhood);
-
   return (
     <ScrollView
       className="flex-1 w-full"
