@@ -1,9 +1,10 @@
 import MapPropertyMarker from "@/components/mapPropertyMarker";
 import MapPropertyPreviewCard from "@/components/mapPropertyPreviewCard";
 import PropertySearchBar from "@/components/propertySearchBar";
-import { PROPERTIES } from "@/data/myAds";
+import { api } from "@/lib/api";
 import type { Property } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import MapView, { MapType, Marker } from "react-native-maps";
@@ -32,6 +33,14 @@ export default function Search() {
   const [isMapStyleSelectorVisible, setIsMapStyleSelectorVisible] =
     useState(false);
 
+  const { data: properties } = useQuery({
+    queryKey: ["propertiesLocations"],
+    queryFn: async () => {
+      const response = await api.get("/properties?hasLocation=true");
+      return response.data;
+    },
+  });
+
   return (
     <SafeAreaView className="flex-1" edges={["top"]}>
       <View className="flex-1">
@@ -47,20 +56,22 @@ export default function Search() {
             }
           }}
         >
-          {PROPERTIES.map((property) => (
-            <Marker
-              key={property.id}
-              coordinate={{
-                latitude: property.location.latitude,
-                longitude: property.location.longitude,
-              }}
-              onPress={() => {
-                setSelectedProperty(property);
-              }}
-            >
-              <MapPropertyMarker />
-            </Marker>
-          ))}
+          {properties
+            ? properties.properties.map((property: Property) => (
+                <Marker
+                  key={property.id}
+                  coordinate={{
+                    latitude: property.location.latitude,
+                    longitude: property.location.longitude,
+                  }}
+                  onPress={() => {
+                    setSelectedProperty(property);
+                  }}
+                >
+                  <MapPropertyMarker />
+                </Marker>
+              ))
+            : null}
         </MapView>
 
         <View className="absolute top-0 left-0 right-0">
@@ -93,7 +104,7 @@ export default function Search() {
           </Pressable>
 
           {isMapStyleSelectorVisible && (
-            <View className="mt-2 overflow-hidden rounded-xl bg-white shadow-md">
+            <View className="mt-2 overflow-hidden bg-white shadow-md rounded-xl">
               {MAP_STYLES.map((style) => (
                 <Pressable
                   key={style.value}
