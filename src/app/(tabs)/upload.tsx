@@ -2,21 +2,20 @@ import StepFour from "@/components/uploadSteps/stepFour";
 import StepOne from "@/components/uploadSteps/stepOne";
 import StepThree from "@/components/uploadSteps/stepThree";
 import StepTwo from "@/components/uploadSteps/stepTwo";
-import { api } from "@/lib/api";
+import { isUploadBusy, startUpload } from "@/lib/uploadStore";
 import type { UploadFormFields } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-
 export default function UploadProperty() {
   const router = useRouter();
   const [steps, setSteps] = useState(1);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const queryClient = useQueryClient();
   const { control, watch, setValue, reset } = useForm<UploadFormFields>({
     defaultValues: {
       images: [],
@@ -59,8 +58,6 @@ export default function UploadProperty() {
   const formValues = watch();
 
   const onSubmit = async (values: UploadFormFields) => {
-    if (isSubmitting) return;
-
     const price = Number(values.price);
     const areaSize = Number(values.area);
 
@@ -122,50 +119,20 @@ export default function UploadProperty() {
       ...(values.longitude !== null && { longitude: values.longitude }),
     };
 
-    const form = new FormData();
-    form.append("data", JSON.stringify(payload));
-
-    values.images.forEach((uri, i) => {
-      form.append("images", {
-        uri,
-        name: `photo-${i}.jpg`,
-        type: "image/jpeg",
-      } as any);
-    });
-
-    if (values.videos[0]) {
-      form.append("video", {
-        uri: values.videos[0],
-        name: "video.mp4",
-        type: "video/mp4",
-      } as any);
+    if (isUploadBusy()) {
+      Toast.show({
+        type: "info",
+        text1: "يوجد إعلان قيد النشر",
+        text2: "انتظر حتى ينتهي ثم أضف إعلاناً جديداً",
+      });
+      return;
     }
 
-    setIsSubmitting(true);
-    try {
-      await api.post("/properties", form, {
-        headers: { "Content-Type": "multipart/form-data" },
-        transformRequest: (d) => d,
-        timeout: 180000,
-      });
-
-      Toast.show({
-        type: "success",
-        text1: "تم النشر",
-        text2: "تم نشر إعلانك بنجاح 🎊",
-      });
-      router.replace("/(tabs)");
-    } catch (error: any) {
-      Toast.show({
-        type: "error",
-        text1: "تعذر نشر الإعلان",
-        text2:
-          error?.response?.data?.error ??
-          (error instanceof Error ? error.message : "حدث خطأ غير متوقع"),
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    startUpload(
+      { payload, images: values.images, video: values.videos[0] },
+      () => queryClient.invalidateQueries({ queryKey: ["properties"] }),
+    );
+    router.replace("/(tabs)");
   };
 
   useFocusEffect(
