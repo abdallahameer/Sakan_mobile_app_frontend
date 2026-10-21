@@ -40,28 +40,17 @@ export default function Index() {
     useInfiniteQuery({
       queryKey: ["properties"],
       initialPageParam: 1,
-
-      queryFn: async ({ pageParam }) => {
-        const response = await api.get("/properties", {
-          params: {
-            page: pageParam,
-            limit: 10,
-          },
-        });
-
-        return response.data;
-      },
-
-      getNextPageParam: (lastPage) => {
-        if (!lastPage.pagination?.hasNextPage) {
-          return undefined;
-        }
-
-        return lastPage.pagination.page + 1;
-      },
+      queryFn: async ({ pageParam }) =>
+        (
+          await api.get("/properties", {
+            params: { page: pageParam, limit: 10, hello: "true" },
+          })
+        ).data,
+      getNextPageParam: (last) =>
+        last.pagination.hasMore ? last.pagination.page + 1 : undefined,
     });
 
-  const properties = data?.pages.flatMap((page) => page.properties ?? []) ?? [];
+  const properties = data?.pages.flatMap((p) => p.properties) ?? [];
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1   bg-[#F0F1FA]">
