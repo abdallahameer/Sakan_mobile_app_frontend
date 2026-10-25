@@ -1,6 +1,7 @@
 import type { FilterText } from "@/types";
 import { useEffect, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
 import AppNumberInput from "../InputsComponents/Appnumberinput";
 
 type PriceRangeModalProps = {
@@ -29,6 +30,14 @@ export default function PriceRangeModal({
   }, [visible, min, max]);
 
   const handleApply = () => {
+    if (maxVal < minVal) {
+      Toast.show({
+        type: "error",
+        text1: "خطئ إدخال",
+        text2: "أقصى سعر يجب أن تكون أكبر من أو تساوي أقل سعر",
+      });
+      return;
+    }
     onApply(minVal, maxVal);
     onClose();
   };
@@ -68,6 +77,16 @@ export default function PriceRangeModal({
               containerClassName="w-[50%]"
             />
           </View>
+
+          <Pressable
+            onPress={() => {
+              onApply(null, null);
+              onClose();
+            }}
+            className="items-center self-start px-4 py-2 mt-4 border rounded-xl border-[#E5E7EB]"
+          >
+            <Text className="text-base font-bold text-[#0F113C]">الكل</Text>
+          </Pressable>
 
           <Pressable
             onPress={handleApply}

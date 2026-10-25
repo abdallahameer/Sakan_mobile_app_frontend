@@ -42,6 +42,17 @@ export default function ResidentialorCommercial({
 
           <View className="flex-row gap-3">
             <Pressable
+              onPress={() => setVal(null)}
+              className="items-center justify-center flex-1 py-4 border rounded-2xl"
+              style={{
+                borderColor: val === null ? "#1e40af" : "#E5E7EB",
+                backgroundColor: val === null ? "#dbeafe" : "#ffffff",
+              }}
+            >
+              <Text className="text-base font-bold text-[#0F113C]">الكل</Text>
+            </Pressable>
+
+            <Pressable
               onPress={() =>
                 setVal((currentValue) =>
                   currentValue === "residential" ? null : "residential",

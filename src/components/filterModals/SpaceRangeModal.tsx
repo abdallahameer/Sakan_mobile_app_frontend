@@ -1,6 +1,7 @@
 import type { FilterText } from "@/types";
 import { useEffect, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
 import AppNumberInput from "../InputsComponents/Appnumberinput";
 
 type PriceRangeModalProps = {
@@ -22,6 +23,14 @@ export default function SpaceRangeModal({
   const [maxSpace, setMaxSpace] = useState(max ?? "");
 
   const handleApply = () => {
+    if (maxSpace < minSpace) {
+      Toast.show({
+        type: "error",
+        text1: "خطئ إدخال",
+        text2: "أقصى مساحة يجب أن تكون أكبر من أو تساوي أقل مساحة",
+      });
+      return;
+    }
     onApply(minSpace, maxSpace);
     onClose();
   };
@@ -68,6 +77,16 @@ export default function SpaceRangeModal({
               containerClassName="w-[50%]"
             />
           </View>
+
+          <Pressable
+            onPress={() => {
+              onApply(null, null);
+              onClose();
+            }}
+            className="items-center self-start px-4 py-2 mt-4 border rounded-xl border-[#E5E7EB]"
+          >
+            <Text className="text-base font-bold text-[#0F113C]">الكل</Text>
+          </Pressable>
 
           <Pressable
             onPress={handleApply}

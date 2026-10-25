@@ -11,18 +11,18 @@ export type RoomsNumber = null | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "+8";
 export type FilterText = string | null;
 
 export type PropertyFilterForm = {
-  propertyType: ListingType | null;
+  listingType: ListingType | null;
   familyOrSingle: FamilyOrSingle | null;
   paymentType: PaymentFrequency | null;
-  status: "all" | PropertyStatus;
-  residentialOrCommercial: PropertyCategory | null;
-  furnished: "furnished" | "unfurnished" | null;
+  propertyStatus: PropertyStatus | null;
+  propertyType: PropertyCategory | null;
+  furnished: boolean | null;
   rooms: RoomsNumber;
   bathRooms: RoomsNumber;
   minPrice: FilterText;
   maxPrice: FilterText;
-  minSpace: FilterText;
-  maxSpace: FilterText;
+  minArea: FilterText;
+  maxArea: FilterText;
 };
 
 export type UploadFormFields = {

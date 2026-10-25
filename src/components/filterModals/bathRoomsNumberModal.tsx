@@ -50,8 +50,19 @@ export default function BathRoomsNumberModal({
 
           <View className="flex-row flex-wrap gap-3 mb-5">
             <Pressable
+              onPress={() => setDraft(null)}
+              className="flex-row items-center justify-center p-2 border min-w-10 rounded-2xl"
+              style={{
+                borderColor: draft === null ? "#1e40af" : "#E5E7EB",
+                backgroundColor: draft === null ? "#dbeafe" : "#ffffff",
+              }}
+            >
+              <Text className="text-base font-bold text-[#0F113C]">الكل</Text>
+            </Pressable>
+
+            <Pressable
               onPress={() => handleSelect("1")}
-              className="flex-row items-center justify-center flex-1 p-2 border min-w-10 rounded-2xl"
+              className="flex-row items-center justify-center p-2 border min-w-10 rounded-2xl"
               style={{
                 borderColor: draft === "1" ? "#1e40af" : "#E5E7EB",
                 backgroundColor: draft === "1" ? "#dbeafe" : "#ffffff",
@@ -61,7 +72,7 @@ export default function BathRoomsNumberModal({
             </Pressable>
             <Pressable
               onPress={() => handleSelect("2")}
-              className="flex-row items-center justify-center flex-1 p-2 border min-w-10 rounded-2xl"
+              className="flex-row items-center justify-center p-2 border min-w-10 rounded-2xl"
               style={{
                 borderColor: draft === "2" ? "#1e40af" : "#E5E7EB",
                 backgroundColor: draft === "2" ? "#dbeafe" : "#ffffff",
@@ -71,7 +82,7 @@ export default function BathRoomsNumberModal({
             </Pressable>
             <Pressable
               onPress={() => handleSelect("3")}
-              className="flex-row items-center justify-center flex-1 p-2 border min-w-10 rounded-2xl"
+              className="flex-row items-center justify-center p-2 border min-w-10 rounded-2xl"
               style={{
                 borderColor: draft === "3" ? "#1e40af" : "#E5E7EB",
                 backgroundColor: draft === "3" ? "#dbeafe" : "#ffffff",
@@ -81,7 +92,7 @@ export default function BathRoomsNumberModal({
             </Pressable>
             <Pressable
               onPress={() => handleSelect("4")}
-              className="flex-row items-center justify-center flex-1 p-2 border min-w-10 rounded-2xl"
+              className="flex-row items-center justify-center p-2 border min-w-10 rounded-2xl"
               style={{
                 borderColor: draft === "4" ? "#1e40af" : "#E5E7EB",
                 backgroundColor: draft === "4" ? "#dbeafe" : "#ffffff",
@@ -91,7 +102,7 @@ export default function BathRoomsNumberModal({
             </Pressable>
             <Pressable
               onPress={() => handleSelect("5")}
-              className="flex-row items-center justify-center flex-1 p-2 border min-w-10 rounded-2xl"
+              className="flex-row items-center justify-center p-2 border min-w-10 rounded-2xl"
               style={{
                 borderColor: draft === "5" ? "#1e40af" : "#E5E7EB",
                 backgroundColor: draft === "5" ? "#dbeafe" : "#ffffff",
@@ -101,7 +112,7 @@ export default function BathRoomsNumberModal({
             </Pressable>
             <Pressable
               onPress={() => handleSelect("6")}
-              className="flex-row items-center justify-center flex-1 p-2 border min-w-10 rounded-2xl"
+              className="flex-row items-center justify-center p-2 border min-w-10 rounded-2xl"
               style={{
                 borderColor: draft === "6" ? "#1e40af" : "#E5E7EB",
                 backgroundColor: draft === "6" ? "#dbeafe" : "#ffffff",
@@ -111,7 +122,7 @@ export default function BathRoomsNumberModal({
             </Pressable>
             <Pressable
               onPress={() => handleSelect("7")}
-              className="flex-row items-center justify-center flex-1 p-2 border min-w-10 rounded-2xl"
+              className="flex-row items-center justify-center p-2 border min-w-10 rounded-2xl"
               style={{
                 borderColor: draft === "7" ? "#1e40af" : "#E5E7EB",
                 backgroundColor: draft === "7" ? "#dbeafe" : "#ffffff",

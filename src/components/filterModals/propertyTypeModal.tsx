@@ -41,6 +41,17 @@ export default function PropertyTypeModal({
 
           <View className="flex-row-reverse gap-3">
             <Pressable
+              onPress={() => setPropertyType(null)}
+              className="items-center justify-center flex-1 py-4 border rounded-2xl"
+              style={{
+                borderColor: propertyType === null ? "#1e40af" : "#E5E7EB",
+                backgroundColor: propertyType === null ? "#dbeafe" : "#ffffff",
+              }}
+            >
+              <Text className="text-base font-bold text-[#0F113C]">الكل</Text>
+            </Pressable>
+
+            <Pressable
               onPress={() => {
                 setPropertyType((currentType) =>
                   currentType === "sale" ? null : "sale",

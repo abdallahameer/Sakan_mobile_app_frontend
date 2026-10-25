@@ -12,6 +12,7 @@ import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 import AppNumberInput from "../InputsComponents/Appnumberinput";
 import SmallOptionButton from "../buttons/SmallOptionButton";
 import OptionButton from "../buttons/optionButton";
+import FilterSection from "./filterSection";
 
 type AllFiltersModalProps = {
   visible: boolean;
@@ -40,7 +41,7 @@ export default function AllFiltersModal({
   useEffect(() => {
     if (visible) {
       setNewValues(formValues);
-      clearErrors(["maxPrice", "maxSpace"]);
+      clearErrors(["maxPrice", "maxArea"]);
     }
   }, [visible, clearErrors]);
 
@@ -67,10 +68,8 @@ export default function AllFiltersModal({
         message: "أعلى سعر يجب أن يكون أكبر من أو يساوي أقل سعر",
       });
 
-      return;
+      // return;
     }
-
-    clearErrors("maxPrice");
 
     setNewValues((currentValues) => ({
       ...currentValues,
@@ -78,16 +77,16 @@ export default function AllFiltersModal({
     }));
   };
 
-  const handleMaxSpaceChange = (value: string) => {
+  const handleMaxAreaChange = (value: string) => {
     setNewValues((currentValues) => ({
       ...currentValues,
-      maxSpace: value,
+      maxArea: value,
     }));
 
-    const min = newValues.minSpace;
+    const min = newValues.minArea;
 
     if (!value || !min) {
-      clearErrors("maxSpace");
+      clearErrors("maxArea");
       return;
     }
 
@@ -95,14 +94,12 @@ export default function AllFiltersModal({
     const maxNumber = Number(value);
 
     if (maxNumber < minNumber) {
-      setError("maxSpace", {
+      setError("maxArea", {
         type: "validate",
         message: "أقصى مساحة يجب أن تكون أكبر من أو تساوي أقل مساحة",
       });
       return;
     }
-
-    clearErrors("maxSpace");
   };
 
   const handleApply = () => {
@@ -111,8 +108,8 @@ export default function AllFiltersModal({
     const minPrice = Number(values.minPrice);
     const maxPrice = Number(values.maxPrice);
 
-    const minSpace = Number(values.minSpace);
-    const maxSpace = Number(values.maxSpace);
+    const minArea = Number(values.minArea);
+    const maxArea = Number(values.maxArea);
 
     let hasError = false;
 
@@ -125,8 +122,8 @@ export default function AllFiltersModal({
       hasError = true;
     }
 
-    if (values.minSpace && values.maxSpace && maxSpace < minSpace) {
-      setError("maxSpace", {
+    if (values.minArea && values.maxArea && maxArea < minArea) {
+      setError("maxArea", {
         type: "validate",
         message: "أقصى مساحة يجب أن تكون أكبر من أو تساوي أقل مساحة",
       });
@@ -142,20 +139,23 @@ export default function AllFiltersModal({
     onClose();
   };
 
-  const selectPropertyType = (propertyType: "sale" | "rent") => {
+  const selectListingType = (listingType: "sale" | "rent" | null) => {
     setNewValues((currentValues) => {
-      const nextPropertyType =
-        currentValues.propertyType === propertyType ? null : propertyType;
+      const nextListingType =
+        listingType === null || currentValues.listingType === listingType
+          ? null
+          : listingType;
 
       return {
         ...currentValues,
-        propertyType: nextPropertyType,
+        listingType: nextListingType,
         paymentType:
-          nextPropertyType === "rent" ? currentValues.paymentType : null,
-        status: nextPropertyType === "sale" ? currentValues.status : null,
+          nextListingType === "rent" ? currentValues.paymentType : null,
+        propertyStatus:
+          nextListingType === "sale" ? currentValues.propertyStatus : null,
         familyOrSingle:
-          nextPropertyType === "rent" &&
-          currentValues.residentialOrCommercial === "residential"
+          nextListingType === "rent" &&
+          currentValues.propertyType === "residential"
             ? currentValues.familyOrSingle
             : null,
       };
@@ -163,17 +163,17 @@ export default function AllFiltersModal({
   };
 
   const selectResidentialOrCommercial = (
-    residentialOrCommercial: "residential" | "commercial",
+    propertyType: "residential" | "commercial" | null,
   ) => {
     setNewValues((currentValues) => {
       const nextValue =
-        currentValues.residentialOrCommercial === residentialOrCommercial
+        propertyType === null || currentValues.propertyType === propertyType
           ? null
-          : residentialOrCommercial;
+          : propertyType;
 
       return {
         ...currentValues,
-        residentialOrCommercial: nextValue,
+        propertyType: nextValue,
         familyOrSingle:
           nextValue === "residential" ? currentValues.familyOrSingle : null,
       };
@@ -191,23 +191,9 @@ export default function AllFiltersModal({
   };
 
   const handleReset = () => {
-    const defaultValues: PropertyFilterForm = {
-      propertyType: "rent",
-      familyOrSingle: "family",
-      paymentType: "monthly",
-      status: "all",
-      residentialOrCommercial: "residential",
-      furnished: "furnished",
-      rooms: null,
-      bathRooms: null,
-      minPrice: "",
-      maxPrice: "",
-      minSpace: "",
-      maxSpace: "",
-    };
-    reset(defaultValues);
+    reset();
 
-    setNewValues(defaultValues);
+    setNewValues(formValues);
     clearErrors();
   };
 
@@ -244,46 +230,60 @@ export default function AllFiltersModal({
             <FilterSection title="نوع العملية">
               <View className="flex-row gap-3">
                 <OptionButton
+                  label="الكل"
+                  selected={newValues.listingType === null}
+                  onPress={() => selectListingType(null)}
+                />
+
+                <OptionButton
                   label="للبيع"
-                  selected={newValues.propertyType === "sale"}
-                  onPress={() => selectPropertyType("sale")}
+                  selected={newValues.listingType === "sale"}
+                  onPress={() => selectListingType("sale")}
                 />
 
                 <OptionButton
                   label="للإيجار"
-                  selected={newValues.propertyType === "rent"}
-                  onPress={() => selectPropertyType("rent")}
+                  selected={newValues.listingType === "rent"}
+                  onPress={() => selectListingType("rent")}
                 />
               </View>
             </FilterSection>
 
-            {newValues.propertyType == "sale" ? (
+            {newValues.listingType === "sale" ? (
               <FilterSection title="جاهزية العقار">
                 <View className="flex-row flex-wrap gap-3">
                   <OptionButton
                     label="الكل"
-                    selected={newValues.status === "all"}
-                    onPress={() => toggleValue("status", "all")}
+                    selected={newValues.propertyStatus === null}
+                    onPress={() => toggleValue("propertyStatus", null)}
                   />
 
                   <OptionButton
                     label="جاهز"
-                    selected={newValues.status === "ready"}
-                    onPress={() => toggleValue("status", "ready")}
+                    selected={newValues.propertyStatus === "ready"}
+                    onPress={() => toggleValue("propertyStatus", "ready")}
                   />
 
                   <OptionButton
                     label="قيد الإنشاء"
-                    selected={newValues.status === "underConstruction"}
-                    onPress={() => toggleValue("status", "underConstruction")}
+                    selected={newValues.propertyStatus === "underConstruction"}
+                    onPress={() =>
+                      toggleValue("propertyStatus", "underConstruction")
+                    }
                   />
                 </View>
               </FilterSection>
             ) : null}
 
-            {newValues.propertyType == "rent" ? (
+            {newValues.listingType === "rent" ? (
               <FilterSection title="نظام الدفع">
                 <View className="flex-row flex-wrap gap-3">
+                  <OptionButton
+                    label="الكل"
+                    selected={newValues.paymentType === null}
+                    onPress={() => toggleValue("paymentType", null)}
+                  />
+
                   <OptionButton
                     label="سنوي"
                     selected={newValues.paymentType === "yearly"}
@@ -308,14 +308,20 @@ export default function AllFiltersModal({
             <FilterSection title="نوع العقار">
               <View className="flex-row gap-3">
                 <OptionButton
+                  label="الكل"
+                  selected={newValues.propertyType === null}
+                  onPress={() => selectResidentialOrCommercial(null)}
+                />
+
+                <OptionButton
                   label="سكني"
-                  selected={newValues.residentialOrCommercial === "residential"}
+                  selected={newValues.propertyType === "residential"}
                   onPress={() => selectResidentialOrCommercial("residential")}
                 />
 
                 <OptionButton
                   label="تجاري"
-                  selected={newValues.residentialOrCommercial === "commercial"}
+                  selected={newValues.propertyType === "commercial"}
                   onPress={() => selectResidentialOrCommercial("commercial")}
                 />
               </View>
@@ -324,21 +330,38 @@ export default function AllFiltersModal({
             <FilterSection title="التأثيث">
               <View className="flex-row gap-3">
                 <OptionButton
+                  label="الكل"
+                  selected={newValues.furnished === null}
+                  onPress={() => toggleValue("furnished", null)}
+                />
+
+                <OptionButton
                   label="مفروش"
-                  selected={newValues.furnished === "furnished"}
-                  onPress={() => toggleValue("furnished", "furnished")}
+                  selected={newValues.furnished === true}
+                  onPress={() => toggleValue("furnished", true)}
                 />
 
                 <OptionButton
                   label="غير مفروش"
-                  selected={newValues.furnished === "unfurnished"}
-                  onPress={() => toggleValue("furnished", "unfurnished")}
+                  selected={newValues.furnished === false}
+                  onPress={() => toggleValue("furnished", false)}
                 />
               </View>
             </FilterSection>
 
             <FilterSection title="عدد الغرف">
               <View className="flex-row flex-wrap gap-3">
+                <SmallOptionButton
+                  label="الكل"
+                  selected={newValues.rooms === null}
+                  onPress={() =>
+                    setNewValues((currentValues) => ({
+                      ...currentValues,
+                      rooms: null,
+                    }))
+                  }
+                />
+
                 {["1", "2", "3", "4", "5", "6", "7", "+8"].map((room) => {
                   const selected = newValues.rooms === room;
 
@@ -361,6 +384,17 @@ export default function AllFiltersModal({
 
             <FilterSection title="عدد الحمامات">
               <View className="flex-row flex-wrap gap-3">
+                <SmallOptionButton
+                  label="الكل"
+                  selected={newValues.bathRooms === null}
+                  onPress={() =>
+                    setNewValues((currentValues) => ({
+                      ...currentValues,
+                      bathRooms: null,
+                    }))
+                  }
+                />
+
                 {["1", "2", "3", "4", "5", "6", "7", "+8"].map((bath) => {
                   const selected = newValues.bathRooms === bath;
 
@@ -409,19 +443,33 @@ export default function AllFiltersModal({
                   />
                 </View>
               </View>
+              <View className="flex-row justify-start mt-3">
+                <SmallOptionButton
+                  label="الكل"
+                  selected={!newValues.minPrice && !newValues.maxPrice}
+                  onPress={() => {
+                    setNewValues((currentValues) => ({
+                      ...currentValues,
+                      minPrice: null,
+                      maxPrice: null,
+                    }));
+                    clearErrors("maxPrice");
+                  }}
+                />
+              </View>
             </FilterSection>
 
             <FilterSection title="نطاق المساحة">
               <View className="flex-row gap-3">
                 <View className="flex-1">
                   <AppNumberInput
-                    value={newValues.minSpace}
+                    value={newValues.minArea}
                     label="من"
                     placeholder="أقل مساحة"
                     onChangeText={(val) =>
                       setNewValues((currentValues) => ({
                         ...currentValues,
-                        minSpace: val,
+                        minArea: val,
                       }))
                     }
                     suffix="م²"
@@ -431,13 +479,27 @@ export default function AllFiltersModal({
                 <View className="flex-1">
                   <AppNumberInput
                     label="إلى"
-                    value={newValues.maxSpace}
+                    value={newValues.maxArea}
                     placeholder="أعلى مساحة"
                     suffix="م²"
-                    error={errors.maxSpace?.message as string}
-                    onChangeText={handleMaxSpaceChange}
+                    error={errors.maxArea?.message}
+                    onChangeText={handleMaxAreaChange}
                   />
                 </View>
+              </View>
+              <View className="flex-row justify-start mt-3">
+                <SmallOptionButton
+                  label="الكل"
+                  selected={!newValues.minArea && !newValues.maxArea}
+                  onPress={() => {
+                    setNewValues((currentValues) => ({
+                      ...currentValues,
+                      minArea: null,
+                      maxArea: null,
+                    }));
+                    clearErrors("maxArea");
+                  }}
+                />
               </View>
             </FilterSection>
           </ScrollView>
@@ -464,23 +526,5 @@ export default function AllFiltersModal({
         </View>
       </View>
     </Modal>
-  );
-}
-
-function FilterSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <View className="pb-6 mb-6 border-b border-[#E5E7EB]">
-      <Text className="mb-4 text-lg font-bold text-[#0F113C] text-right">
-        {title}
-      </Text>
-
-      {children}
-    </View>
   );
 }
