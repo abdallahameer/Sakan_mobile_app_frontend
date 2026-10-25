@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 
-type PropertyType = "furnished" | "unfurnished" | null;
+type FurnishedValue = boolean | null;
 
 type ResidentialorCommercialProps = {
   visible: boolean;
   onClose: () => void;
-  value: PropertyType;
-  onApply: (type: PropertyType) => void;
+  value: FurnishedValue;
+  onApply: (type: FurnishedValue) => void;
 };
 
 export default function IsFurnishedModal({
@@ -42,17 +42,28 @@ export default function IsFurnishedModal({
 
           <View className="flex-row gap-3">
             <Pressable
+              onPress={() => setIsFurnished(null)}
+              className="items-center justify-center flex-1 py-4 border rounded-2xl"
+              style={{
+                borderColor: isFurnished === null ? "#1e40af" : "#E5E7EB",
+                backgroundColor: isFurnished === null ? "#dbeafe" : "#ffffff",
+              }}
+            >
+              <Text className="text-base font-bold text-[#0F113C]">الكل</Text>
+            </Pressable>
+
+            <Pressable
               onPress={() =>
                 setIsFurnished((currentValue) =>
-                  currentValue === "furnished" ? null : "furnished",
+                  currentValue === true ? null : true,
                 )
               }
               className="items-center justify-center flex-1 py-4 border rounded-2xl"
               style={{
                 borderColor:
-                  isFurnished === "furnished" ? "#1e40af" : "#E5E7EB",
+                  isFurnished === true ? "#1e40af" : "#E5E7EB",
                 backgroundColor:
-                  isFurnished === "furnished" ? "#dbeafe" : "#ffffff",
+                  isFurnished === true ? "#dbeafe" : "#ffffff",
               }}
             >
               <Text className="text-base font-bold text-[#0F113C]">مفروش</Text>
@@ -61,15 +72,15 @@ export default function IsFurnishedModal({
             <Pressable
               onPress={() =>
                 setIsFurnished((currentValue) =>
-                  currentValue === "unfurnished" ? null : "unfurnished",
+                  currentValue === false ? null : false,
                 )
               }
               className="items-center justify-center flex-1 py-4 border rounded-2xl"
               style={{
                 borderColor:
-                  isFurnished === "unfurnished" ? "#1e40af" : "#E5E7EB",
+                  isFurnished === false ? "#1e40af" : "#E5E7EB",
                 backgroundColor:
-                  isFurnished === "unfurnished" ? "#dbeafe" : "#ffffff",
+                  isFurnished === false ? "#dbeafe" : "#ffffff",
               }}
             >
               <Text className="text-base font-bold text-[#0F113C]">

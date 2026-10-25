@@ -1,11 +1,13 @@
 import MapPropertyMarker from "@/components/mapPropertyMarker";
 import MapPropertyPreviewCard from "@/components/mapPropertyPreviewCard";
+import PropertyFilter from "@/components/propertyFilter";
 import PropertySearchBar from "@/components/propertySearchBar";
 import { api } from "@/lib/api";
-import type { Property } from "@/types";
+import type { Property, PropertyFilterForm } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Pressable, Text, View } from "react-native";
 import MapView, { MapType, Marker } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -25,6 +27,32 @@ const INITIAL_REGION = {
 };
 
 export default function Search() {
+  const {
+    control,
+    getValues,
+    watch,
+    setValue,
+    setError,
+    clearErrors,
+    reset,
+    formState: { errors },
+  } = useForm<PropertyFilterForm>({
+    defaultValues: {
+      listingType: null,
+      paymentType: null,
+      familyOrSingle: null,
+      propertyStatus: null,
+      propertyType: null,
+      furnished: null,
+      rooms: null,
+      bathRooms: null,
+      minPrice: "",
+      maxPrice: "",
+      minArea: "",
+      maxArea: "",
+    },
+  });
+
   const [searchText, setSearchText] = useState("");
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
     null,
@@ -33,10 +61,14 @@ export default function Search() {
   const [isMapStyleSelectorVisible, setIsMapStyleSelectorVisible] =
     useState(false);
 
+  const formValues = watch();
+
   const { data: properties } = useQuery({
-    queryKey: ["propertiesLocations"],
+    queryKey: ["propertiesLocations", formValues],
     queryFn: async () => {
-      const response = await api.get("/properties?hasLocation=true");
+      const response = await api.get("/properties", {
+        params: { hasLocation: true, ...formValues },
+      });
       return response.data;
     },
   });
@@ -74,15 +106,26 @@ export default function Search() {
             : null}
         </MapView>
 
-        <View className="absolute top-0 left-0 right-0">
+        <View className="absolute top-0 left-0 right-0 h-full">
           <PropertySearchBar
             value={searchText}
             onChangeText={setSearchText}
             placeholder="ابحث عن موقع أو حي..."
           />
+
+          <PropertyFilter
+            getValues={getValues}
+            reset={reset}
+            setError={setError}
+            errors={errors}
+            control={control}
+            clearErrors={clearErrors}
+            formValues={formValues}
+            setValue={setValue}
+          />
         </View>
 
-        <View className="absolute top-[68px] right-3 z-10">
+        <View className="absolute top-[130px] right-3 z-10">
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="اختيار نمط الخريطة"

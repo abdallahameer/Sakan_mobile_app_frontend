@@ -20,30 +20,29 @@ export default function Index() {
     formState: { errors },
   } = useForm<PropertyFilterForm>({
     defaultValues: {
-      propertyType: "rent",
-      paymentType: "monthly",
-      familyOrSingle: "family",
-      status: "all",
-      residentialOrCommercial: "residential",
-      furnished: "furnished",
+      listingType: null,
+      paymentType: null,
+      familyOrSingle: null,
+      propertyStatus: null,
+      propertyType: null,
+      furnished: null,
       rooms: null,
       bathRooms: null,
       minPrice: "",
       maxPrice: "",
-      minSpace: "",
-      maxSpace: "",
+      minArea: "",
+      maxArea: "",
     },
   });
   const formValues = watch();
-
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: ["properties"],
+      queryKey: ["properties", formValues],
       initialPageParam: 1,
       queryFn: async ({ pageParam }) =>
         (
           await api.get("/properties", {
-            params: { page: pageParam, limit: 10, hello: "true" },
+            params: { page: pageParam, limit: 5, ...formValues },
           })
         ).data,
       getNextPageParam: (last) =>

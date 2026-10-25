@@ -56,23 +56,23 @@ export default function PropertyFilter({
   const [openFiltersModal, setOpenFiltersModal] = useState(false);
   const [openFamilyOrSingleModal, setOpenFamilyOrSingleModal] = useState(false);
   const propertyTypeLabel =
-    formValues.propertyType === "sale"
+    formValues.listingType === "sale"
       ? "للبيع"
-      : formValues.propertyType === "rent"
+      : formValues.listingType === "rent"
         ? "للإيجار"
         : "نوع العملية";
 
   const residentialOrCommercialLable =
-    formValues.residentialOrCommercial === "residential"
+    formValues.propertyType === "residential"
       ? "سكني"
-      : formValues.residentialOrCommercial === "commercial"
+      : formValues.propertyType === "commercial"
         ? "تجاري"
         : "نوع العقار";
 
   const isFurnishedLable =
-    formValues.furnished === "furnished"
+    formValues.furnished === true
       ? "مفروش"
-      : formValues.furnished === "unfurnished"
+      : formValues.furnished === false
         ? "غير مفروش"
         : "التأثيث";
 
@@ -105,10 +105,10 @@ export default function PropertyFilter({
           onPress={() => {
             setOpenPropertyTypeModal(true);
           }}
-          className={`flex-row items-center px-4 py-3 rounded-lg border ${formValues.propertyType == "sale" || formValues.propertyType == "rent" ? "bg-[#0F113C] " : "bg-white"} border-gray-500  `}
+          className={`flex-row items-center px-4 py-3 rounded-lg border ${formValues.listingType ? "bg-[#0F113C] " : "bg-white"} border-gray-500  `}
         >
           <Text
-            className={`text-sm ${formValues.propertyType == "sale" || formValues.propertyType == "rent" ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.listingType ? "text-white" : "text-[#0F113C]"}`}
           >
             {propertyTypeLabel}
           </Text>
@@ -116,8 +116,7 @@ export default function PropertyFilter({
             name="chevron-down"
             size={14}
             color={
-              formValues.propertyType === "sale" ||
-              formValues.propertyType === "rent"
+              formValues.listingType
                 ? "white"
                 : "#0F113C"
             }
@@ -125,45 +124,49 @@ export default function PropertyFilter({
           />
         </TouchableOpacity>
 
-        {formValues.propertyType == "sale" ? (
+        {formValues.listingType === "sale" ? (
           <View className="flex-row gap-3 p-1 bg-white border border-gray-500 rounded-lg">
             <TouchableOpacity
-              onPress={() => setValue("status", "all")}
+              onPress={() => setValue("propertyStatus", null)}
               className={`flex-row items-center px-4 py-2 rounded-full ${
-                formValues.status == "all" ? "bg-[#0F113C]" : "bg-white"
+                formValues.propertyStatus === null
+                  ? "bg-[#0F113C]"
+                  : "bg-white"
               }`}
             >
               <Text
-                className={`text-sm ${formValues.status == "all" ? "text-[#ffffff]" : "text-[#0F113C]"} `}
+                className={`text-sm ${formValues.propertyStatus === null ? "text-[#ffffff]" : "text-[#0F113C]"} `}
               >
-                الجميع
+                الكل
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => setValue("status", "ready")}
+              onPress={() => setValue("propertyStatus", "ready")}
               className={`flex-row items-center px-4 py-2 rounded-full ${
-                formValues.status == "ready" ? "bg-[#0F113C]" : "bg-white"
+                formValues.propertyStatus === "ready"
+                  ? "bg-[#0F113C]"
+                  : "bg-white"
               }`}
             >
               <Text
-                className={`text-sm ${formValues.status == "ready" ? "text-[#ffffff]" : "text-[#0F113C]"} `}
+                className={`text-sm ${formValues.propertyStatus === "ready" ? "text-[#ffffff]" : "text-[#0F113C]"} `}
               >
                 جاهز
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => setValue("status", "underConstruction")}
+              onPress={() => setValue("propertyStatus", "underConstruction")}
               className={`flex-row items-center px-4 py-2 rounded-full ${
-                formValues.status == "underConstruction"
+                formValues.propertyStatus === "underConstruction"
                   ? "bg-[#0F113C]"
                   : "bg-white"
               }`}
             >
               <Text
                 className={`text-sm ${
-                  formValues.status == "underConstruction"
+                  formValues.propertyStatus === "underConstruction"
                     ? "text-white"
                     : "text-[#0F113C]"
                 }`}
@@ -174,8 +177,21 @@ export default function PropertyFilter({
           </View>
         ) : null}
 
-        {formValues.propertyType == "rent" ? (
+        {formValues.listingType === "rent" ? (
           <View className="flex-row gap-3 p-1 bg-white border border-gray-500 rounded-lg">
+            <TouchableOpacity
+              onPress={() => setValue("paymentType", null)}
+              className={`flex-row items-center px-4 py-2 rounded-full ${
+                formValues.paymentType === null ? "bg-[#0F113C]" : "bg-white"
+              }`}
+            >
+              <Text
+                className={`text-sm ${formValues.paymentType === null ? "text-[#ffffff]" : "text-[#0F113C]"}`}
+              >
+                الكل
+              </Text>
+            </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() => setValue("paymentType", "yearly")}
               className={`flex-row items-center px-4 py-2 rounded-full ${
@@ -223,8 +239,8 @@ export default function PropertyFilter({
           </View>
         ) : null}
 
-        {formValues.propertyType == "rent" &&
-        formValues.residentialOrCommercial == "residential" ? (
+        {formValues.listingType === "rent" &&
+        formValues.propertyType === "residential" ? (
           <TouchableOpacity
             onPress={() => setOpenFamilyOrSingleModal(true)}
             className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
@@ -248,18 +264,18 @@ export default function PropertyFilter({
         <TouchableOpacity
           onPress={() => setopenResidentialorCommercialModal(true)}
           className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
-            formValues.residentialOrCommercial ? "bg-[#0F113C]" : "bg-white"
+            formValues.propertyType ? "bg-[#0F113C]" : "bg-white"
           }`}
         >
           <Text
-            className={`text-sm ${formValues.residentialOrCommercial ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.propertyType ? "text-white" : "text-[#0F113C]"}`}
           >
             {residentialOrCommercialLable}
           </Text>
           <Ionicons
             name="chevron-down"
             size={14}
-            color={formValues.residentialOrCommercial ? "#ffffff" : "#0F113C"}
+            color={formValues.propertyType ? "#ffffff" : "#0F113C"}
             className="ms-1"
           />
         </TouchableOpacity>
@@ -267,18 +283,18 @@ export default function PropertyFilter({
         <TouchableOpacity
           onPress={() => setOpenIsFurnishedModal(true)}
           className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
-            formValues.furnished ? "bg-[#0F113C]" : "bg-white"
+            formValues.furnished !== null ? "bg-[#0F113C]" : "bg-white"
           }`}
         >
           <Text
-            className={`text-sm ${formValues.furnished ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.furnished !== null ? "text-white" : "text-[#0F113C]"}`}
           >
             {isFurnishedLable}
           </Text>
           <Ionicons
             name="chevron-down"
             size={14}
-            color={formValues.furnished ? "#ffffff" : "#0F113C"}
+            color={formValues.furnished !== null ? "#ffffff" : "#0F113C"}
             className="ms-1"
           />
         </TouchableOpacity>
@@ -347,13 +363,13 @@ export default function PropertyFilter({
         <TouchableOpacity
           onPress={() => setOpenSpaceRangeModal(true)}
           className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
-            formValues.maxSpace || formValues.minSpace
+            formValues.maxArea || formValues.minArea
               ? "bg-[#0F113C]"
               : "bg-white"
           }`}
         >
           <Text
-            className={`text-sm ${formValues.maxSpace || formValues.minSpace ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.maxArea || formValues.minArea ? "text-white" : "text-[#0F113C]"}`}
           >
             المساحة
           </Text>
@@ -361,7 +377,7 @@ export default function PropertyFilter({
             name="chevron-down"
             size={14}
             color={
-              formValues.maxSpace || formValues.minSpace ? "#ffffff" : "#0F113C"
+              formValues.maxArea || formValues.minArea ? "#ffffff" : "#0F113C"
             }
             className="ms-1"
           />
@@ -379,10 +395,13 @@ export default function PropertyFilter({
       />
 
       <PropertyTypeModal
-        value={formValues.propertyType}
+        value={formValues.listingType}
         onApply={(type) => {
-          setValue("propertyType", type);
-          setValue("status", type === "sale" ? formValues.status : null);
+          setValue("listingType", type);
+          setValue(
+            "propertyStatus",
+            type === "sale" ? formValues.propertyStatus : null,
+          );
           setValue(
             "paymentType",
             type === "rent" ? formValues.paymentType : null,
@@ -390,7 +409,7 @@ export default function PropertyFilter({
           setValue(
             "familyOrSingle",
             type === "rent" &&
-              formValues.residentialOrCommercial === "residential"
+              formValues.propertyType === "residential"
               ? formValues.familyOrSingle
               : null,
           );
@@ -401,12 +420,12 @@ export default function PropertyFilter({
       />
 
       <ResidentialorCommercial
-        value={formValues.residentialOrCommercial}
+        value={formValues.propertyType}
         onClose={() => {
           setopenResidentialorCommercialModal(false);
         }}
         onApply={(type) => {
-          setValue("residentialOrCommercial", type);
+          setValue("propertyType", type);
           setValue(
             "familyOrSingle",
             type === "residential" ? formValues.familyOrSingle : null,
@@ -455,13 +474,13 @@ export default function PropertyFilter({
       <SpaceRangeModal
         visible={openSpaceRangeModal}
         onApply={(min, max) => {
-          setValue("minSpace", min);
-          setValue("maxSpace", max);
+          setValue("minArea", min);
+          setValue("maxArea", max);
           setOpenSpaceRangeModal(false);
         }}
         onClose={() => setOpenSpaceRangeModal(false)}
-        min={formValues.minSpace}
-        max={formValues.maxSpace}
+        min={formValues.minArea}
+        max={formValues.maxArea}
       />
 
       <IsFurnishedModal

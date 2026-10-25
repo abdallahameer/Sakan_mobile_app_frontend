@@ -51,11 +51,11 @@ export default function CustomToast({
       className={`w-[92%] min-h-[72px] flex-row items-center justify-between rounded-[18px] border px-3.5 py-3 shadow-lg elevation-8 ${config.backgroundClassName}`}
     >
       <View className="flex-row items-center gap-2 max-w-[70%] justify-start  ">
-        <View className="mr-0 ml-3 h-11 w-11 items-center justify-center rounded-full bg-white">
+        <View className="items-center justify-center ml-3 mr-0 bg-white rounded-full h-11 w-11">
           <Ionicons name={config.icon} size={25} color={config.iconColor} />
         </View>
 
-        <View className="flex-1 flex-col   items-start">
+        <View className="flex-col items-start flex-1">
           {!!text1 && (
             <Text
               numberOfLines={1}
@@ -68,7 +68,7 @@ export default function CustomToast({
           {!!text2 && (
             <Text
               numberOfLines={2}
-              className={`mt-0.5 text-right text-[13px] leading-[19px] ${config.textClassName}`}
+              className={`mt-0.5 text-left text-[13px] leading-[19px] ${config.textClassName}`}
             >
               {text2}
             </Text>
@@ -79,7 +79,7 @@ export default function CustomToast({
       <Pressable
         onPress={hide}
         hitSlop={10}
-        className="mr-2 h-7 w-7 items-center justify-center"
+        className="items-center justify-center mr-2 h-7 w-7"
       >
         <Ionicons
           name="close"
