@@ -1,12 +1,7 @@
 import type { Property } from "@/types";
 import { titleHandler } from "@/utilities/functions";
-import {
-  FontAwesome,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 
 const COLORS = {
@@ -23,12 +18,6 @@ export default function MapPropertyPreviewCard({
   onClose: () => void;
 }) {
   const router = useRouter();
-
-  const [isFavorite, setIsFavorited] = useState(false);
-
-  const handleFavorite = () => {
-    setIsFavorited(!isFavorite);
-  };
 
   return (
     <View className="absolute bottom-0 left-0 right-0 pb-6">
@@ -99,18 +88,6 @@ export default function MapPropertyPreviewCard({
             <Text className="text-sm font-bold text-left text-[#3b82f6]">
               {property.price.toLocaleString("ar-EG")} جنيه
             </Text>
-          </View>
-          <View className="flex-row items-start justify-start h-full mt-6 mr-3 ">
-            <Pressable
-              onPress={handleFavorite}
-              className="items-center justify-center w-6 h-6 bg-white rounded-full bottom-1 left-1"
-            >
-              <FontAwesome
-                name={isFavorite ? "bookmark" : "bookmark-o"}
-                size={14}
-                color={isFavorite ? "#3b82f6" : "black"}
-              />
-            </Pressable>
           </View>
         </Pressable>
       </ScrollView>
