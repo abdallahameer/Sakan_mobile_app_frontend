@@ -1,12 +1,14 @@
+import { api } from "@/lib/api";
 import type { Property } from "@/types";
+import { PropertiesPage } from "@/types/property";
 import { titleHandler } from "@/utilities/functions";
 import {
   FontAwesome,
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
 export default function PropertyCard({
@@ -17,10 +19,77 @@ export default function PropertyCard({
   onFavorite?: (id: string) => void;
 }) {
   const router = useRouter();
-  const [isFavorited, setIsFavorited] = useState(property.isFavorite ?? false);
+  const queryClient = useQueryClient();
 
-  const handleFavorite = () => {
-    setIsFavorited(!isFavorited);
+  const handleFavorite = async () => {
+    try {
+      const shouldFavorite = !property.isFavorite;
+
+      const res = shouldFavorite
+        ? await api.post(`/favorites/${property.id}`)
+        : await api.delete(`/favorites/${property.id}`);
+
+      if (res.status < 200 || res.status >= 300) return;
+
+      queryClient.setQueriesData<InfiniteData<PropertiesPage>>(
+        { queryKey: ["properties"] },
+        (oldData) => {
+          if (!oldData) return oldData;
+
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page) => ({
+              ...page,
+              properties: page.properties.map((p) =>
+                p.id === property.id ? { ...p, isFavorite: shouldFavorite } : p,
+              ),
+            })),
+          };
+        },
+      );
+
+      queryClient.setQueryData<InfiniteData<PropertiesPage>>(
+        ["savedProperties"],
+        (oldData) => {
+          if (!oldData) {
+            return oldData;
+          }
+
+          if (!shouldFavorite) {
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page) => ({
+                ...page,
+                properties: page.properties.filter((p) => p.id !== property.id),
+              })),
+            };
+          }
+
+          const alreadySaved = oldData.pages.some((page) =>
+            page.properties.some((p) => p.id === property.id),
+          );
+
+          if (alreadySaved) return oldData;
+
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page, index) =>
+              index === 0
+                ? {
+                    ...page,
+                    properties: [
+                      { ...property, isFavorite: true },
+                      ...page.properties,
+                    ],
+                  }
+                : page,
+            ),
+          };
+        },
+      );
+    } catch (err) {
+      console.error("Failed to update favorite:", err);
+    }
   };
 
   return (
@@ -100,9 +169,9 @@ export default function PropertyCard({
               className="items-center justify-center w-6 h-6 bg-white rounded-full bottom-1 left-1"
             >
               <FontAwesome
-                name={isFavorited ? "bookmark" : "bookmark-o"}
+                name={property.isFavorite ? "bookmark" : "bookmark-o"}
                 size={14}
-                color={isFavorited ? "#3b82f6" : "black"}
+                color={property.isFavorite ? "#3b82f6" : "black"}
               />
             </Pressable>
           </View>

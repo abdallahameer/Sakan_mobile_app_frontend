@@ -50,3 +50,8 @@ export type Property = {
   isFavorite?: boolean;
   postedAt?: string;
 };
+
+export type PropertiesPage = {
+  properties: Property[];
+  [key: string]: unknown;
+};

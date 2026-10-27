@@ -1,11 +1,12 @@
+import { api } from "@/lib/api";
+import type { Property } from "@/types";
+import { PropertiesPage } from "@/types/property";
 import {
   FontAwesome,
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { api } from "@/lib/api";
-import type { Property } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { InfiniteData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -44,9 +45,9 @@ export default function PropertyDetailsScreen() {
     : params.propertyId;
   const insets = useSafeAreaInsets();
   const [currentImage, setCurrentImage] = useState(0);
-  const [favoriteOverride, setFavoriteOverride] = useState<boolean | null>(null);
-  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
 
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+  const queryClient = useQueryClient();
   const {
     data: property,
     isPending,
@@ -63,6 +64,76 @@ export default function PropertyDetailsScreen() {
         : response.data;
     },
   });
+
+  const handleFavorite = async () => {
+    if (property == undefined) return;
+    try {
+      const shouldFavorite = !property.isFavorite;
+
+      const res = shouldFavorite
+        ? await api.post(`/favorites/${property.id}`)
+        : await api.delete(`/favorites/${property.id}`);
+
+      if (res.status < 200 || res.status >= 300) return;
+
+      queryClient.setQueryData(
+        ["property", propertyId],
+        (oldData: Property | undefined) => {
+          if (!oldData) return oldData;
+
+          return {
+            ...oldData,
+            isFavorite: shouldFavorite,
+          };
+        },
+      );
+
+      queryClient.setQueriesData<InfiniteData<PropertiesPage>>(
+        { queryKey: ["properties"] },
+        (oldData) => {
+          if (!oldData) return oldData;
+
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page) => ({
+              ...page,
+              properties: page.properties.map((p) =>
+                p.id === property.id ? { ...p, isFavorite: shouldFavorite } : p,
+              ),
+            })),
+          };
+        },
+      );
+
+      // Update favorites cache
+      queryClient.setQueryData<InfiniteData<PropertiesPage>>(
+        ["savedProperties"],
+        (oldData) => {
+          if (!oldData) return oldData;
+
+          if (!shouldFavorite) {
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page) => ({
+                ...page,
+                properties: page.properties.filter((p) => p.id !== property.id),
+              })),
+            };
+          }
+
+          return oldData;
+        },
+      );
+
+      if (shouldFavorite) {
+        await queryClient.invalidateQueries({
+          queryKey: ["savedProperties"],
+        });
+      }
+    } catch (err) {
+      console.error("Failed to update favorite:", err);
+    }
+  };
 
   if (isPending) {
     return (
@@ -146,8 +217,7 @@ export default function PropertyDetailsScreen() {
     {
       icon: "calendar-month-outline",
       label: "حالة العقار",
-      value:
-        property.propertyStatus === "ready" ? "جاهز" : "قيد الإنشاء",
+      value: property.propertyStatus === "ready" ? "جاهز" : "قيد الإنشاء",
     },
     {
       icon: "sofa-outline",
@@ -166,7 +236,6 @@ export default function PropertyDetailsScreen() {
     },
   ] as const;
 
-  const isFavorited = favoriteOverride ?? property.isFavorite ?? false;
   const phoneNumber = `${property.phoneKey ?? ""}${property.phone ?? ""}`;
   const whatsappNumber = `${property.whatsAppKey ?? property.phoneKey ?? ""}${property.whatsapp ?? property.phone ?? ""}`;
 
@@ -196,13 +265,13 @@ export default function PropertyDetailsScreen() {
 
             <View className="flex-row items-center gap-3">
               <Pressable
-                onPress={() => setFavoriteOverride((previous) => !isFavorited)}
+                onPress={handleFavorite}
                 className="items-center justify-center bg-white rounded-full w-11 h-11"
               >
                 <Ionicons
-                  name={isFavorited ? "heart" : "heart-outline"}
+                  name={property.isFavorite ? "bookmark" : "bookmark-outline"}
                   size={20}
-                  color={isFavorited ? "#EF4444" : "#0F113C"}
+                  color={property.isFavorite ? "#3b82f6" : "blck"}
                 />
               </Pressable>
               <Pressable className="items-center justify-center bg-white rounded-full w-11 h-11">
