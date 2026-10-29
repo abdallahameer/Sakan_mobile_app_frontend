@@ -1,14 +1,17 @@
 import PropertyCard from "@/components/propertyCard";
 import PropertyFilter from "@/components/propertyFilter";
 import PropertySearchBar from "@/components/propertySearchBar";
+import VideoSplash from "@/components/SplashScreen";
 import { api } from "@/lib/api";
 import type { PropertyFilterForm } from "@/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ActivityIndicator, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
+  const [isLoadingSplash, setIsLoadingSplash] = useState(true);
   const {
     control,
     getValues,
@@ -51,6 +54,7 @@ export default function Index() {
 
   const properties = data?.pages.flatMap((p) => p.properties) ?? [];
 
+  if (isLoadingSplash) return <VideoSplash setLoading={setIsLoadingSplash} />;
   return (
     <SafeAreaView edges={["top"]} className="flex-1   bg-[#F0F1FA]">
       <PropertySearchBar />
