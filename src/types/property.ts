@@ -42,6 +42,8 @@ export type Property = {
   videos: string[];
   location: PropertyLocation;
   phone?: string;
+  phoneKey?: string;
+  whatsAppKey?: string;
   whatsapp?: string;
   originalPrice?: number;
   views: number;

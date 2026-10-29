@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store";
 
 const PROD_URL = process.env.EXPO_PUBLIC_API_URL_PROD;
 const DEV_URL = process.env.EXPO_PUBLIC_API_URL_DEV;
-const USE_DEV = process.env.EXPO_PUBLIC_USE_DEV === "true";
+const USE_DEV = process.env.EXPO_PUBLIC_USE_DEV === "false";
 
 const url = __DEV__ && USE_DEV ? DEV_URL : PROD_URL;
 
@@ -45,8 +45,7 @@ export const setAuthToken = async (token: string | null) => {
     } else {
       await SecureStore.deleteItemAsync(TOKEN_KEY);
     }
-  } catch {
-  }
+  } catch {}
 };
 
 api.interceptors.request.use(async (config) => {
@@ -56,3 +55,9 @@ api.interceptors.request.use(async (config) => {
   }
   return config;
 });
+
+// Returns the saved login token, or null if the user is not logged in
+export const getSavedToken = async (): Promise<string | null> => {
+  await loadSavedToken();
+  return authToken;
+};
