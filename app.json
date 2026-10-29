@@ -27,7 +27,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "white",
+          "backgroundColor": "#ffffff",
           "image": "./assets/progectImages/maskanIcon.png",
           "imageWidth": 140
         }

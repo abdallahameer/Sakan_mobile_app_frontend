@@ -9,7 +9,7 @@ import {
 } from "@expo/vector-icons";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Linking, Pressable, Text, View } from "react-native";
 
 export default function PropertyCard({
   property,
@@ -91,6 +91,9 @@ export default function PropertyCard({
       console.error("Failed to update favorite:", err);
     }
   };
+
+  const phoneNumber = `${property.phoneKey ?? ""}${property.phone ?? ""}`;
+  const whatsappNumber = `${property.whatsAppKey ?? property.phoneKey ?? ""}${property.whatsapp ?? property.phone ?? ""}`;
 
   return (
     <Pressable
@@ -176,13 +179,28 @@ export default function PropertyCard({
             </Pressable>
           </View>
         </View>
-        <View className="flex-row justify-start gap-2">
-          <View className="flex-row w-[45%] p-2  mb-2 rounded-xl items-center justify-center bg-green-400/30">
-            <FontAwesome name="whatsapp" size={18} color="black" />
-          </View>
-          <View className="flex-row w-[45%] p-2  mb-2 rounded-xl items-center justify-center bg-blue-400/30">
-            <FontAwesome name="phone" size={18} color="black" />
-          </View>
+        <View className="flex-row gap-2">
+          <Pressable
+            onPress={() => {
+              Linking.openURL(
+                `https://wa.me/${whatsappNumber.replace(/\D/g, "")}`,
+              );
+            }}
+            className="w-[45%] h-full"
+          >
+            <View className="flex-row items-center justify-center w-full p-2 mb-2 rounded-xl bg-green-400/30">
+              <FontAwesome name="whatsapp" size={18} color="black" />
+            </View>
+          </Pressable>
+          <Pressable
+            onPress={() => Linking.openURL(`tel:${phoneNumber}`)}
+            disabled={!property.phone}
+            className="w-[45%] h-full"
+          >
+            <View className="flex-row items-center justify-center w-full p-2 mb-2 rounded-xl bg-blue-400/30">
+              <FontAwesome name="phone" size={18} color="black" />
+            </View>
+          </Pressable>
         </View>
       </View>
     </Pressable>

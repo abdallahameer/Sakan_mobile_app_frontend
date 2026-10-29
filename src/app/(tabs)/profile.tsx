@@ -1,4 +1,6 @@
+import { setAuthToken } from "@/lib/api";
 import { Ionicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import {
   FlatList,
@@ -10,7 +12,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-
 const COLORS = {
   primary: "#0F113C",
   accent: "#10B981",
@@ -75,7 +76,7 @@ const MENU_ITEMS: MenuItem[] = [
 
 export default function ProfileScreen() {
   const router = useRouter();
-
+  const queryClinet = useQueryClient();
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
       <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
@@ -192,7 +193,9 @@ export default function ProfileScreen() {
         </View>
 
         <Pressable
-          onPress={() => {
+          onPress={async () => {
+            await setAuthToken(null);
+            queryClinet.clear();
             router.replace("/login/login");
 
             Toast.show({

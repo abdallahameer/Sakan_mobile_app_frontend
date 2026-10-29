@@ -2,16 +2,24 @@ import PropertyCard from "@/components/propertyCard";
 import PropertyFilter from "@/components/propertyFilter";
 import PropertySearchBar from "@/components/propertySearchBar";
 import VideoSplash from "@/components/SplashScreen";
-import { api } from "@/lib/api";
+import { api, getSavedToken } from "@/lib/api";
 import type { PropertyFilterForm } from "@/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { Redirect } from "expo-router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ActivityIndicator, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const [isLoadingSplash, setIsLoadingSplash] = useState(true);
+  // undefined = still checking, null = not logged in, string = logged in
+  const [token, setToken] = useState<string | null | undefined>(undefined);
+
+  useEffect(() => {
+    getSavedToken().then(setToken);
+  }, []);
+
   const {
     control,
     getValues,
@@ -42,6 +50,7 @@ export default function Index() {
     useInfiniteQuery({
       queryKey: ["properties", formValues],
       initialPageParam: 1,
+      enabled: !!token, // do not load ads for a logged-out user
       queryFn: async ({ pageParam }) =>
         (
           await api.get("/properties", {
@@ -55,8 +64,15 @@ export default function Index() {
   const properties = data?.pages.flatMap((p) => p.properties) ?? [];
 
   if (isLoadingSplash) return <VideoSplash setLoading={setIsLoadingSplash} />;
+
+  // still reading the token from the phone (very short)
+  if (token === undefined) return null;
+
+  // not logged in -> go to the login page
+  if (token === null) return <Redirect href={"/login/login" as any} />;
+
   return (
-    <SafeAreaView edges={["top"]} className="flex-1   bg-[#F0F1FA]">
+    <SafeAreaView edges={["top"]} className="flex-1 bg-[#F0F1FA]">
       <PropertySearchBar />
       <PropertyFilter
         getValues={getValues}
