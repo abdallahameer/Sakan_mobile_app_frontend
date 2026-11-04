@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store";
 
 const PROD_URL = process.env.EXPO_PUBLIC_API_URL_PROD;
 const DEV_URL = process.env.EXPO_PUBLIC_API_URL_DEV;
-const USE_DEV = process.env.EXPO_PUBLIC_USE_DEV === "false";
+const USE_DEV = process.env.EXPO_PUBLIC_USE_DEV === "true";
 
 const url = __DEV__ && USE_DEV ? DEV_URL : PROD_URL;
 
