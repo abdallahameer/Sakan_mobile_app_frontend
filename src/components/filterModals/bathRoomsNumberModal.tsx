@@ -1,6 +1,7 @@
 import type { RoomsNumber } from "@/types";
 import { useEffect, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type BathRoomsModalProps = {
   visible: boolean;
@@ -16,6 +17,7 @@ export default function BathRoomsNumberModal({
   onApply,
 }: BathRoomsModalProps) {
   const [draft, setDraft] = useState<RoomsNumber>(value);
+  const inSet = useSafeAreaInsets();
 
   useEffect(() => {
     if (visible) {
@@ -42,7 +44,8 @@ export default function BathRoomsNumberModal({
       <Pressable onPress={onClose} className="justify-end flex-1 bg-black/40">
         <Pressable
           onPress={(e) => e.stopPropagation()}
-          className="px-5 pt-3 pb-8 bg-white rounded-t-3xl"
+          className="px-5 pt-3 bg-white rounded-t-3xl"
+          style={{ paddingBottom: inSet.bottom + 16 }}
         >
           <View className="items-center mb-5">
             <View className="w-10 h-1.5 rounded-full bg-[#E5E7EB]" />

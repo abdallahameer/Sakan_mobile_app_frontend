@@ -4,7 +4,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
@@ -31,65 +37,67 @@ export default function SignUp() {
 
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
-      <View className="flex-row items-center justify-start gap-2 px-4 py-4 border-b border-[#0F113C]">
-        <Pressable onPress={() => router.back()}>
-          <Ionicons name="arrow-forward" size={22} color="#0F113C" />
-        </Pressable>
-        <Text className="text-lg font-bold text-[#0F113C]">إنشاء حساب</Text>
-      </View>
-
-      <ScrollView contentContainerStyle={{ padding: 20, gap: 24 }}>
-        <View className="gap-1.5">
-          <Text className="text-2xl font-bold text-left text-[#0F113C]">
-            أنشئ حسابك في سكن
-          </Text>
-          <Text className="text-sm text-left text-[#9CA3AF]">
-            ابدأ رحلتك في البحث عن السكن المناسب
-          </Text>
-        </View>
-
-        <AppTextInput
-          control={control}
-          name="name"
-          label="الاسم*"
-          placeholder="الاسم الكامل"
-        />
-
-        <EmailInput control={control} name="email" />
-
-        <AppTextInput
-          control={control}
-          name="password"
-          label="كلمة المرور*"
-          placeholder="أدخل 8 احرف على الأقل"
-          secureTextEntry={!showPassword}
-          rightElement={
-            <Pressable onPress={() => setShowPassword((prev) => !prev)}>
-              <Ionicons
-                name={showPassword ? "eye-off-outline" : "eye-outline"}
-                size={20}
-                color="#9CA3AF"
-              />
-            </Pressable>
-          }
-        />
-
-        <Pressable
-          onPress={handleSubmit(onSubmit)}
-          className="items-center justify-center py-4 mt-2 rounded-xl bg-[#0F113C]"
-        >
-          <Text className="text-base font-bold text-white">إنشاء حساب</Text>
-        </Pressable>
-
-        <View className="flex-row justify-center gap-1 mt-2">
-          <Pressable onPress={() => router.push("/login/login")}>
-            <Text className="text-sm font-bold text-[#10B981]">
-              تسجيل الدخول
-            </Text>
+      <KeyboardAvoidingView className="flex-1" behavior="padding">
+        <View className="flex-row items-center justify-start gap-2 px-4 py-4 border-b border-[#0F113C]">
+          <Pressable onPress={() => router.back()}>
+            <Ionicons name="arrow-forward" size={22} color="#0F113C" />
           </Pressable>
-          <Text className="text-sm text-[#6B7280]">لديك حساب بالفعل؟</Text>
+          <Text className="text-lg font-bold text-[#0F113C]">إنشاء حساب</Text>
         </View>
-      </ScrollView>
+
+        <ScrollView contentContainerStyle={{ padding: 20, gap: 24 }}>
+          <View className="gap-1.5">
+            <Text className="text-2xl font-bold text-left text-[#0F113C]">
+              أنشئ حسابك في سكن
+            </Text>
+            <Text className="text-sm text-left text-[#9CA3AF]">
+              ابدأ رحلتك في البحث عن السكن المناسب
+            </Text>
+          </View>
+
+          <AppTextInput
+            control={control}
+            name="name"
+            label="الاسم*"
+            placeholder="الاسم الكامل"
+          />
+
+          <EmailInput control={control} name="email" />
+
+          <AppTextInput
+            control={control}
+            name="password"
+            label="كلمة المرور*"
+            placeholder="أدخل 8 احرف على الأقل"
+            secureTextEntry={!showPassword}
+            rightElement={
+              <Pressable onPress={() => setShowPassword((prev) => !prev)}>
+                <Ionicons
+                  name={showPassword ? "eye-off-outline" : "eye-outline"}
+                  size={20}
+                  color="#9CA3AF"
+                />
+              </Pressable>
+            }
+          />
+
+          <Pressable
+            onPress={handleSubmit(onSubmit)}
+            className="items-center justify-center py-4 mt-2 rounded-xl bg-[#0F113C]"
+          >
+            <Text className="text-base font-bold text-white">إنشاء حساب</Text>
+          </Pressable>
+
+          <View className="flex-row justify-center gap-1 mt-2">
+            <Pressable onPress={() => router.push("/login/login")}>
+              <Text className="text-sm font-bold text-[#10B981]">
+                تسجيل الدخول
+              </Text>
+            </Pressable>
+            <Text className="text-sm text-[#6B7280]">لديك حساب بالفعل؟</Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
