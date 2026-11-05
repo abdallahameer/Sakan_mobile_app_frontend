@@ -18,7 +18,7 @@ export type PropertyFilterForm = {
   propertyType: PropertyCategory | null;
   furnished: boolean | null;
   rooms: RoomsNumber;
-  bathRooms: RoomsNumber;
+  bathrooms: RoomsNumber;
   minPrice: FilterText;
   maxPrice: FilterText;
   minArea: FilterText;

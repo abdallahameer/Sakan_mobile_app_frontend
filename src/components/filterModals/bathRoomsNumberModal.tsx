@@ -3,19 +3,19 @@ import { useEffect, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-type BathRoomsModalProps = {
+type BathroomsModalProps = {
   visible: boolean;
   onClose: () => void;
   value: RoomsNumber;
   onApply: (rooms: RoomsNumber) => void;
 };
 
-export default function BathRoomsNumberModal({
+export default function BathroomsNumberModal({
   visible,
   onClose,
   value,
   onApply,
-}: BathRoomsModalProps) {
+}: BathroomsModalProps) {
   const [draft, setDraft] = useState<RoomsNumber>(value);
   const inSet = useSafeAreaInsets();
 

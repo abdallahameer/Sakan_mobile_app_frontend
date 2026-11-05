@@ -45,7 +45,7 @@ export default function Search() {
       propertyType: null,
       furnished: null,
       rooms: null,
-      bathRooms: null,
+      bathrooms: null,
       minPrice: "",
       maxPrice: "",
       minArea: "",

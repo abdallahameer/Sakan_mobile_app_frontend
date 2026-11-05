@@ -12,7 +12,7 @@ import {
 } from "react-hook-form";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import AllFiltersModal from "./filterModals/allFiltersModal";
-import BathRoomsNumberModal from "./filterModals/bathRoomsNumberModal";
+import BathroomsNumberModal from "./filterModals/bathroomsNumberModal";
 import FamilyOrSingleModal from "./filterModals/familyOrSingleModal";
 import IsFurnishedModal from "./filterModals/isFurnishedModal";
 import PriceRangeModal from "./filterModals/priceRangeModal";
@@ -45,7 +45,7 @@ export default function PropertyFilter({
   const [openPropertyTypeModal, setOpenPropertyTypeModal] = useState(false);
   const [openRoomsNumberModal, setOpenRoomsNumberModal] = useState(false);
   const [openIsFurnishedModal, setOpenIsFurnishedModal] = useState(false);
-  const [openBathRoomsNumberModal, setOpenBathRoomsNumberModal] =
+  const [openBathroomsNumberModal, setOpenBathroomsNumberModal] =
     useState(false);
   const [openPricerangeModal, setOpenPriceRangeModal] = useState(false);
   const [openSpaceRangeModal, setOpenSpaceRangeModal] = useState(false);
@@ -319,20 +319,20 @@ export default function PropertyFilter({
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => setOpenBathRoomsNumberModal(true)}
+          onPress={() => setOpenBathroomsNumberModal(true)}
           className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
-            formValues.bathRooms ? "bg-[#0F113C]" : "bg-white"
+            formValues.bathrooms ? "bg-[#0F113C]" : "bg-white"
           }`}
         >
           <Text
-            className={`text-sm ${formValues.bathRooms ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.bathrooms ? "text-white" : "text-[#0F113C]"}`}
           >
             الحمامات
           </Text>
           <Ionicons
             name="chevron-down"
             size={14}
-            color={formValues.bathRooms ? "#ffffff" : "#0F113C"}
+            color={formValues.bathrooms ? "#ffffff" : "#0F113C"}
             className="ms-1"
           />
         </TouchableOpacity>
@@ -452,11 +452,11 @@ export default function PropertyFilter({
         visible={openRoomsNumberModal}
       />
 
-      <BathRoomsNumberModal
-        onClose={() => setOpenBathRoomsNumberModal(false)}
-        onApply={(bathRooms) => setValue("bathRooms", bathRooms)}
-        value={formValues.bathRooms}
-        visible={openBathRoomsNumberModal}
+      <BathroomsNumberModal
+        onClose={() => setOpenBathroomsNumberModal(false)}
+        onApply={(bathrooms) => setValue("bathrooms", bathrooms)}
+        value={formValues.bathrooms}
+        visible={openBathroomsNumberModal}
       />
 
       <PriceRangeModal

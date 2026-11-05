@@ -396,17 +396,17 @@ export default function AllFiltersModal({
                 <View className="flex-row flex-wrap gap-3">
                   <SmallOptionButton
                     label="الكل"
-                    selected={newValues.bathRooms === null}
+                    selected={newValues.bathrooms === null}
                     onPress={() =>
                       setNewValues((currentValues) => ({
                         ...currentValues,
-                        bathRooms: null,
+                        bathrooms: null,
                       }))
                     }
                   />
 
                   {["1", "2", "3", "4", "5", "6", "7", "+8"].map((bath) => {
-                    const selected = newValues.bathRooms === bath;
+                    const selected = newValues.bathrooms === bath;
 
                     return (
                       <SmallOptionButton
@@ -416,7 +416,7 @@ export default function AllFiltersModal({
                         onPress={() => {
                           setNewValues((currentValues) => ({
                             ...currentValues,
-                            bathRooms: selected ? null : (bath as RoomsNumber),
+                            bathrooms: selected ? null : (bath as RoomsNumber),
                           }));
                         }}
                       />
