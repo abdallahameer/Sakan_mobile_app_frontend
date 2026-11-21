@@ -84,7 +84,6 @@ export default function Index() {
   // not logged in -> go to the login page
   if (token === null) return <Redirect href={"/login/login" as any} />;
 
-  console.log(searchText);
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-[#F0F1FA]">
       <PropertySearchBar
