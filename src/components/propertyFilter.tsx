@@ -12,7 +12,7 @@ import {
 } from "react-hook-form";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import AllFiltersModal from "./filterModals/allFiltersModal";
-import BathroomsNumberModal from "./filterModals/bathroomsNumberModal";
+import BathroomsNumberModal from "./filterModals/bathRoomsNumberModal";
 import FamilyOrSingleModal from "./filterModals/familyOrSingleModal";
 import IsFurnishedModal from "./filterModals/isFurnishedModal";
 import PriceRangeModal from "./filterModals/priceRangeModal";
@@ -115,11 +115,7 @@ export default function PropertyFilter({
           <Ionicons
             name="chevron-down"
             size={14}
-            color={
-              formValues.listingType
-                ? "white"
-                : "#0F113C"
-            }
+            color={formValues.listingType ? "white" : "#0F113C"}
             className="ms-1"
           />
         </TouchableOpacity>
@@ -129,9 +125,7 @@ export default function PropertyFilter({
             <TouchableOpacity
               onPress={() => setValue("propertyStatus", null)}
               className={`flex-row items-center px-4 py-2 rounded-full ${
-                formValues.propertyStatus === null
-                  ? "bg-[#0F113C]"
-                  : "bg-white"
+                formValues.propertyStatus === null ? "bg-[#0F113C]" : "bg-white"
               }`}
             >
               <Text
@@ -408,8 +402,7 @@ export default function PropertyFilter({
           );
           setValue(
             "familyOrSingle",
-            type === "rent" &&
-              formValues.propertyType === "residential"
+            type === "rent" && formValues.propertyType === "residential"
               ? formValues.familyOrSingle
               : null,
           );
