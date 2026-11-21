@@ -45,16 +45,29 @@ export default function Index() {
       maxArea: "",
     },
   });
+  const [searchText, setSearchText] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const formValues = watch();
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchText.trim()), 400);
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: ["properties", formValues],
+      queryKey: ["properties", formValues, debouncedSearch],
       initialPageParam: 1,
       enabled: !!token, // do not load ads for a logged-out user
       queryFn: async ({ pageParam }) =>
         (
           await api.get("/properties", {
-            params: { page: pageParam, limit: 5, ...formValues },
+            params: {
+              page: pageParam,
+              limit: 5,
+              ...formValues,
+              search: debouncedSearch,
+            },
           })
         ).data,
       getNextPageParam: (last) =>
@@ -71,9 +84,14 @@ export default function Index() {
   // not logged in -> go to the login page
   if (token === null) return <Redirect href={"/login/login" as any} />;
 
+  console.log(searchText);
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-[#F0F1FA]">
-      <PropertySearchBar />
+      <PropertySearchBar
+        placeholder="ابحث بي المدينة او الحي او العنوان"
+        value={searchText}
+        onChangeText={setSearchText}
+      />
       <PropertyFilter
         getValues={getValues}
         reset={reset}
