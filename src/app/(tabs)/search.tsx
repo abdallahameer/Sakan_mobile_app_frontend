@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import type { Property, PropertyFilterForm } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, Text, View } from "react-native";
 import MapView, { MapType, Marker } from "react-native-maps";
@@ -57,17 +57,23 @@ export default function Search() {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
     null,
   );
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [mapStyle, setMapStyle] = useState<MapType>("standard");
   const [isMapStyleSelectorVisible, setIsMapStyleSelectorVisible] =
     useState(false);
 
   const formValues = watch();
 
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchText.trim()), 400);
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
   const { data: properties } = useQuery({
-    queryKey: ["propertiesLocations", formValues],
+    queryKey: ["propertiesLocations", formValues, debouncedSearch],
     queryFn: async () => {
       const response = await api.get("/properties", {
-        params: { hasLocation: true, ...formValues },
+        params: { hasLocation: true, ...formValues, search: debouncedSearch },
       });
       return response.data;
     },
