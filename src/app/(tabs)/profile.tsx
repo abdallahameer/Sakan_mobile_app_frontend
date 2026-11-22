@@ -1,6 +1,7 @@
-import { setAuthToken } from "@/lib/api";
+import { api, setAuthToken } from "@/lib/api";
+import { User } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import {
   FlatList,
@@ -77,6 +78,14 @@ const MENU_ITEMS: MenuItem[] = [
 export default function ProfileScreen() {
   const router = useRouter();
   const queryClinet = useQueryClient();
+
+  const { data: userProfile } = useQuery({
+    queryKey: ["userId"],
+    queryFn: async () => {
+      return (await api.get<{ user: User }>("/auth/me")).data.user;
+    },
+  });
+
   return (
     <SafeAreaView className="flex-1 bg-[#F0F1FA]">
       <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
@@ -99,7 +108,9 @@ export default function ProfileScreen() {
             >
               <Image
                 source={{
-                  uri: "https://api.dicebear.com/7.x/initials/png?seed=User",
+                  uri: userProfile?.avatar_url
+                    ? userProfile.avatar_url
+                    : "https://api.dicebear.com/7.x/initials/png?seed=User",
                 }}
                 style={{ width: "100%", height: "100%" }}
               />
@@ -125,7 +136,7 @@ export default function ProfileScreen() {
             className="mt-3 text-lg font-bold"
             style={{ color: COLORS.primary }}
           >
-            username
+            {userProfile?.name}
           </Text>
 
           <View
