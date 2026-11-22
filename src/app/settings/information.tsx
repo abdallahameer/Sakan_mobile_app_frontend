@@ -1,6 +1,9 @@
 import AppTextInput from "@/components/InputsComponents/Apptextinput";
 import EmailInput from "@/components/InputsComponents/EmailInput";
+import { api } from "@/lib/api";
+import { User } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
@@ -14,11 +17,18 @@ type UserInformationFormValues = {
 
 export default function UserInformation() {
   const router = useRouter();
+
+  const { data: userInfo } = useQuery({
+    queryKey: ["userId"],
+    queryFn: async () => {
+      return (await api.get<{ user: User }>("/auth/me")).data.user;
+    },
+  });
+
   const { control } = useForm<UserInformationFormValues>({
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
+      name: userInfo?.name,
+      email: userInfo?.email,
     },
   });
 
@@ -52,13 +62,6 @@ export default function UserInformation() {
         </View>
 
         <EmailInput name="email" control={control} />
-
-        <AppTextInput
-          name="password"
-          control={control}
-          label="كلمة المرور"
-          secureTextEntry
-        />
 
         <View className="px-5 mt-6">
           <Pressable

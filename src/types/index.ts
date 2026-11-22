@@ -14,3 +14,11 @@ export type {
   PropertyLocation,
   PropertyStatus,
 } from "./property";
+
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+  avatar_url: string | null;
+  created_at: string;
+};
