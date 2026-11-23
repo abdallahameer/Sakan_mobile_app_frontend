@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useTheme } from "@/theme/ThemeProvider";
 
 type BaseProps = {
   label?: string;
@@ -61,8 +62,9 @@ export default function AppTextInput<TFieldValues extends FieldValues>(
   } = props;
 
   const [isFocused, setIsFocused] = useState(false);
+  const { colors } = useTheme();
 
-  const borderColor = error ? "#EF4444" : "#0F113C";
+  const borderColor = error ? "#EF4444" : colors.primary;
 
   const sharedInputProps: RNTextInputProps = {
     placeholder,
@@ -79,7 +81,7 @@ export default function AppTextInput<TFieldValues extends FieldValues>(
     textAlignVertical: multiline ? "top" : "center",
     onFocus: () => setIsFocused(true),
     onBlur: () => setIsFocused(false),
-    className: `px-3.5 text-[#0F113C] ${
+    className: `px-3.5 text-[#0F113C] dark:text-[#F3F4F6] ${
       multiline ? "py-3.5 min-h-[120px]" : "py-3.5"
     }`,
   };
@@ -87,7 +89,7 @@ export default function AppTextInput<TFieldValues extends FieldValues>(
   return (
     <View className={`gap-2 ${containerClassName}`}>
       {label && (
-        <Text className="text-base font-semibold text-left text-[#0F113C]">
+        <Text className="text-base font-semibold text-left text-[#0F113C] dark:text-[#F3F4F6]">
           {label}
         </Text>
       )}
@@ -98,7 +100,7 @@ export default function AppTextInput<TFieldValues extends FieldValues>(
         }`}
         style={{
           borderColor,
-          backgroundColor: editable ? "#ffffff" : "#F3F4F6",
+          backgroundColor: editable ? colors.surface : colors.elevatedSurface,
         }}
       >
         <View className="flex-1">

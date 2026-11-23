@@ -17,6 +17,7 @@ import {
 import AppNumberInput from "../InputsComponents/Appnumberinput";
 import AppTextInput from "../InputsComponents/Apptextinput";
 import PhoneNumberInput from "../InputsComponents/PhoneNumberInput";
+import { useTheme } from "@/theme/ThemeProvider";
 
 export default function StepTwo({
   control,
@@ -25,6 +26,7 @@ export default function StepTwo({
   onNext,
   update = false,
 }: StepTwoProps) {
+  const { isDarkMode, colors } = useTheme();
   const [selectedCityId, setSelectedCityid] = useState<string | null>(null);
   const {
     data: cities = [],
@@ -159,9 +161,9 @@ export default function StepTwo({
                 style={{
                   width: 20,
                   height: 20,
-                  borderColor: "#0F113C",
+                  borderColor: colors.primary,
                   backgroundColor: formValues.termsAccepted
-                    ? "#0F113C"
+                    ? colors.primary
                     : "transparent",
                 }}
               >
@@ -170,18 +172,18 @@ export default function StepTwo({
                 )}
               </Pressable>
 
-              <Text className="flex-1 text-sm leading-6 text-[#374151]">
+              <Text className="flex-1 text-sm leading-6 text-[#374151] dark:text-[#D1D5DB]">
                 أوافق على{" "}
                 <Text
                   onPress={() => Linking.openURL("https://example.com/terms")}
-                  className="font-semibold text-blue-900"
+                  className="font-semibold text-blue-900 dark:text-blue-300"
                 >
                   شروط الاستخدام
                 </Text>{" "}
                 و ألتزم{" "}
                 <Text
                   onPress={() => Linking.openURL("https://example.com/ad-fees")}
-                  className="font-semibold text-blue-900"
+                  className="font-semibold text-blue-900 dark:text-blue-300"
                 >
                   برسوم الإعلان
                 </Text>
@@ -195,14 +197,24 @@ export default function StepTwo({
               disabled={!formValues.termsAccepted}
               className="items-center justify-center py-3.5 mt-1 border rounded-xl"
               style={{
-                borderColor: formValues.termsAccepted ? "#0F113C" : "#D1D5DB",
+                borderColor: formValues.termsAccepted
+                  ? colors.primary
+                  : isDarkMode
+                    ? colors.border
+                    : "#D1D5DB",
                 opacity: formValues.termsAccepted ? 1 : 0.5,
               }}
             >
               <Text
                 className="text-base font-bold"
                 style={{
-                  color: formValues.termsAccepted ? "#0F113C" : "#9CA3AF",
+                  color: formValues.termsAccepted
+                    ? isDarkMode
+                      ? "#F3F4F6"
+                      : "#0F113C"
+                    : isDarkMode
+                      ? colors.secondaryText
+                      : "#9CA3AF",
                 }}
               >
                 التالي

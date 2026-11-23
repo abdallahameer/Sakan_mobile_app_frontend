@@ -6,12 +6,24 @@ import { Stack } from "expo-router";
 import { I18nManager, StatusBar, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import { ThemeProvider, useTheme } from "@/theme/ThemeProvider";
 import "../global.css";
 
 I18nManager.allowRTL(true);
 I18nManager.forceRTL(true);
 
+const queryClient = new QueryClient();
+
 export default function RootLayout() {
+  return (
+    <ThemeProvider>
+      <RootLayoutContent />
+    </ThemeProvider>
+  );
+}
+
+function RootLayoutContent() {
+  const { isDarkMode, colors } = useTheme();
   const toastConfig = {
     success: (props: any) => <CustomToast {...props} type="success" />,
 
@@ -22,11 +34,10 @@ export default function RootLayout() {
     info: (props: any) => <CustomToast {...props} type="info" />,
   };
 
-  const queryClient = new QueryClient();
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="default" />
-      <NavigationBar style="inverted" />
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
+      <NavigationBar style={isDarkMode ? "light" : "dark"} />
 
       <QueryClientProvider client={queryClient}>
         <View style={{ flex: 1 }}>
@@ -34,7 +45,7 @@ export default function RootLayout() {
             screenOptions={{
               headerShown: false,
               contentStyle: {
-                backgroundColor: "#0F113C",
+                backgroundColor: isDarkMode ? colors.background : "#0F113C",
               },
             }}
           />

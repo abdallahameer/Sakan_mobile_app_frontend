@@ -10,8 +10,10 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ActivityIndicator, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "@/theme/ThemeProvider";
 
 export default function Index() {
+  const { colors } = useTheme();
   const [isLoadingSplash, setIsLoadingSplash] = useState(true);
   // undefined = still checking, null = not logged in, string = logged in
   const [token, setToken] = useState<string | null | undefined>(undefined);
@@ -85,7 +87,7 @@ export default function Index() {
   if (token === null) return <Redirect href={"/login/login" as any} />;
 
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 bg-[#F0F1FA]">
+    <SafeAreaView edges={["top"]} className="flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
       <PropertySearchBar
         placeholder="ابحث بي المدينة او الحي او العنوان"
         value={searchText}
@@ -115,12 +117,12 @@ export default function Index() {
         onEndReachedThreshold={0.1}
         ListFooterComponent={
           isFetchingNextPage ? (
-            <ActivityIndicator size="large" className="my-4 text-[#0F113C]" />
+            <ActivityIndicator size="large" color={colors.text} className="my-4" />
           ) : null
         }
         ListEmptyComponent={
           isLoading ? (
-            <ActivityIndicator size="large" className="my-4 text-[#0F113C]" />
+            <ActivityIndicator size="large" color={colors.text} className="my-4" />
           ) : null
         }
       />

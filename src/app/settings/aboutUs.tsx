@@ -9,24 +9,26 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "@/theme/ThemeProvider";
 
 export default function AboutUs() {
   const router = useRouter();
+  const { colors } = useTheme();
 
   return (
     <>
-      <SafeAreaView className="flex-1  bg-[#F0F1FA]">
-        <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
+      <SafeAreaView className="flex-1  bg-[#F0F1FA] dark:bg-[#0B0D1D]">
+        <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB] dark:border-[#36384D]">
           <Pressable
             onPress={() => {
               router.back();
             }}
           >
-            <Ionicons name="arrow-forward" size={22} color="#0F113C" />
+            <Ionicons name="arrow-forward" size={22} color={colors.text} />
           </Pressable>
 
           <View className="flex-row items-center justify-start w-[60%]">
-            <Text className="text-lg font-bold text-[#0F113C]">نبذة عنا</Text>
+            <Text className="text-lg font-bold text-[#0F113C] dark:text-[#F3F4F6]">نبذة عنا</Text>
           </View>
         </View>
 
@@ -40,11 +42,11 @@ export default function AboutUs() {
 
         <ScrollView>
           <View className="gap-4 px-5 pt-8 pb-6">
-            <Text className="text-3xl font-bold text-center text-[#0F113C]">
+            <Text className="text-3xl font-bold text-center text-[#0F113C] dark:text-[#F3F4F6]">
               من نحن؟
             </Text>
 
-            <Text className="text-base leading-8 text-left text-[#374151]">
+            <Text className="text-base leading-8 text-left text-[#374151] dark:text-[#D1D5DB]">
               مسكن هو تطبيق سوداني يهدف إلى تسهيل طريقة البحث عن السكن والعقارات
               في السودان، من خلال ربط الباحث عن العقار بمالكه مباشرةً، بعيدًا عن
               الطرق التقليدية والوسطاء. نعمل على جمع خيارات السكن في مكان واحد،
@@ -59,11 +61,11 @@ export default function AboutUs() {
 
           <View className="gap-4 px-5 py-8 mx-4 mt-2 bg-blue-400/30 rounded-2xl">
             <View className="items-center">
-              <Text className="text-2xl font-bold text-[#0F113C]">قيمنا</Text>
+              <Text className="text-2xl font-bold text-[#0F113C] dark:text-[#F3F4F6]">قيمنا</Text>
               <View className="w-16 h-0.5 mt-2 bg-[#0F113C]" />
             </View>
 
-            <Text className="text-base leading-8 text-left text-[#0F113C]">
+            <Text className="text-base leading-8 text-left text-[#0F113C] dark:text-[#F3F4F6]">
               مسكن لم يُبنَ بهدف الربح، بل بُني أولًا لخدمة الناس. نحن نؤمن أن
               التقنية يمكنها أن تجعل حياة الناس أسهل، وأن كثيرًا من المشاكل التي
               نواجهها اليوم يمكن حلها إذا استخدمنا التكنولوجيا بطريقة صحيحة. بدأ

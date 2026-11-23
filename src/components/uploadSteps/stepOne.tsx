@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { Video } from "react-native-compressor";
 import Toast from "react-native-toast-message";
+import { useTheme } from "@/theme/ThemeProvider";
 const MIN_IMAGES = 1;
 const MAX_IMAGES = 10;
 const MAX_SIZE = 40 * 1024 * 1024;
@@ -23,6 +24,7 @@ export default function StepOne({
   onNext,
   update = false,
 }: StepOneProps) {
+  const { colors } = useTheme();
   const [compressing, setCompressing] = useState<number | null>(null);
   const isCompressing = compressing !== null;
 
@@ -179,7 +181,7 @@ export default function StepOne({
       <View className="gap-3 p-5">
         {imageCount > 0 && (
           <View className="mb-2">
-            <Text className="mb-3 text-right text-sm font-semibold text-[#0F113C]">
+            <Text className="mb-3 text-right text-sm font-semibold text-[#0F113C] dark:text-[#F3F4F6]">
               الصور المرفقة ({imageCount}/{MAX_IMAGES})
             </Text>
 
@@ -194,7 +196,7 @@ export default function StepOne({
 
                   <Pressable
                     onPress={() => removeImage(index)}
-                    className="absolute items-center justify-center bg-white rounded-full w-7 h-7 -top-2 -right-2"
+                    className="absolute items-center justify-center bg-white rounded-full w-7 h-7 -top-2 -right-2 dark:bg-[#17192D]"
                     style={{
                       elevation: 3,
                       shadowColor: "#000",
@@ -216,55 +218,55 @@ export default function StepOne({
 
         <Pressable
           onPress={pickImages}
-          className="flex-row items-center justify-between px-4 py-3.5 border bg-white border-[#0F113C] rounded-xl"
+          className="flex-row items-center justify-between px-4 py-3.5 border bg-white border-[#0F113C] rounded-xl dark:bg-[#17192D] dark:border-[#36384D]"
           style={{ opacity: isFull ? 0.5 : 1 }}
         >
           <View className="items-center justify-center w-8 h-8 rounded-lg bg-[#0F113C]/10">
-            <Ionicons name="camera-outline" size={18} color="#0F113C" />
+            <Ionicons name="camera-outline" size={18} color={colors.text} />
           </View>
 
-          <Text className="text-base font-semibold text-[#0F113C]">
+          <Text className="text-base font-semibold text-[#0F113C] dark:text-[#F3F4F6]">
             إرفاق صورة* ({imageCount}/{MAX_IMAGES})
           </Text>
         </Pressable>
 
-        <Text className="text-sm text-left text-[#6B7280]">
+        <Text className="text-sm text-left text-[#6B7280] dark:text-[#A1A1AA]">
           أضف من {MIN_IMAGES} إلى {MAX_IMAGES} صور
         </Text>
 
         <Pressable
           onPress={pickVideo}
           disabled={isCompressing}
-          className="flex-row items-center justify-between px-4 py-3.5 border bg-white border-[#0F113C] rounded-xl"
+          className="flex-row items-center justify-between px-4 py-3.5 border bg-white border-[#0F113C] rounded-xl dark:bg-[#17192D] dark:border-[#36384D]"
           style={{ opacity: isCompressing ? 0.5 : 1 }}
         >
           <View className="items-center justify-center w-8 h-8 rounded-lg bg-[#0F113C]/10">
-            <Ionicons name="videocam-outline" size={18} color="#0F113C" />
+            <Ionicons name="videocam-outline" size={18} color={colors.text} />
           </View>
 
-          <Text className="text-base font-semibold text-[#0F113C]">
+          <Text className="text-base font-semibold text-[#0F113C] dark:text-[#F3F4F6]">
             {hasVideo ? "تغيير الفيديو" : "إضافة فيديو (اختياري)"}
           </Text>
         </Pressable>
 
         {isCompressing ? (
-          <View className="flex-row items-center justify-between px-4 py-3 bg-white border border-[#E5E7EB] rounded-xl">
-            <ActivityIndicator color="#0F113C" />
-            <Text className="text-sm font-semibold text-[#0F113C]">
+          <View className="flex-row items-center justify-between px-4 py-3 bg-white border border-[#E5E7EB] rounded-xl dark:bg-[#17192D] dark:border-[#36384D]">
+            <ActivityIndicator color={colors.text} />
+            <Text className="text-sm font-semibold text-[#0F113C] dark:text-[#F3F4F6]">
               جاري تحميل الفيديو... {compressing}%
             </Text>
           </View>
         ) : hasVideo ? (
-          <View className="flex-row items-center justify-between px-4 py-3 bg-white border border-[#E5E7EB] rounded-xl">
+          <View className="flex-row items-center justify-between px-4 py-3 bg-white border border-[#E5E7EB] rounded-xl dark:bg-[#17192D] dark:border-[#36384D]">
             <Pressable onPress={removeVideo} hitSlop={10}>
               <Ionicons name="close-circle" size={22} color="#EF4444" />
             </Pressable>
-            <Text className="text-sm font-semibold text-[#0F113C]">
+            <Text className="text-sm font-semibold text-[#0F113C] dark:text-[#F3F4F6]">
               تم إرفاق فيديو
             </Text>
           </View>
         ) : (
-          <Text className="text-sm text-left text-[#6B7280]">
+          <Text className="text-sm text-left text-[#6B7280] dark:text-[#A1A1AA]">
             فيديو واحد فقط، بحد أقصى دقيقة واحدة
           </Text>
         )}
@@ -283,7 +285,7 @@ export default function StepOne({
           </Pressable>
         ) : null}
 
-        <Text className="mt-2 text-sm leading-6 text-left text-[#6B7280]">
+        <Text className="mt-2 text-sm leading-6 text-left text-[#6B7280] dark:text-[#A1A1AA]">
           إضافة فيديوهات و صور لإعلانك سيرفع من أولوية ظهور إعلانك في التطبيق
         </Text>
       </View>

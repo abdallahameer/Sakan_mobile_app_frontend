@@ -55,12 +55,12 @@ export default function StepThree({
         contentContainerClassName="pb-6"
       >
         <View className="px-4 pt-3 ">
-          <View className="flex-row h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
+          <View className="flex-row h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg dark:bg-[#22243A] dark:border-[#36384D]">
             <Pressable
               onPress={selectRent}
               className={`items-center justify-center flex-1 ${
                 formValues.listingType === "rent"
-                  ? "bg-[#0F113C]"
+                  ? "bg-[#0F113C] dark:bg-[#2D3158]"
                   : "bg-transparent"
               }`}
             >
@@ -68,7 +68,7 @@ export default function StepThree({
                 className={`text-xs font-semibold ${
                   formValues.listingType === "rent"
                     ? "text-white"
-                    : "text-[#0F113C]"
+                    : "text-[#0F113C] dark:text-[#F3F4F6]"
                 }`}
               >
                 إيجار
@@ -79,7 +79,7 @@ export default function StepThree({
               onPress={selectSale}
               className={`items-center justify-center flex-1 ${
                 formValues.listingType === "sale"
-                  ? "bg-[#0F113C]"
+                  ? "bg-[#0F113C] dark:bg-[#2D3158]"
                   : "bg-transparent"
               }`}
             >
@@ -87,7 +87,7 @@ export default function StepThree({
                 className={`text-xs font-semibold ${
                   formValues.listingType === "sale"
                     ? "text-white"
-                    : "text-[#0F113C]"
+                    : "text-[#0F113C] dark:text-[#F3F4F6]"
                 }`}
               >
                 بيع
@@ -97,14 +97,14 @@ export default function StepThree({
         </View>
 
         <View className="px-4 pt-3">
-          <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
+          <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg dark:bg-[#22243A] dark:border-[#36384D]">
             {(["residential", "commercial"] as const).map((type) => (
               <Pressable
                 key={type}
                 onPress={() => selectPropertyType(type)}
                 className={`items-center justify-center flex-1 ${
                   formValues.propertyType === type
-                    ? "bg-[#0F113C]"
+                    ? "bg-[#0F113C] dark:bg-[#2D3158]"
                     : "bg-transparent"
                 }`}
               >
@@ -112,7 +112,7 @@ export default function StepThree({
                   className={`text-xs font-semibold ${
                     formValues.propertyType === type
                       ? "text-white"
-                      : "text-[#0F113C]"
+                      : "text-[#0F113C] dark:text-[#F3F4F6]"
                   }`}
                 >
                   {type === "residential" ? "سكني" : "تجاري"}
@@ -125,7 +125,7 @@ export default function StepThree({
         {formValues.listingType === "rent" &&
           formValues.propertyType === "residential" && (
             <View className="px-4 pt-3">
-              <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg">
+              <View className="flex-row-reverse h-9 overflow-hidden bg-[#F0F0F3] border border-[#0F113C] rounded-lg dark:bg-[#22243A] dark:border-[#36384D]">
                 {(["family", "single"] as const).map((type) => (
                   <Pressable
                     key={type}
@@ -136,7 +136,7 @@ export default function StepThree({
                     }
                     className={`items-center justify-center flex-1 ${
                       formValues.familyOrSingle === type
-                        ? "bg-[#0F113C]"
+                        ? "bg-[#0F113C] dark:bg-[#2D3158]"
                         : "bg-transparent"
                     }`}
                   >
@@ -144,7 +144,7 @@ export default function StepThree({
                       className={`text-xs font-semibold ${
                         formValues.familyOrSingle === type
                           ? "text-white"
-                          : "text-[#0F113C]"
+                          : "text-[#0F113C] dark:text-[#F3F4F6]"
                       }`}
                     >
                       {type === "family" ? "عوائل" : "عزاب"}
@@ -174,7 +174,7 @@ export default function StepThree({
                     className={`text-xs font-semibold ${
                       formValues.paymentType === type
                         ? "text-white"
-                        : "text-[#0F113C]"
+                        : "text-[#0F113C] dark:text-[#F3F4F6]"
                     }`}
                   >
                     {type === "monthly"
@@ -207,7 +207,7 @@ export default function StepThree({
                   className={`text-xs font-semibold ${
                     formValues.propertyStatus === status
                       ? "text-white"
-                      : "text-[#0F113C]"
+                      : "text-[#0F113C] dark:text-[#F3F4F6]"
                   }`}
                 >
                   {status === "ready" ? "جاهز" : "قيد الإنشاء"}

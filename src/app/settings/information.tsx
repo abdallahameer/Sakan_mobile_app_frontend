@@ -8,6 +8,7 @@ import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "@/theme/ThemeProvider";
 
 type UserInformationFormValues = {
   name: string;
@@ -17,6 +18,7 @@ type UserInformationFormValues = {
 
 export default function UserInformation() {
   const router = useRouter();
+  const { colors } = useTheme();
 
   const { data: userInfo } = useQuery({
     queryKey: ["userId"],
@@ -33,18 +35,18 @@ export default function UserInformation() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F0F1FA]">
-      <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
+    <SafeAreaView className="flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
+      <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB] dark:border-[#36384D]">
         <Pressable
           onPress={() => {
             router.back();
           }}
         >
-          <Ionicons name="arrow-forward" size={22} color="#0F113C" />
+          <Ionicons name="arrow-forward" size={22} color={colors.text} />
         </Pressable>
 
         <View className="flex-row items-center justify-start w-[60%]">
-          <Text className="text-lg font-bold text-[#0F113C]">
+          <Text className="text-lg font-bold text-[#0F113C] dark:text-[#F3F4F6]">
             إعدادات الحساب
           </Text>
         </View>
@@ -66,17 +68,17 @@ export default function UserInformation() {
         <View className="px-5 mt-6">
           <Pressable
             onPress={() => {}}
-            className="items-center justify-center py-4 rounded-xl bg-[#0F113C]"
+            className="items-center justify-center py-4 rounded-xl bg-[#0F113C] dark:bg-[#2D3158]"
           >
             <Text className="text-base font-bold text-white">تحديث</Text>
           </Pressable>
         </View>
 
         <Pressable className="flex-row-reverse items-center self-start gap-2 mt-2">
-          <Text className="text-sm font-semibold text-[#374151]">
+          <Text className="text-sm font-semibold text-[#374151] dark:text-[#D1D5DB]">
             حذف الحساب
           </Text>
-          <Ionicons name="trash-outline" size={18} color="#374151" />
+          <Ionicons name="trash-outline" size={18} color={colors.secondaryText} />
         </Pressable>
       </ScrollView>
     </SafeAreaView>

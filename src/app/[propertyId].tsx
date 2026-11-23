@@ -22,6 +22,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import { useTheme } from "@/theme/ThemeProvider";
 
 type PropertyDetails = Omit<Property, "location"> & {
   location: Omit<Property["location"], "address"> & { address?: string };
@@ -44,6 +45,7 @@ export default function PropertyDetailsScreen() {
     ? params.propertyId[0]
     : params.propertyId;
   const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
   const [currentImage, setCurrentImage] = useState(0);
 
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
@@ -137,7 +139,7 @@ export default function PropertyDetailsScreen() {
 
   if (isPending) {
     return (
-      <SafeAreaView className="items-center justify-center flex-1 bg-[#F0F1FA]">
+      <SafeAreaView className="items-center justify-center flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
         <ActivityIndicator size="large" color="#10B981" />
       </SafeAreaView>
     );
@@ -145,8 +147,8 @@ export default function PropertyDetailsScreen() {
 
   if (isError || !property) {
     return (
-      <SafeAreaView className="items-center justify-center flex-1 gap-4 bg-[#F0F1FA]">
-        <Text className="text-base text-[#6B7280]">
+      <SafeAreaView className="items-center justify-center flex-1 gap-4 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
+        <Text className="text-base text-[#6B7280] dark:text-[#A1A1AA]">
           تعذر تحميل بيانات العقار
         </Text>
         <Pressable onPress={() => router.back()}>
@@ -240,7 +242,7 @@ export default function PropertyDetailsScreen() {
   const whatsappNumber = `${property.whatsAppKey ?? property.phoneKey ?? ""}${property.whatsapp ?? property.phone ?? ""}`;
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F0F1FA]" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]" edges={["top"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 33 }}>
         <View className="relative">
           {property.images.length > 0 ? (
@@ -250,7 +252,7 @@ export default function PropertyDetailsScreen() {
               onError={() => setCurrentImage(0)}
             />
           ) : (
-            <View className="items-center justify-center w-full h-80 bg-[#E5E7EB]">
+            <View className="items-center justify-center w-full h-80 bg-[#E5E7EB] dark:bg-[#22243A]">
               <Ionicons name="image-outline" size={40} color="#9CA3AF" />
             </View>
           )}
@@ -258,27 +260,27 @@ export default function PropertyDetailsScreen() {
           <View className="absolute flex-row items-center justify-between w-full px-4 top-4">
             <Pressable
               onPress={() => router.back()}
-              className="items-center justify-center bg-white rounded-full w-11 h-11"
+              className="items-center justify-center bg-white rounded-full w-11 h-11 dark:bg-[#17192D]"
             >
-              <Ionicons name="arrow-forward" size={22} color="#0F113C" />
+              <Ionicons name="arrow-forward" size={22} color={colors.text} />
             </Pressable>
 
             <View className="flex-row items-center gap-3">
               <Pressable
                 onPress={handleFavorite}
-                className="items-center justify-center bg-white rounded-full w-11 h-11"
+                className="items-center justify-center bg-white rounded-full w-11 h-11 dark:bg-[#17192D]"
               >
                 <Ionicons
                   name={property.isFavorite ? "bookmark" : "bookmark-outline"}
                   size={20}
-                  color={property.isFavorite ? "#3b82f6" : "blck"}
+                  color={property.isFavorite ? "#3b82f6" : colors.text}
                 />
               </Pressable>
-              <Pressable className="items-center justify-center bg-white rounded-full w-11 h-11">
+              <Pressable className="items-center justify-center bg-white rounded-full w-11 h-11 dark:bg-[#17192D]">
                 <Ionicons
                   name="share-social-outline"
                   size={20}
-                  color="#0F113C"
+                  color={colors.text}
                 />
               </Pressable>
             </View>
@@ -300,12 +302,16 @@ export default function PropertyDetailsScreen() {
         </View>
 
         <View className="gap-3 px-5 pt-5">
-          <Text className="text-xl font-bold text-left text-[#0F113C]">
+          <Text className="text-xl font-bold text-left text-[#0F113C] dark:text-[#F3F4F6]">
             {property.title}
           </Text>
           <View className="flex-row items-center gap-1">
-            <Ionicons name="location-outline" size={15} color="#6B7280" />
-            <Text className="flex-1 text-sm text-left text-[#6B7280]">
+            <Ionicons
+              name="location-outline"
+              size={15}
+              color={colors.secondaryText}
+            />
+            <Text className="flex-1 text-sm text-left text-[#6B7280] dark:text-[#A1A1AA]">
               {property.location.address ??
                 `${property.location.city}، ${property.location.neighborhood}`}
             </Text>
@@ -317,17 +323,20 @@ export default function PropertyDetailsScreen() {
             </Text>
           </View>
 
-          <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C]">
+          <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C] dark:text-[#F3F4F6]">
             معلومات العقار
           </Text>
 
-          <View className="overflow-hidden border border-[#E5E7EB] rounded-2xl">
+          <View className="overflow-hidden border border-[#E5E7EB] rounded-2xl dark:border-[#36384D]">
             {propertyInfo.map((item, index) => (
               <View
                 key={item.label}
                 className="flex-row items-center justify-between px-4 py-3.5"
                 style={{
-                  backgroundColor: index % 2 === 0 ? "#F8F9FA" : "#ffffff",
+                  backgroundColor:
+                    index % 2 === 0
+                      ? colors.elevatedSurface
+                      : colors.surface,
                 }}
               >
                 <View className="flex-row items-center gap-2">
@@ -336,28 +345,30 @@ export default function PropertyDetailsScreen() {
                     size={18}
                     color="#10B981"
                   />
-                  <Text className="text-sm font-semibold text-left text-[#0F113C]">
+                  <Text className="text-sm font-semibold text-left text-[#0F113C] dark:text-[#F3F4F6]">
                     {item.label}
                   </Text>
                 </View>
-                <Text className="text-sm text-[#374151]">{item.value}</Text>
+                <Text className="text-sm text-[#374151] dark:text-[#D1D5DB]">{item.value}</Text>
               </View>
             ))}
           </View>
 
           {features.length > 0 && (
             <>
-              <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C]">
+              <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C] dark:text-[#F3F4F6]">
                 مميزات العقار
               </Text>
-              <View className="overflow-hidden border border-[#E5E7EB] rounded-2xl">
+              <View className="overflow-hidden border border-[#E5E7EB] rounded-2xl dark:border-[#36384D]">
                 {chunkPairs(features).map((pair, rowIndex) => (
                   <View
                     key={pair.join("-")}
                     className="flex-row"
                     style={{
                       backgroundColor:
-                        rowIndex % 2 === 0 ? "#F8F9FA" : "#ffffff",
+                        rowIndex % 2 === 0
+                          ? colors.elevatedSurface
+                          : colors.surface,
                     }}
                   >
                     {pair.map((feature) => (
@@ -365,7 +376,7 @@ export default function PropertyDetailsScreen() {
                         key={feature}
                         className="flex-row items-center justify-start flex-1 gap-2 px-2 py-3.5"
                       >
-                        <Text className="text-sm font-medium text-[#374151]">
+                        <Text className="text-sm font-medium text-[#374151] dark:text-[#D1D5DB]">
                           {feature}
                         </Text>
                         <Ionicons
@@ -382,12 +393,12 @@ export default function PropertyDetailsScreen() {
             </>
           )}
 
-          <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C]">
+          <Text className="mt-4 mb-1 text-lg font-bold text-left text-[#0F113C] dark:text-[#F3F4F6]">
             وصف العقار
           </Text>
 
           <Text
-            className="text-sm leading-7 text-left text-[#374151]"
+            className="text-sm leading-7 text-left text-[#374151] dark:text-[#D1D5DB]"
             numberOfLines={descriptionExpanded ? undefined : 2}
           >
             {property.description}
@@ -403,7 +414,7 @@ export default function PropertyDetailsScreen() {
         </View>
       </ScrollView>
       <View
-        className="flex-row items-center justify-between w-full gap-2 px-4 pt-3 border-t border-[#E5E7EB] bg-[#F8F9FA]"
+        className="flex-row items-center justify-between w-full gap-2 px-4 pt-3 border-t border-[#E5E7EB] bg-[#F8F9FA] dark:bg-[#17192D] dark:border-[#36384D]"
         style={{ paddingBottom: insets.bottom + 12 }}
       >
         <Pressable
@@ -415,7 +426,7 @@ export default function PropertyDetailsScreen() {
           disabled={!property.whatsapp && !property.phone}
           className="flex-row w-[50%] p-2 rounded-xl border border-green-800 items-center justify-center bg-green-400/30"
         >
-          <FontAwesome name="whatsapp" size={18} color="black" />
+          <FontAwesome name="whatsapp" size={18} color={colors.text} />
         </Pressable>
 
         <Pressable
@@ -423,7 +434,7 @@ export default function PropertyDetailsScreen() {
           disabled={!property.phone}
           className="flex-row w-[50%] p-2 rounded-xl border border-gray-500 items-center justify-center bg-blue-400/30"
         >
-          <FontAwesome name="phone" size={18} color="black" />
+          <FontAwesome name="phone" size={18} color={colors.text} />
         </Pressable>
       </View>
     </SafeAreaView>

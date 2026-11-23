@@ -11,6 +11,7 @@ import {
   UseFormSetValue,
 } from "react-hook-form";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useTheme } from "@/theme/ThemeProvider";
 import AllFiltersModal from "./filterModals/allFiltersModal";
 import BathroomsNumberModal from "./filterModals/bathRoomsNumberModal";
 import FamilyOrSingleModal from "./filterModals/familyOrSingleModal";
@@ -42,6 +43,7 @@ export default function PropertyFilter({
   errors,
   reset,
 }: PropertyFilterProps) {
+  const { colors } = useTheme();
   const [openPropertyTypeModal, setOpenPropertyTypeModal] = useState(false);
   const [openRoomsNumberModal, setOpenRoomsNumberModal] = useState(false);
   const [openIsFurnishedModal, setOpenIsFurnishedModal] = useState(false);
@@ -96,40 +98,40 @@ export default function PropertyFilter({
       <View className="flex-row items-center gap-2 px-3 py-2.5">
         <TouchableOpacity
           onPress={() => setOpenFiltersModal(true)}
-          className="items-center justify-center w-10 h-10 bg-white rounded-full shadow-md"
+          className="items-center justify-center w-10 h-10 bg-white rounded-full shadow-md dark:bg-[#17192D]"
         >
-          <Ionicons name="options-outline" size={20} color="#0F113C" />
+          <Ionicons name="options-outline" size={20} color={colors.text} />
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => {
             setOpenPropertyTypeModal(true);
           }}
-          className={`flex-row items-center px-4 py-3 rounded-lg border ${formValues.listingType ? "bg-[#0F113C] " : "bg-white"} border-gray-500  `}
+          className={`flex-row items-center px-4 py-3 rounded-lg border ${formValues.listingType ? "bg-[#0F113C] dark:bg-[#2D3158]" : "bg-white dark:bg-[#17192D]"} border-gray-500`}
         >
           <Text
-            className={`text-sm ${formValues.listingType ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.listingType ? "text-white" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
           >
             {propertyTypeLabel}
           </Text>
           <Ionicons
             name="chevron-down"
             size={14}
-            color={formValues.listingType ? "white" : "#0F113C"}
+            color={formValues.listingType ? "white" : colors.text}
             className="ms-1"
           />
         </TouchableOpacity>
 
         {formValues.listingType === "sale" ? (
-          <View className="flex-row gap-3 p-1 bg-white border border-gray-500 rounded-lg">
+          <View className="flex-row gap-3 p-1 bg-white border border-gray-500 rounded-lg dark:bg-[#17192D]">
             <TouchableOpacity
               onPress={() => setValue("propertyStatus", null)}
               className={`flex-row items-center px-4 py-2 rounded-full ${
-                formValues.propertyStatus === null ? "bg-[#0F113C]" : "bg-white"
+                formValues.propertyStatus === null ? "bg-[#0F113C] dark:bg-[#2D3158]" : "bg-white dark:bg-[#17192D]"
               }`}
             >
               <Text
-                className={`text-sm ${formValues.propertyStatus === null ? "text-[#ffffff]" : "text-[#0F113C]"} `}
+                className={`text-sm ${formValues.propertyStatus === null ? "text-[#ffffff]" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
               >
                 الكل
               </Text>
@@ -139,12 +141,12 @@ export default function PropertyFilter({
               onPress={() => setValue("propertyStatus", "ready")}
               className={`flex-row items-center px-4 py-2 rounded-full ${
                 formValues.propertyStatus === "ready"
-                  ? "bg-[#0F113C]"
-                  : "bg-white"
+                  ? "bg-[#0F113C] dark:bg-[#2D3158]"
+                  : "bg-white dark:bg-[#17192D]"
               }`}
             >
               <Text
-                className={`text-sm ${formValues.propertyStatus === "ready" ? "text-[#ffffff]" : "text-[#0F113C]"} `}
+                className={`text-sm ${formValues.propertyStatus === "ready" ? "text-[#ffffff]" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
               >
                 جاهز
               </Text>
@@ -154,15 +156,15 @@ export default function PropertyFilter({
               onPress={() => setValue("propertyStatus", "underConstruction")}
               className={`flex-row items-center px-4 py-2 rounded-full ${
                 formValues.propertyStatus === "underConstruction"
-                  ? "bg-[#0F113C]"
-                  : "bg-white"
+                  ? "bg-[#0F113C] dark:bg-[#2D3158]"
+                  : "bg-white dark:bg-[#17192D]"
               }`}
             >
               <Text
                 className={`text-sm ${
                   formValues.propertyStatus === "underConstruction"
                     ? "text-white"
-                    : "text-[#0F113C]"
+                    : "text-[#0F113C] dark:text-[#F3F4F6]"
                 }`}
               >
                 قيد الإنشاء
@@ -172,15 +174,15 @@ export default function PropertyFilter({
         ) : null}
 
         {formValues.listingType === "rent" ? (
-          <View className="flex-row gap-3 p-1 bg-white border border-gray-500 rounded-lg">
+          <View className="flex-row gap-3 p-1 bg-white border border-gray-500 rounded-lg dark:bg-[#17192D]">
             <TouchableOpacity
               onPress={() => setValue("paymentType", null)}
               className={`flex-row items-center px-4 py-2 rounded-full ${
-                formValues.paymentType === null ? "bg-[#0F113C]" : "bg-white"
+                formValues.paymentType === null ? "bg-[#0F113C] dark:bg-[#2D3158]" : "bg-white dark:bg-[#17192D]"
               }`}
             >
               <Text
-                className={`text-sm ${formValues.paymentType === null ? "text-[#ffffff]" : "text-[#0F113C]"}`}
+                className={`text-sm ${formValues.paymentType === null ? "text-[#ffffff]" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
               >
                 الكل
               </Text>
@@ -189,11 +191,11 @@ export default function PropertyFilter({
             <TouchableOpacity
               onPress={() => setValue("paymentType", "yearly")}
               className={`flex-row items-center px-4 py-2 rounded-full ${
-                formValues.paymentType == "yearly" ? "bg-[#0F113C]" : "bg-white"
+                formValues.paymentType == "yearly" ? "bg-[#0F113C] dark:bg-[#2D3158]" : "bg-white dark:bg-[#17192D]"
               }`}
             >
               <Text
-                className={`text-sm ${formValues.paymentType == "yearly" ? "text-[#ffffff]" : "text-[#0F113C]"} `}
+                className={`text-sm ${formValues.paymentType == "yearly" ? "text-[#ffffff]" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
               >
                 سنوي
               </Text>
@@ -203,12 +205,12 @@ export default function PropertyFilter({
               onPress={() => setValue("paymentType", "monthly")}
               className={`flex-row items-center px-4 py-2 rounded-full ${
                 formValues.paymentType == "monthly"
-                  ? "bg-[#0F113C]"
-                  : "bg-white"
+                  ? "bg-[#0F113C] dark:bg-[#2D3158]"
+                  : "bg-white dark:bg-[#17192D]"
               }`}
             >
               <Text
-                className={`text-sm ${formValues.paymentType == "monthly" ? "text-[#ffffff]" : "text-[#0F113C]"} `}
+                className={`text-sm ${formValues.paymentType == "monthly" ? "text-[#ffffff]" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
               >
                 شهري
               </Text>
@@ -217,14 +219,14 @@ export default function PropertyFilter({
             <TouchableOpacity
               onPress={() => setValue("paymentType", "daily")}
               className={`flex-row items-center px-4 py-2 rounded-full ${
-                formValues.paymentType == "daily" ? "bg-[#0F113C]" : "bg-white"
+                formValues.paymentType == "daily" ? "bg-[#0F113C] dark:bg-[#2D3158]" : "bg-white dark:bg-[#17192D]"
               }`}
             >
               <Text
                 className={`text-sm ${
                   formValues.paymentType == "daily"
                     ? "text-white"
-                    : "text-[#0F113C]"
+                    : "text-[#0F113C] dark:text-[#F3F4F6]"
                 }`}
               >
                 يومي
@@ -238,18 +240,18 @@ export default function PropertyFilter({
           <TouchableOpacity
             onPress={() => setOpenFamilyOrSingleModal(true)}
             className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
-              formValues.familyOrSingle ? "bg-[#0F113C]" : "bg-white"
+              formValues.familyOrSingle ? "bg-[#0F113C] dark:bg-[#2D3158]" : "bg-white dark:bg-[#17192D]"
             }`}
           >
             <Text
-              className={`text-sm ${formValues.familyOrSingle ? "text-white" : "text-[#0F113C]"}`}
+              className={`text-sm ${formValues.familyOrSingle ? "text-white" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
             >
               {familyOrSingleLable}
             </Text>
             <Ionicons
               name="chevron-down"
               size={14}
-              color={formValues.familyOrSingle ? "#ffffff" : "#0F113C"}
+              color={formValues.familyOrSingle ? "#ffffff" : colors.text}
               className="ms-1"
             />
           </TouchableOpacity>
@@ -258,18 +260,18 @@ export default function PropertyFilter({
         <TouchableOpacity
           onPress={() => setopenResidentialorCommercialModal(true)}
           className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
-            formValues.propertyType ? "bg-[#0F113C]" : "bg-white"
+            formValues.propertyType ? "bg-[#0F113C] dark:bg-[#2D3158]" : "bg-white dark:bg-[#17192D]"
           }`}
         >
           <Text
-            className={`text-sm ${formValues.propertyType ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.propertyType ? "text-white" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
           >
             {residentialOrCommercialLable}
           </Text>
           <Ionicons
             name="chevron-down"
             size={14}
-            color={formValues.propertyType ? "#ffffff" : "#0F113C"}
+            color={formValues.propertyType ? "#ffffff" : colors.text}
             className="ms-1"
           />
         </TouchableOpacity>
@@ -277,18 +279,18 @@ export default function PropertyFilter({
         <TouchableOpacity
           onPress={() => setOpenIsFurnishedModal(true)}
           className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
-            formValues.furnished !== null ? "bg-[#0F113C]" : "bg-white"
+            formValues.furnished !== null ? "bg-[#0F113C] dark:bg-[#2D3158]" : "bg-white dark:bg-[#17192D]"
           }`}
         >
           <Text
-            className={`text-sm ${formValues.furnished !== null ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.furnished !== null ? "text-white" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
           >
             {isFurnishedLable}
           </Text>
           <Ionicons
             name="chevron-down"
             size={14}
-            color={formValues.furnished !== null ? "#ffffff" : "#0F113C"}
+            color={formValues.furnished !== null ? "#ffffff" : colors.text}
             className="ms-1"
           />
         </TouchableOpacity>
@@ -296,18 +298,18 @@ export default function PropertyFilter({
         <TouchableOpacity
           onPress={() => setOpenRoomsNumberModal(true)}
           className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
-            formValues.rooms ? "bg-[#0F113C]" : "bg-white"
+            formValues.rooms ? "bg-[#0F113C] dark:bg-[#2D3158]" : "bg-white dark:bg-[#17192D]"
           }`}
         >
           <Text
-            className={`text-sm ${formValues.rooms ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.rooms ? "text-white" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
           >
             الغرف
           </Text>
           <Ionicons
             name="chevron-down"
             size={14}
-            color={formValues.rooms ? "#ffffff" : "#0F113C"}
+            color={formValues.rooms ? "#ffffff" : colors.text}
             className="ms-1"
           />
         </TouchableOpacity>
@@ -315,18 +317,18 @@ export default function PropertyFilter({
         <TouchableOpacity
           onPress={() => setOpenBathroomsNumberModal(true)}
           className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
-            formValues.bathrooms ? "bg-[#0F113C]" : "bg-white"
+            formValues.bathrooms ? "bg-[#0F113C] dark:bg-[#2D3158]" : "bg-white dark:bg-[#17192D]"
           }`}
         >
           <Text
-            className={`text-sm ${formValues.bathrooms ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.bathrooms ? "text-white" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
           >
             الحمامات
           </Text>
           <Ionicons
             name="chevron-down"
             size={14}
-            color={formValues.bathrooms ? "#ffffff" : "#0F113C"}
+            color={formValues.bathrooms ? "#ffffff" : colors.text}
             className="ms-1"
           />
         </TouchableOpacity>
@@ -335,12 +337,12 @@ export default function PropertyFilter({
           onPress={() => setOpenPriceRangeModal(true)}
           className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
             formValues.maxPrice || formValues.minPrice
-              ? "bg-[#0F113C]"
-              : "bg-white"
+              ? "bg-[#0F113C] dark:bg-[#2D3158]"
+              : "bg-white dark:bg-[#17192D]"
           }`}
         >
           <Text
-            className={`text-sm ${formValues.maxPrice || formValues.minPrice ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.maxPrice || formValues.minPrice ? "text-white" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
           >
             السعر
           </Text>
@@ -348,7 +350,7 @@ export default function PropertyFilter({
             name="chevron-down"
             size={14}
             color={
-              formValues.maxPrice || formValues.minPrice ? "#ffffff" : "#0F113C"
+              formValues.maxPrice || formValues.minPrice ? "#ffffff" : colors.text
             }
             className="ms-1"
           />
@@ -358,12 +360,12 @@ export default function PropertyFilter({
           onPress={() => setOpenSpaceRangeModal(true)}
           className={`flex-row items-center px-4 py-3 rounded-lg border border-gray-500 ${
             formValues.maxArea || formValues.minArea
-              ? "bg-[#0F113C]"
-              : "bg-white"
+              ? "bg-[#0F113C] dark:bg-[#2D3158]"
+              : "bg-white dark:bg-[#17192D]"
           }`}
         >
           <Text
-            className={`text-sm ${formValues.maxArea || formValues.minArea ? "text-white" : "text-[#0F113C]"}`}
+            className={`text-sm ${formValues.maxArea || formValues.minArea ? "text-white" : "text-[#0F113C] dark:text-[#F3F4F6]"}`}
           >
             المساحة
           </Text>
@@ -371,7 +373,7 @@ export default function PropertyFilter({
             name="chevron-down"
             size={14}
             color={
-              formValues.maxArea || formValues.minArea ? "#ffffff" : "#0F113C"
+              formValues.maxArea || formValues.minArea ? "#ffffff" : colors.text
             }
             className="ms-1"
           />

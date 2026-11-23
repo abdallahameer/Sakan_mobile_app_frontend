@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { Pressable, Text, View } from "react-native";
 import MapView, { MapType, Marker } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "@/theme/ThemeProvider";
 
 const MAP_STYLES: { label: string; value: MapType }[] = [
   { label: "قياسي", value: "standard" },
@@ -27,6 +28,7 @@ const INITIAL_REGION = {
 };
 
 export default function Search() {
+  const { colors } = useTheme();
   const {
     control,
     getValues,
@@ -80,7 +82,7 @@ export default function Search() {
   });
 
   return (
-    <SafeAreaView className="flex-1" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]" edges={["top"]}>
       <View className="flex-1">
         <MapView
           style={{ flex: 1 }}
@@ -136,24 +138,24 @@ export default function Search() {
             accessibilityRole="button"
             accessibilityLabel="اختيار نمط الخريطة"
             accessibilityState={{ expanded: isMapStyleSelectorVisible }}
-            className="flex-row-reverse items-center gap-2 rounded-xl bg-white px-3 py-2.5 shadow-md"
+            className="flex-row-reverse items-center gap-2 rounded-xl bg-white px-3 py-2.5 shadow-md dark:bg-[#17192D]"
             onPress={() =>
               setIsMapStyleSelectorVisible(!isMapStyleSelectorVisible)
             }
           >
-            <Ionicons name="layers-outline" size={18} color="#0F113C" />
-            <Text className="text-sm font-medium text-[#0F113C]">
+            <Ionicons name="layers-outline" size={18} color={colors.text} />
+            <Text className="text-sm font-medium text-[#0F113C] dark:text-[#F3F4F6]">
               {MAP_STYLES.find((style) => style.value === mapStyle)?.label}
             </Text>
             <Ionicons
               name={isMapStyleSelectorVisible ? "chevron-up" : "chevron-down"}
               size={16}
-              color="#0F113C"
+              color={colors.text}
             />
           </Pressable>
 
           {isMapStyleSelectorVisible && (
-            <View className="mt-2 overflow-hidden bg-white shadow-md rounded-xl">
+            <View className="mt-2 overflow-hidden bg-white shadow-md rounded-xl dark:bg-[#17192D]">
               {MAP_STYLES.map((style) => (
                 <Pressable
                   key={style.value}
@@ -169,14 +171,14 @@ export default function Search() {
                   <Text
                     className={`text-sm ${
                       mapStyle === style.value
-                        ? "font-semibold text-[#0F113C]"
-                        : "text-gray-600"
+                        ? "font-semibold text-[#0F113C] dark:text-[#F3F4F6]"
+                        : "text-gray-600 dark:text-[#A1A1AA]"
                     }`}
                   >
                     {style.label}
                   </Text>
                   {mapStyle === style.value && (
-                    <Ionicons name="checkmark" size={16} color="#0F113C" />
+                    <Ionicons name="checkmark" size={16} color={colors.text} />
                   )}
                 </Pressable>
               ))}
@@ -184,8 +186,8 @@ export default function Search() {
           )}
         </View>
 
-        <Pressable className="absolute items-center justify-center bg-white rounded-full shadow-md w-11 h-11 right-4 bottom-4">
-          <Ionicons name="locate" size={20} color="#0F113C" />
+        <Pressable className="absolute items-center justify-center bg-white rounded-full shadow-md w-11 h-11 right-4 bottom-4 dark:bg-[#17192D]">
+          <Ionicons name="locate" size={20} color={colors.text} />
         </Pressable>
 
         {selectedProperty && (

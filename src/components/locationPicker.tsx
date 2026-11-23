@@ -8,6 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useTheme } from "@/theme/ThemeProvider";
 
 export type LocationOption = { id: number; name: string };
 
@@ -40,6 +41,7 @@ export default function LocationPicker({
   onChangeNeighborhood,
 }: Props) {
   const [open, setOpen] = useState<"city" | "neighborhood" | null>(null);
+  const { colors } = useTheme();
 
   const failed = citiesError || neighborhoodsError;
   const loading = open === "city" ? loadingCities : loadingNeighborhood;
@@ -91,18 +93,18 @@ export default function LocationPicker({
           onPress={() => setOpen(null)}
         >
           <Pressable
-            className="px-4 pt-4 pb-8 bg-white rounded-t-2xl"
+            className="px-4 pt-4 pb-8 bg-white rounded-t-2xl dark:bg-[#0B0D1D]"
             style={{ maxHeight: "60%" }}
             onPress={() => {}}
           >
-            <Text className="mb-3 text-lg font-bold text-[#0F113C]">
+            <Text className="mb-3 text-lg font-bold text-[#0F113C] dark:text-[#F3F4F6]">
               {open === "city" ? "اختر المدينة" : "اختر المنطقة"}
             </Text>
 
             {loading ? (
               <ActivityIndicator className="py-6" />
             ) : options.length === 0 ? (
-              <Text className="py-6 text-center text-[#6B7280]">
+              <Text className="py-6 text-center text-[#6B7280] dark:text-[#A1A1AA]">
                 لا توجد خيارات
               </Text>
             ) : (
@@ -112,13 +114,13 @@ export default function LocationPicker({
                 renderItem={({ item }) => (
                   <Pressable
                     onPress={() => choose(item)}
-                    className="flex-row items-center justify-between py-3 border-b border-[#E5E7EB]"
+                    className="flex-row items-center justify-between py-3 border-b border-[#E5E7EB] dark:border-[#36384D]"
                   >
-                    <Text className="text-base text-[#0F113C]">
+                    <Text className="text-base text-[#0F113C] dark:text-[#F3F4F6]">
                       {item.name}
                     </Text>
                     {item.name === selected && (
-                      <Ionicons name="checkmark" size={20} color="#10B981" />
+                      <Ionicons name="checkmark" size={20} color={colors.accent} />
                     )}
                   </Pressable>
                 )}
@@ -144,23 +146,26 @@ function Field({
   disabled?: boolean;
   onPress: () => void;
 }) {
+  const { colors } = useTheme();
   return (
     <View style={{ gap: 8 }}>
-      <Text className="text-sm font-semibold text-[#0F113C]">{label}</Text>
+      <Text className="text-sm font-semibold text-[#0F113C] dark:text-[#F3F4F6]">{label}</Text>
       <Pressable
         onPress={onPress}
         disabled={disabled}
-        className="flex-row items-center justify-between px-4 py-4 bg-white border border-[#E5E7EB] rounded-xl"
+        className="flex-row items-center justify-between px-4 py-4 bg-white border border-[#E5E7EB] rounded-xl dark:bg-[#17192D] dark:border-[#36384D]"
         style={{ opacity: disabled ? 0.5 : 1 }}
       >
         <Text
           className={
-            value ? "text-base text-[#0F113C]" : "text-base text-[#9CA3AF]"
+            value
+              ? "text-base text-[#0F113C] dark:text-[#F3F4F6]"
+              : "text-base text-[#9CA3AF] dark:text-[#A1A1AA]"
           }
         >
           {value || placeholder}
         </Text>
-        <Ionicons name="chevron-down" size={20} color="#9CA3AF" />
+        <Ionicons name="chevron-down" size={20} color={colors.secondaryText} />
       </Pressable>
     </View>
   );
