@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
+import { useTheme } from "@/theme/ThemeProvider";
 
 type ToastProps = {
   text1?: string;
@@ -45,10 +46,15 @@ export default function CustomToast({
   hide,
 }: ToastProps) {
   const config = CONFIG[type];
+  const { isDarkMode } = useTheme();
+  const backgroundClassName = isDarkMode
+    ? "bg-[#17192D] border-[#36384D]"
+    : config.backgroundClassName;
+  const textClassName = isDarkMode ? "text-[#F3F4F6]" : config.textClassName;
 
   return (
     <View
-      className={`w-[92%] min-h-[72px] flex-row items-center justify-between rounded-[18px] border px-3.5 py-3 shadow-lg elevation-8 ${config.backgroundClassName}`}
+      className={`w-[92%] min-h-[72px] flex-row items-center justify-between rounded-[18px] border px-3.5 py-3 shadow-lg elevation-8 ${backgroundClassName}`}
     >
       <View className="flex-row items-center gap-2 max-w-[70%] justify-start  ">
         <View className="items-center justify-center ml-3 mr-0 bg-white rounded-full h-11 w-11">
@@ -59,7 +65,7 @@ export default function CustomToast({
           {!!text1 && (
             <Text
               numberOfLines={1}
-              className={`text-right text-[15px] font-bold ${config.textClassName}`}
+              className={`text-right text-[15px] font-bold ${textClassName}`}
             >
               {text1}
             </Text>
@@ -68,7 +74,7 @@ export default function CustomToast({
           {!!text2 && (
             <Text
               numberOfLines={2}
-              className={`mt-0.5 text-left text-[13px] leading-[19px] ${config.textClassName}`}
+              className={`mt-0.5 text-left text-[13px] leading-[19px] ${textClassName}`}
             >
               {text2}
             </Text>
@@ -84,7 +90,7 @@ export default function CustomToast({
         <Ionicons
           name="close"
           size={19}
-          color={type === "success" ? "#FFFFFF" : "#0F113C"}
+          color={isDarkMode || type === "success" ? "#FFFFFF" : "#0F113C"}
         />
       </Pressable>
     </View>

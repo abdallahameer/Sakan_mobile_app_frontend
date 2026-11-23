@@ -3,15 +3,7 @@ import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { Pressable, ScrollView, Switch, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const COLORS = {
-  primary: "#0F113C",
-  accent: "#10B981",
-  white: "#ffffff",
-  textGray: "#6B7280",
-  border: "#E5E7EB",
-  lightBg: "#F8F9FA",
-};
+import { useTheme } from "@/theme/ThemeProvider";
 
 type Language = "ar" | "en";
 
@@ -27,26 +19,27 @@ type LanguageAndThemeFormValues = {
 
 export default function LanguageAndTheme() {
   const router = useRouter();
+  const { isDarkMode, setDarkMode, colors } = useTheme();
   const { control } = useForm<LanguageAndThemeFormValues>({
     defaultValues: {
-      isDarkMode: false,
+      isDarkMode,
       language: "ar",
     },
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F0F1FA]">
-      <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
+    <SafeAreaView className="flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
+      <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB] dark:border-[#36384D]">
         <Pressable
           onPress={() => {
             router.back();
           }}
         >
-          <Ionicons name="arrow-forward" size={22} color="#0F113C" />
+          <Ionicons name="arrow-forward" size={22} color={colors.text} />
         </Pressable>
 
         <View className="flex-row items-center justify-start w-[60%]">
-          <Text className="text-lg font-bold text-[#0F113C]">
+          <Text className="text-lg font-bold text-[#0F113C] dark:text-[#F3F4F6]">
             اللغة و المظهر
           </Text>
         </View>
@@ -56,7 +49,7 @@ export default function LanguageAndTheme() {
         <View style={{ gap: 8 }}>
           <Text
             className="text-sm font-semibold text-left"
-            style={{ color: COLORS.textGray }}
+            style={{ color: colors.secondaryText }}
           >
             المظهر
           </Text>
@@ -65,45 +58,48 @@ export default function LanguageAndTheme() {
             control={control}
             name="isDarkMode"
             render={({ field: { value, onChange } }) => (
-              <View
-                className="overflow-hidden bg-white border rounded-2xl"
-                style={{ borderColor: COLORS.border }}
-              >
+              <View className="overflow-hidden bg-white border rounded-2xl dark:bg-[#17192D]" style={{ borderColor: colors.border }}>
                 <View className="flex-row items-center justify-between px-4 py-4">
                   <Text
-                    className="text-base font-semibold"
-                    style={{ color: COLORS.primary }}
+                    className="text-base font-semibold dark:text-[#F3F4F6]"
+                    style={{ color: colors.text }}
                   >
                     الوضع الفاتح
                   </Text>
                   <Switch
                     value={!value}
-                    onValueChange={(nextValue) => onChange(!nextValue)}
-                    trackColor={{
-                      false: COLORS.border,
-                      true: `${COLORS.accent}55`,
+                    onValueChange={async (nextValue) => {
+                      onChange(!nextValue);
+                      await setDarkMode(!nextValue);
                     }}
-                    thumbColor={!value ? COLORS.accent : COLORS.white}
+                    trackColor={{
+                      false: colors.border,
+                      true: `${colors.accent}55`,
+                    }}
+                    thumbColor={!value ? colors.accent : "#FFFFFF"}
                   />
                 </View>
 
-                <View style={{ height: 1, backgroundColor: COLORS.border }} />
+                <View style={{ height: 1, backgroundColor: colors.border }} />
 
                 <View className="flex-row items-center justify-between px-4 py-4">
                   <Text
-                    className="text-base font-semibold"
-                    style={{ color: COLORS.primary }}
+                    className="text-base font-semibold dark:text-[#F3F4F6]"
+                    style={{ color: colors.text }}
                   >
                     الوضع الداكن
                   </Text>
                   <Switch
                     value={value}
-                    onValueChange={onChange}
-                    trackColor={{
-                      false: COLORS.border,
-                      true: `${COLORS.accent}55`,
+                    onValueChange={async (nextValue) => {
+                      onChange(nextValue);
+                      await setDarkMode(nextValue);
                     }}
-                    thumbColor={value ? COLORS.accent : COLORS.white}
+                    trackColor={{
+                      false: colors.border,
+                      true: `${colors.accent}55`,
+                    }}
+                    thumbColor={value ? colors.accent : "#FFFFFF"}
                   />
                 </View>
               </View>
@@ -114,7 +110,7 @@ export default function LanguageAndTheme() {
         <View style={{ gap: 8 }}>
           <Text
             className="text-sm font-semibold text-left"
-            style={{ color: COLORS.textGray }}
+            style={{ color: colors.secondaryText }}
           >
             اللغة
           </Text>
@@ -123,10 +119,7 @@ export default function LanguageAndTheme() {
             control={control}
             name="language"
             render={({ field: { value, onChange } }) => (
-              <View
-                className="overflow-hidden bg-white border rounded-2xl"
-                style={{ borderColor: COLORS.border }}
-              >
+              <View className="overflow-hidden bg-white border rounded-2xl dark:bg-[#17192D]" style={{ borderColor: colors.border }}>
                 {LANGUAGES.map((lang, index) => {
                   const isSelected = value === lang.key;
                   return (
@@ -136,8 +129,8 @@ export default function LanguageAndTheme() {
                         className="flex-row items-center justify-between px-4 py-4"
                       >
                         <Text
-                          className="text-base font-semibold"
-                          style={{ color: COLORS.primary }}
+                          className="text-base font-semibold dark:text-[#F3F4F6]"
+                          style={{ color: colors.text }}
                         >
                           {lang.label}
                         </Text>
@@ -145,13 +138,13 @@ export default function LanguageAndTheme() {
                           <Ionicons
                             name="checkmark-circle"
                             size={20}
-                            color={COLORS.accent}
+                            color={colors.accent}
                           />
                         )}
                       </Pressable>
                       {index < LANGUAGES.length - 1 && (
                         <View
-                          style={{ height: 1, backgroundColor: COLORS.border }}
+                          style={{ height: 1, backgroundColor: colors.border }}
                         />
                       )}
                     </View>

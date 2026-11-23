@@ -3,12 +3,14 @@ import { dismissUpload, retryUpload, useUploadState } from "@/lib/uploadStore";
 import { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTheme } from "@/theme/ThemeProvider";
 
 // Floats at the top of the screen, on every screen. Shows the progress of the
 // ad that is being uploaded, then "published" or "failed" (with a retry button).
 export default function UploadBanner() {
   const state = useUploadState();
   const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
 
   // the success message goes away by itself
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function UploadBanner() {
       }}
     >
       <View
-        className="px-4 py-3 bg-white border border-[#E5E7EB] rounded-xl"
+        className="px-4 py-3 bg-white border border-[#E5E7EB] rounded-xl dark:bg-[#17192D] dark:border-[#36384D]"
         style={{
           shadowColor: "#000",
           shadowOffset: { width: 0, height: 2 },
@@ -55,7 +57,7 @@ export default function UploadBanner() {
         <Text
           className="text-sm font-bold"
           style={{
-            color: isError ? "#EF4444" : isSuccess ? "#10B981" : "#0F113C",
+            color: isError ? "#EF4444" : isSuccess ? "#10B981" : colors.text,
           }}
         >
           {title}
@@ -63,13 +65,13 @@ export default function UploadBanner() {
 
         {!isError && !isSuccess && (
           <>
-            <View className="h-2 overflow-hidden rounded-full bg-[#E5E7EB]">
+            <View className="h-2 overflow-hidden rounded-full bg-[#E5E7EB] dark:bg-[#36384D]">
               <View
-                className="h-2 rounded-full bg-[#0F113C]"
+                className="h-2 rounded-full bg-[#0F113C] dark:bg-[#2D3158]"
                 style={{ width: `${state.progress}%` }}
               />
             </View>
-            <Text className="text-xs text-[#6B7280]">
+            <Text className="text-xs text-[#6B7280] dark:text-[#A1A1AA]">
               لا تغلق التطبيق حتى يكتمل النشر
             </Text>
           </>
@@ -78,7 +80,7 @@ export default function UploadBanner() {
         {isError && (
           <>
             {state.error ? (
-              <Text className="text-xs text-[#6B7280]">{state.error}</Text>
+              <Text className="text-xs text-[#6B7280] dark:text-[#A1A1AA]">{state.error}</Text>
             ) : null}
             <View className="flex-row" style={{ gap: 16 }}>
               <Pressable onPress={retryUpload}>
@@ -87,7 +89,7 @@ export default function UploadBanner() {
                 </Text>
               </Pressable>
               <Pressable onPress={dismissUpload}>
-                <Text className="text-sm font-bold text-[#6B7280]">إغلاق</Text>
+                <Text className="text-sm font-bold text-[#6B7280] dark:text-[#A1A1AA]">إغلاق</Text>
               </Pressable>
             </View>
           </>

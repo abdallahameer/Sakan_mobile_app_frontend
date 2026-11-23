@@ -1,5 +1,6 @@
 import { StepFourProps } from "@/types/forms";
 import { Pressable, Text, View } from "react-native";
+import { useTheme } from "@/theme/ThemeProvider";
 import MapView, {
   Marker,
   type MapPressEvent,
@@ -18,6 +19,7 @@ export default function StepFour({
   setValue,
   onSubmit,
 }: StepFourProps) {
+  const { colors } = useTheme();
   const selectedLocation =
     formValues.latitude !== null && formValues.longitude !== null
       ? {
@@ -35,7 +37,7 @@ export default function StepFour({
 
   return (
     <View className="flex-1 px-4 pt-4 pb-6">
-      <Text className="mb-3 text-right text-base font-semibold text-[#0F113C]">
+      <Text className="mb-3 text-right text-base font-semibold text-[#0F113C] dark:text-[#F3F4F6]">
         حدد موقع العقار على الخريطة
       </Text>
 
@@ -52,7 +54,7 @@ export default function StepFour({
       <Pressable
         onPress={() => onSubmit(formValues)}
         className="items-center justify-center py-3.5 mt-4 rounded-xl"
-        style={{ backgroundColor: "#0F113C" }}
+        style={{ backgroundColor: colors.primary }}
       >
         <Text className="text-base font-bold text-white">
           اختيار الموقع والنشر

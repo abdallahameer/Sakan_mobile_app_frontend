@@ -12,9 +12,11 @@ import { useForm } from "react-hook-form";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import { useTheme } from "@/theme/ThemeProvider";
 
 export default function EditProperty() {
   const router = useRouter();
+  const { colors } = useTheme();
   const params = useLocalSearchParams<{ editId: string | string[] }>();
   const editId = Array.isArray(params.editId)
     ? params.editId[0]
@@ -179,8 +181,8 @@ export default function EditProperty() {
 
   if (!editId) {
     return (
-      <SafeAreaView className="items-center justify-center flex-1 bg-[#F0F1FA]">
-        <Text className="text-base font-semibold text-[#6B7280]">
+      <SafeAreaView className="items-center justify-center flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
+        <Text className="text-base font-semibold text-[#6B7280] dark:text-[#A1A1AA]">
           لم يتم العثور على الإعلان
         </Text>
         <Pressable onPress={() => router.back()} className="mt-4">
@@ -191,16 +193,16 @@ export default function EditProperty() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F0F1FA]">
-      <View className="flex-row items-center justify-start gap-2 px-4 py-4 border-b border-[#E5E7EB]">
+    <SafeAreaView className="flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
+      <View className="flex-row items-center justify-start gap-2 px-4 py-4 border-b border-[#E5E7EB] dark:border-[#36384D]">
         <Pressable onPress={() => router.back()}>
-          <Ionicons name="arrow-forward" size={22} color="#0F113C" />
+          <Ionicons name="arrow-forward" size={22} color={colors.text} />
         </Pressable>
-        <Text className="text-lg font-bold text-[#0F113C]">تعديل الإعلان</Text>
+        <Text className="text-lg font-bold text-[#0F113C] dark:text-[#F3F4F6]">تعديل الإعلان</Text>
       </View>
 
       <View className="flex-1">
-        <View className="flex-row gap-2 px-4 py-3 border-b border-[#E5E7EB]">
+        <View className="flex-row gap-2 px-4 py-3 border-b border-[#E5E7EB] dark:border-[#36384D]">
           {["الصور", "المعلومات", "التفاصيل"].map((label, index) => {
             const step = index + 1;
             const isActive = activeStep === step;
@@ -263,7 +265,7 @@ export default function EditProperty() {
         <View className="px-5 mt-6">
           <Pressable
             onPress={updateProperty}
-            className="items-center justify-center py-4 rounded-xl bg-[#0F113C]"
+            className="items-center justify-center py-4 rounded-xl bg-[#0F113C] dark:bg-[#2D3158]"
           >
             <Text className="text-base font-bold text-white">تحديث</Text>
           </Pressable>

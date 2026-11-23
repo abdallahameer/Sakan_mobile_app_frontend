@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { getSelectionStyle, useTheme } from "@/theme/ThemeProvider";
 
 type WithFamily = "family" | "single" | null;
 
@@ -19,6 +20,7 @@ export default function FamilyOrSingleModal({
 }: ResidentialorCommercialProps) {
   const [withFamily, setWithFamily] = useState(value);
   const inSet = useSafeAreaInsets();
+  const { isDarkMode, colors } = useTheme();
 
   useEffect(() => {
     if (visible) {
@@ -36,23 +38,20 @@ export default function FamilyOrSingleModal({
       <Pressable onPress={onClose} className="justify-end flex-1 bg-black/40">
         <Pressable
           onPress={(e) => e.stopPropagation()}
-          className="flex-col gap-5 px-5 pt-3 bg-white rounded-t-3xl"
+          className="flex-col gap-5 px-5 pt-3 bg-white rounded-t-3xl dark:bg-[#0B0D1D]"
           style={{ paddingBottom: inSet.bottom + 16 }}
         >
           <View className="items-center mb-5">
-            <View className="w-10 h-1.5 rounded-full bg-[#E5E7EB]" />
+            <View className="w-10 h-1.5 rounded-full bg-[#E5E7EB] dark:bg-[#36384D]" />
           </View>
 
           <View className="flex-row gap-3">
             <Pressable
               onPress={() => setWithFamily(null)}
               className="items-center justify-center flex-1 py-4 border rounded-2xl"
-              style={{
-                borderColor: withFamily === null ? "#1e40af" : "#E5E7EB",
-                backgroundColor: withFamily === null ? "#dbeafe" : "#ffffff",
-              }}
+              style={getSelectionStyle(withFamily === null, isDarkMode, colors)}
             >
-              <Text className="text-base font-bold text-[#0F113C]">الكل</Text>
+              <Text className="text-base font-bold text-[#0F113C] dark:text-[#F3F4F6]">الكل</Text>
             </Pressable>
 
             <Pressable
@@ -62,13 +61,13 @@ export default function FamilyOrSingleModal({
                 )
               }
               className="items-center justify-center flex-1 py-4 border rounded-2xl"
-              style={{
-                borderColor: withFamily === "family" ? "#1e40af" : "#E5E7EB",
-                backgroundColor:
-                  withFamily === "family" ? "#dbeafe" : "#ffffff",
-              }}
+              style={getSelectionStyle(
+                withFamily === "family",
+                isDarkMode,
+                colors,
+              )}
             >
-              <Text className="text-base font-bold text-[#0F113C]">عوائل</Text>
+              <Text className="text-base font-bold text-[#0F113C] dark:text-[#F3F4F6]">عوائل</Text>
             </Pressable>
 
             <Pressable
@@ -78,19 +77,19 @@ export default function FamilyOrSingleModal({
                 )
               }
               className="items-center justify-center flex-1 py-4 border rounded-2xl"
-              style={{
-                borderColor: withFamily === "single" ? "#1e40af" : "#E5E7EB",
-                backgroundColor:
-                  withFamily === "single" ? "#dbeafe" : "#ffffff",
-              }}
+              style={getSelectionStyle(
+                withFamily === "single",
+                isDarkMode,
+                colors,
+              )}
             >
-              <Text className="text-base font-bold text-[#0F113C]">عزاب</Text>
+              <Text className="text-base font-bold text-[#0F113C] dark:text-[#F3F4F6]">عزاب</Text>
             </Pressable>
           </View>
 
           <Pressable
             onPress={() => onApply(withFamily)}
-            className="items-center justify-center py-3.5 rounded-xl bg-[#0F113C]"
+            className="items-center justify-center py-3.5 rounded-xl bg-[#0F113C] dark:bg-[#2D3158]"
           >
             <Text className="text-base font-bold text-white">تطبيق</Text>
           </Pressable>

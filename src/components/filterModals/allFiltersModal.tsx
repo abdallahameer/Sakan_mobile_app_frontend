@@ -21,6 +21,7 @@ import AppNumberInput from "../InputsComponents/Appnumberinput";
 import SmallOptionButton from "../buttons/SmallOptionButton";
 import OptionButton from "../buttons/optionButton";
 import FilterSection from "./filterSection";
+import { useTheme } from "@/theme/ThemeProvider";
 
 type AllFiltersModalProps = {
   visible: boolean;
@@ -47,6 +48,7 @@ export default function AllFiltersModal({
 }: AllFiltersModalProps) {
   const [newValues, setNewValues] = useState(formValues);
   const inSet = useSafeAreaInsets();
+  const { colors } = useTheme();
   useEffect(() => {
     if (visible) {
       setNewValues(formValues);
@@ -213,16 +215,16 @@ export default function AllFiltersModal({
     >
       <KeyboardAvoidingView className="flex-1" behavior="padding">
         <View className="flex-1 bg-black/40">
-          <View className="flex-1 mt-10 bg-white rounded-t-[30px]">
-            <View className="flex-row items-center justify-between px-5 pt-4 pb-4 border-b border-[#E5E7EB]">
+          <View className="flex-1 mt-10 bg-white rounded-t-[30px] dark:bg-[#0B0D1D]">
+            <View className="flex-row items-center justify-between px-5 pt-4 pb-4 border-b border-[#E5E7EB] dark:border-[#36384D]">
               <Pressable
                 onPress={onClose}
-                className="items-center justify-center w-10 h-10 bg-gray-100 rounded-full"
+                className="items-center justify-center w-10 h-10 bg-gray-100 rounded-full dark:bg-[#22243A]"
               >
-                <Ionicons name="close" size={22} color={"#0F113C"} />
+                <Ionicons name="close" size={22} color={colors.text} />
               </Pressable>
 
-              <Text className="text-xl font-bold text-[#0F113C]">البحث</Text>
+              <Text className="text-xl font-bold text-[#0F113C] dark:text-[#F3F4F6]">البحث</Text>
 
               <View className="w-10" />
             </View>
@@ -515,22 +517,22 @@ export default function AllFiltersModal({
             </ScrollView>
 
             <View
-              className="absolute bottom-0 left-0 right-0 px-5 pt-3 bg-white "
+              className="absolute bottom-0 left-0 right-0 px-5 pt-3 bg-white dark:bg-[#0B0D1D]"
               style={{ paddingBottom: inSet.bottom + 16 }}
             >
               <View className="flex-row gap-3">
                 <Pressable
                   onPress={handleReset}
-                  className="items-center justify-center flex-1 py-4 border rounded-xl border-[#0F113C]"
+                  className="items-center justify-center flex-1 py-4 border rounded-xl border-[#0F113C] dark:border-[#36384D]"
                 >
-                  <Text className="text-base font-bold text-[#0F113C]">
+                  <Text className="text-base font-bold text-[#0F113C] dark:text-[#F3F4F6]">
                     إعادة تعيين
                   </Text>
                 </Pressable>
 
                 <Pressable
                   onPress={handleApply}
-                  className="items-center justify-center flex-1 py-4 rounded-xl bg-[#0F113C]"
+                  className="items-center justify-center flex-1 py-4 rounded-xl bg-[#0F113C] dark:bg-[#2D3158]"
                 >
                   <Text className="text-base font-bold text-white">تطبيق</Text>
                 </Pressable>

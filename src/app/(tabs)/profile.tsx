@@ -13,14 +13,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-const COLORS = {
-  primary: "#0F113C",
-  accent: "#10B981",
-  white: "#ffffff",
-  textGray: "#6B7280",
-  border: "#E5E7EB",
-  lightBg: "#F8F9FA",
-};
+import { useTheme } from "@/theme/ThemeProvider";
 
 type MenuItem = {
   key: string;
@@ -78,6 +71,7 @@ const MENU_ITEMS: MenuItem[] = [
 export default function ProfileScreen() {
   const router = useRouter();
   const queryClinet = useQueryClient();
+  const { colors } = useTheme();
 
   const { data: userProfile } = useQuery({
     queryKey: ["userId"],
@@ -87,7 +81,7 @@ export default function ProfileScreen() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F0F1FA]">
+    <SafeAreaView className="flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
       <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
         <View
           className="items-center px-4 pt-6 pb-6 "
@@ -98,12 +92,12 @@ export default function ProfileScreen() {
         >
           <View className="relative">
             <View
-              className="items-center justify-center overflow-hidden bg-gray-100 rounded-full"
+              className="items-center justify-center overflow-hidden bg-gray-100 rounded-full dark:bg-[#22243A]"
               style={{
                 width: 110,
                 height: 110,
                 borderWidth: 1,
-                borderColor: COLORS.border,
+                borderColor: colors.border,
               }}
             >
               <Image
@@ -123,29 +117,29 @@ export default function ProfileScreen() {
                 height: 32,
                 bottom: 0,
                 left: 0,
-                backgroundColor: COLORS.accent,
+                backgroundColor: colors.accent,
                 borderWidth: 2,
-                borderColor: COLORS.white,
+                borderColor: colors.surface,
               }}
             >
-              <Ionicons name="camera" size={16} color={COLORS.white} />
+              <Ionicons name="camera" size={16} color="#FFFFFF" />
             </Pressable>
           </View>
 
           <Text
-            className="mt-3 text-lg font-bold"
-            style={{ color: COLORS.primary }}
+            className="mt-3 text-lg font-bold dark:text-[#F3F4F6]"
+            style={{ color: colors.text }}
           >
             {userProfile?.name}
           </Text>
 
           <View
             className="px-3 py-1 mt-2 rounded-full"
-            style={{ backgroundColor: `${COLORS.accent}1A` }}
+            style={{ backgroundColor: `${colors.accent}1A` }}
           >
             <Text
               className="text-xs font-semibold text-center"
-              style={{ color: COLORS.accent }}
+              style={{ color: colors.accent }}
             >
               المورد والمشتري
             </Text>
@@ -153,7 +147,7 @@ export default function ProfileScreen() {
         </View>
 
         <View
-          className="mx-4 mt-4 overflow-hidden bg-white rounded-2xl"
+          className="mx-4 mt-4 overflow-hidden bg-white rounded-2xl dark:bg-[#17192D]"
           style={{
             shadowColor: "#000",
             shadowOpacity: 0.05,
@@ -172,7 +166,7 @@ export default function ProfileScreen() {
                 className="flex-row items-center px-4 py-4"
                 style={{
                   borderBottomWidth: index === MENU_ITEMS.length - 1 ? 0 : 1,
-                  borderBottomColor: COLORS.border,
+                  borderBottomColor: colors.border,
                 }}
               >
                 <View
@@ -180,15 +174,15 @@ export default function ProfileScreen() {
                   style={{
                     width: 36,
                     height: 36,
-                    backgroundColor: COLORS.lightBg,
+                    backgroundColor: colors.elevatedSurface,
                   }}
                 >
-                  <Ionicons name={item.icon} size={18} color={COLORS.primary} />
+                  <Ionicons name={item.icon} size={18} color={colors.text} />
                 </View>
 
                 <Text
-                  className="flex-1 mr-3 text-base font-semibold text-right"
-                  style={{ color: COLORS.primary, marginEnd: 12 }}
+                  className="flex-1 mr-3 text-base font-semibold text-right dark:text-[#F3F4F6]"
+                  style={{ color: colors.text, marginEnd: 12 }}
                 >
                   {item.label}
                 </Text>
@@ -196,7 +190,7 @@ export default function ProfileScreen() {
                 <Ionicons
                   name="chevron-back"
                   size={18}
-                  color={COLORS.textGray}
+                  color={colors.secondaryText}
                 />
               </Pressable>
             )}

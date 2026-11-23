@@ -8,8 +8,10 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "@/theme/ThemeProvider";
 export default function Advertisements() {
   const router = useRouter();
+  const { colors } = useTheme();
   const [ads, setAds] = useState<Property[]>(PROPERTIES.slice(0, 3));
 
   const handleDelete = (id: string) => {
@@ -28,18 +30,18 @@ export default function Advertisements() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F0F1FA]">
-      <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
+    <SafeAreaView className="flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
+      <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB] dark:border-[#36384D]">
         <Pressable
           onPress={() => {
             router.back();
           }}
         >
-          <Ionicons name="arrow-forward" size={22} color="#0F113C" />
+          <Ionicons name="arrow-forward" size={22} color={colors.text} />
         </Pressable>
 
         <View className="flex-row items-center justify-start w-[60%]">
-          <Text className="text-lg font-bold text-[#0F113C]">إعلاناتي</Text>
+          <Text className="text-lg font-bold text-[#0F113C] dark:text-[#F3F4F6]">إعلاناتي</Text>
         </View>
       </View>
 
@@ -53,13 +55,13 @@ export default function Advertisements() {
         )}
         ListEmptyComponent={
           <View className="items-center justify-center gap-3 mt-24">
-            <Ionicons name="home-outline" size={48} color="#9CA3AF" />
-            <Text className="text-base font-semibold text-[#6B7280]">
+            <Ionicons name="home-outline" size={48} color={colors.secondaryText} />
+            <Text className="text-base font-semibold text-[#6B7280] dark:text-[#A1A1AA]">
               لا توجد إعلانات منشورة بعد
             </Text>
             <Pressable
               onPress={() => router.push("/add-property" as any)}
-              className="px-5 py-2.5 mt-2 rounded-xl bg-[#0F113C]"
+              className="px-5 py-2.5 mt-2 rounded-xl bg-[#0F113C] dark:bg-[#2D3158]"
             >
               <Text className="text-sm font-bold text-white">
                 أضف إعلانك الأول

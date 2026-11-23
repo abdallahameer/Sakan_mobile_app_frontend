@@ -5,20 +5,37 @@ import {
   Linking,
   Pressable,
   ScrollView,
-  Text,
+  Text as NativeText,
+  type TextProps,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "@/theme/ThemeProvider";
+
+type ThemedTextProps = TextProps & { className?: string };
+
+function Text({ className, ...props }: ThemedTextProps) {
+  const { isDarkMode } = useTheme();
+  const themedClassName = isDarkMode
+    ? className
+        ?.replace(/text-\[#0F113C\]/g, "text-[#F3F4F6]")
+        .replace(/text-\[#374151\]/g, "text-[#D1D5DB]")
+        .replace(/text-\[#9CA3AF\]/g, "text-[#A1A1AA]")
+    : className;
+
+  return <NativeText {...props} className={themedClassName} />;
+}
 
 export default function PrivacyPolicy() {
   const router = useRouter();
+  const { colors } = useTheme();
 
   return (
-    <View className="flex-1 bg-[#F0F1FA]">
+    <View className="flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
       <SafeAreaView>
-        <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
+        <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB] dark:border-[#36384D]">
           <Pressable onPress={() => router.back()}>
-            <Ionicons name="arrow-forward" size={22} color="#0F113C" />
+            <Ionicons name="arrow-forward" size={22} color={colors.text} />
           </Pressable>
 
           <View className="flex-row items-center justify-start w-[60%]">

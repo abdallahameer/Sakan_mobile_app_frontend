@@ -8,6 +8,7 @@ import {
 } from "react-hook-form";
 import { Text, View } from "react-native";
 import PhoneInput, { ICountry } from "rn-international-phone-number";
+import { useTheme } from "@/theme/ThemeProvider";
 
 type PhoneNumberInputProps<T extends FieldValues> = {
   control: Control<T>;
@@ -30,10 +31,11 @@ export default function PhoneNumberInput<T extends FieldValues>({
   error,
   defaultCountry = "SD",
 }: PhoneNumberInputProps<T>) {
+  const { colors } = useTheme();
   return (
     <View className="w-full">
       {label && (
-        <Text className="mb-2 text-left text-base font-bold  text-[#0F113C]">
+        <Text className="mb-2 text-left text-base font-bold text-[#0F113C] dark:text-[#F3F4F6]">
           {label}
           {required ? "*" : ""}
         </Text>
@@ -56,18 +58,18 @@ export default function PhoneNumberInput<T extends FieldValues>({
               language="ar"
               rtl
               phoneInputPlaceholderTextColor="#9CA3AF"
-              phoneInputSelectionColor="#0F113C"
+              phoneInputSelectionColor={colors.primary}
               placeholder="أدخل رقم الهاتف"
               phoneInputStyles={{
                 container: {
                   borderWidth: 1,
-                  borderColor: error ? "#EF4444" : "#E5E7EB",
+                  borderColor: error ? "#EF4444" : colors.border,
                   borderRadius: 12,
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: colors.surface,
                   height: 52,
                 },
                 flagContainer: {
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: colors.surface,
                   borderTopLeftRadius: 12,
                   borderBottomLeftRadius: 12,
                 },
@@ -76,14 +78,14 @@ export default function PhoneNumberInput<T extends FieldValues>({
                   height: 20,
                 },
                 divider: {
-                  backgroundColor: "#E5E7EB",
+                  backgroundColor: colors.border,
                 },
                 callingCode: {
-                  color: "#0F113C",
+                  color: colors.text,
                   fontSize: 15,
                 },
                 input: {
-                  color: "#0F113C",
+                  color: colors.text,
                   fontSize: 16,
                   textAlign: "right",
                 },

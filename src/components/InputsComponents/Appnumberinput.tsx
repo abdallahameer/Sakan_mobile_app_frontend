@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
 import { TextInput as RNTextInput, Text, View } from "react-native";
+import { useTheme } from "@/theme/ThemeProvider";
 
 type BaseProps = {
   label?: string;
@@ -48,12 +49,13 @@ export default function AppNumberInput<TFieldValues extends FieldValues>(
   } = props;
 
   const [isFocused, setIsFocused] = useState(false);
-  const borderColor = error ? "#EF4444" : "#0F113C";
+  const { colors } = useTheme();
+  const borderColor = error ? "#EF4444" : colors.primary;
 
   return (
     <View className={`gap-2 ${containerClassName}`}>
       {label && (
-        <Text className="text-base font-semibold text-left text-[#0F113C]">
+        <Text className="text-base font-semibold text-left text-[#0F113C] dark:text-[#F3F4F6]">
           {label}
         </Text>
       )}
@@ -62,7 +64,7 @@ export default function AppNumberInput<TFieldValues extends FieldValues>(
         className="flex-row-reverse items-center px-3.5 border rounded-xl"
         style={{
           borderColor,
-          backgroundColor: editable ? "#ffffff" : "#F3F4F6",
+          backgroundColor: editable ? colors.surface : colors.elevatedSurface,
         }}
       >
         {"control" in props && props.control ? (
@@ -85,7 +87,7 @@ export default function AppNumberInput<TFieldValues extends FieldValues>(
                 textAlign="right"
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                className="flex-1 py-3.5 text-[#0F113C]"
+                className="flex-1 py-3.5 text-[#0F113C] dark:text-[#F3F4F6]"
               />
             )}
           />
@@ -104,12 +106,12 @@ export default function AppNumberInput<TFieldValues extends FieldValues>(
             textAlign="right"
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            className="flex-1 py-3.5 text-[#0F113C]"
+            className="flex-1 py-3.5 text-[#0F113C] dark:text-[#F3F4F6]"
           />
         )}
 
         {suffix && (
-          <Text className="mr-2 text-sm font-semibold text-[#6B7280]">
+          <Text className="mr-2 text-sm font-semibold text-[#6B7280] dark:text-[#A1A1AA]">
             {suffix}
           </Text>
         )}

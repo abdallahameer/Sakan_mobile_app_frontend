@@ -1,15 +1,17 @@
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
+import { useTheme } from "@/theme/ThemeProvider";
 
 export default function TabBar() {
   const router = useRouter();
+  const { isDarkMode, colors } = useTheme();
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#0F113C",
-          borderTopColor: "#ffffff",
+          backgroundColor: isDarkMode ? colors.surface : "#0F113C",
+          borderTopColor: isDarkMode ? colors.border : "#FFFFFF",
           borderTopWidth: 1,
         },
         tabBarItemStyle: {
@@ -18,8 +20,8 @@ export default function TabBar() {
           height: 100,
           paddingVertical: 8,
         },
-        tabBarActiveTintColor: "#ffffff",
-        tabBarInactiveTintColor: "#A0AEC0",
+        tabBarActiveTintColor: isDarkMode ? colors.accent : "#FFFFFF",
+        tabBarInactiveTintColor: isDarkMode ? colors.secondaryText : "#A0AEC0",
         tabBarShowLabel: false,
       }}
     >

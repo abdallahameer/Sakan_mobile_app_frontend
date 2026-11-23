@@ -10,6 +10,7 @@ import {
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { Image, Linking, Pressable, Text, View } from "react-native";
+import { useTheme } from "@/theme/ThemeProvider";
 
 export default function PropertyCard({
   property,
@@ -20,6 +21,7 @@ export default function PropertyCard({
 }) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { colors } = useTheme();
 
   const handleFavorite = async () => {
     try {
@@ -98,7 +100,7 @@ export default function PropertyCard({
   return (
     <Pressable
       onPress={() => router.push(`/${property.id}`)}
-      className="flex-row items-center gap-2 mb-3 bg-white shadow-sm max-h-48 rounded-2xl"
+      className="flex-row items-center gap-2 mb-3 bg-white shadow-sm max-h-48 rounded-2xl dark:bg-[#17192D]"
     >
       <View className="relative w-[30%] h-full">
         <Image
@@ -108,7 +110,7 @@ export default function PropertyCard({
         />
 
         <View className="absolute px-2 py-0.5 rounded-full top-1 right-1 bg-blue-500/40">
-          <Text className="text-[10px] font-semibold text-[#171947]">
+          <Text className="text-[10px] font-semibold text-[#171947] dark:text-[#F3F4F6]">
             {property.listingType == "rent" ? "إيجار" : "بيع"}
           </Text>
         </View>
@@ -118,7 +120,7 @@ export default function PropertyCard({
           <View className="flex-row h-full gap-2 w-fit">
             <View className="flex-col items-start gap-1 pr-3">
               <Text
-                className="mb-1  text-xl font-bold text-right text-[#171947]"
+                className="mb-1 text-xl font-bold text-right text-[#171947] dark:text-[#F3F4F6]"
                 numberOfLines={1}
               >
                 {titleHandler(property.title, 19)}
@@ -127,7 +129,7 @@ export default function PropertyCard({
               <View className="flex-row-reverse items-center gap-1 mb-1.5">
                 <Ionicons name="location" color={"#3b82f6"} size={13} />
 
-                <Text className="text-xs text-blue-900" numberOfLines={1}>
+                <Text className="text-xs text-blue-900 dark:text-[#A1A1AA]" numberOfLines={1}>
                   {`${property.location.city}-${property.location.neighborhood}`}
                 </Text>
               </View>
@@ -140,7 +142,7 @@ export default function PropertyCard({
                     color={"#3b82f6"}
                   />
 
-                  <Text className="text-xs font-semibold text-[#5C5E82]">
+                  <Text className="text-xs font-semibold text-[#5C5E82] dark:text-[#A1A1AA]">
                     {property.area} م
                   </Text>
                 </View>
@@ -148,14 +150,14 @@ export default function PropertyCard({
                 <View className="flex-row-reverse items-center gap-1">
                   <Ionicons name="bed-outline" size={14} color={"#3b82f6"} />
 
-                  <Text className="text-xs font-semibold text-[#5C5E82]">
+                  <Text className="text-xs font-semibold text-[#5C5E82] dark:text-[#A1A1AA]">
                     {property.rooms} غرف
                   </Text>
                 </View>
               </View>
 
               {property.postedAt && (
-                <Text className="mb-1 text-[11px] text-right text-[#8587A3]">
+                <Text className="mb-1 text-[11px] text-right text-[#8587A3] dark:text-[#A1A1AA]">
                   {property.postedAt}
                 </Text>
               )}
@@ -169,12 +171,12 @@ export default function PropertyCard({
           <View className="flex-row items-start justify-start h-full ">
             <Pressable
               onPress={handleFavorite}
-              className="items-center justify-center w-6 h-6 bg-white rounded-full bottom-1 left-1"
+              className="items-center justify-center w-6 h-6 bg-white rounded-full bottom-1 left-1 dark:bg-[#22243A]"
             >
               <FontAwesome
                 name={property.isFavorite ? "bookmark" : "bookmark-o"}
                 size={14}
-                color={property.isFavorite ? "#3b82f6" : "black"}
+                color={property.isFavorite ? "#3b82f6" : colors.text}
               />
             </Pressable>
           </View>

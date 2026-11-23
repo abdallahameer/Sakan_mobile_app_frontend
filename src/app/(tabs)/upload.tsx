@@ -12,8 +12,10 @@ import { useForm } from "react-hook-form";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import { useTheme } from "@/theme/ThemeProvider";
 export default function UploadProperty() {
   const router = useRouter();
+  const { colors } = useTheme();
   const [steps, setSteps] = useState(1);
   const queryClient = useQueryClient();
   const { control, watch, setValue, reset } = useForm<UploadFormFields>({
@@ -145,8 +147,8 @@ export default function UploadProperty() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F0F1FA]">
-      <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB]">
+    <SafeAreaView className="flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
+      <View className="flex-row items-center justify-between px-4 py-4 w-full border-b border-[#E5E7EB] dark:border-[#36384D]">
         <Pressable
           onPress={() => {
             if (steps === 1) {
@@ -156,11 +158,11 @@ export default function UploadProperty() {
             }
           }}
         >
-          <Ionicons name="arrow-forward" size={22} color="#0F113C" />
+          <Ionicons name="arrow-forward" size={22} color={colors.text} />
         </Pressable>
 
         <View className="flex-row items-center justify-start w-[60%]">
-          <Text className="text-lg font-bold text-[#0F113C]">
+          <Text className="text-lg font-bold text-[#0F113C] dark:text-[#F3F4F6]">
             {steps === 1
               ? "إرفاق صورة"
               : steps === 2

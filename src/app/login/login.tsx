@@ -49,7 +49,7 @@ export default function Login() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F0F1FA]">
+    <SafeAreaView className="flex-1 bg-[#F0F1FA] dark:bg-[#0B0D1D]">
       <KeyboardAvoidingView className="flex-1" behavior="padding">
         <ScrollView contentContainerStyle={{ padding: 20, gap: 24 }}>
           <View className="flex-row items-center justify-center">
@@ -90,7 +90,7 @@ export default function Login() {
 
           <Pressable
             onPress={handleSubmit(onSubmit)}
-            className="items-center justify-center py-4 mt-2 rounded-xl bg-[#0F113C]"
+            className="items-center justify-center py-4 mt-2 rounded-xl bg-[#0F113C] dark:bg-[#2D3158]"
           >
             <Text className="text-base font-bold text-white">تسجيل الدخول</Text>
           </Pressable>
@@ -101,15 +101,15 @@ export default function Login() {
                 إنشاء حساب
               </Text>
             </Pressable>
-            <Text className="text-sm text-[#6B7280]">ليس لديك حساب؟</Text>
+            <Text className="text-sm text-[#6B7280] dark:text-[#A1A1AA]">ليس لديك حساب؟</Text>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
       <Pressable
         onPress={() => signIn()}
-        className="items-center justify-center py-4 mt-2 rounded-xl bg-white border border-[#E5E7EB]"
+        className="items-center justify-center py-4 mt-2 rounded-xl bg-white border border-[#E5E7EB] dark:bg-[#17192D] dark:border-[#36384D]"
       >
-        <Text className="text-base font-bold text-[#0F113C]">
+        <Text className="text-base font-bold text-[#0F113C] dark:text-[#F3F4F6]">
           تسجيل الدخول عبر Google
         </Text>
       </Pressable>

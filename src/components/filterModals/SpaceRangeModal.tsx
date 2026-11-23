@@ -61,11 +61,11 @@ export default function SpaceRangeModal({
         <Pressable onPress={onClose} className="justify-end flex-1 bg-black/40">
           <Pressable
             onPress={(e) => e.stopPropagation()}
-            className="px-5 pt-3 bg-white rounded-t-3xl"
+            className="px-5 pt-3 bg-white rounded-t-3xl dark:bg-[#0B0D1D]"
             style={{ paddingBottom: inSet.bottom + 16 }}
           >
             <View className="items-center mb-5">
-              <View className="w-10 h-1.5 rounded-full bg-[#E5E7EB]" />
+              <View className="w-10 h-1.5 rounded-full bg-[#E5E7EB] dark:bg-[#36384D]" />
             </View>
 
             <View className="flex-row w-full gap-2">
@@ -93,9 +93,9 @@ export default function SpaceRangeModal({
                 onApply(null, null);
                 onClose();
               }}
-              className="items-center self-start px-4 py-2 mt-4 border rounded-xl border-[#E5E7EB]"
+              className="items-center self-start px-4 py-2 mt-4 border rounded-xl border-[#E5E7EB] dark:border-[#36384D]"
             >
-              <Text className="text-base font-bold text-[#0F113C]">الكل</Text>
+              <Text className="text-base font-bold text-[#0F113C] dark:text-[#F3F4F6]">الكل</Text>
             </Pressable>
 
             <Pressable
