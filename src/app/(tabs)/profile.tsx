@@ -1,4 +1,5 @@
 import { api, setAuthToken } from "@/lib/api";
+import { useTheme } from "@/theme/ThemeProvider";
 import { User } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -13,7 +14,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-import { useTheme } from "@/theme/ThemeProvider";
 
 type MenuItem = {
   key: string;
@@ -35,24 +35,14 @@ const MENU_ITEMS: MenuItem[] = [
     icon: "home-outline",
     path: "/settings/advertisements",
   },
-  {
-    key: "notifications",
-    label: "الإشعارات",
-    icon: "notifications-outline",
-    path: "/settings/notifications",
-  },
+
   {
     key: "settings",
     label: "اللغة و المظهر",
     icon: "language",
     path: "/settings/languageAndTheme",
   },
-  {
-    key: "contact",
-    label: "تواصل معنا",
-    icon: "chatbubble-ellipses-outline",
-    path: "/settings/contactWithUs",
-  },
+
   {
     key: "about",
     label: "نبذة عنا",
